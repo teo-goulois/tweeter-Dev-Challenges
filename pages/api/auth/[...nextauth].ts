@@ -4,8 +4,7 @@ import credentials from "next-auth/providers/credentials";
 import email from "next-auth/providers/email";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import { signIn } from "next-auth/react";
-import { connectToDatabase } from "../../../libs/mongodb";
+
 import {
   getUser,
   createUser,
@@ -27,6 +26,10 @@ export default NextAuth({
     }),
     // ...add more providers here
   ],
+  pages: {
+    signIn: "/auth/login",
+    newUser: "/auth/signup",
+  },
   session: {
     strategy: "jwt",
   },
@@ -51,7 +54,8 @@ export default NextAuth({
           console.log("SEND TO DATABSAE");
           // get User if  not create one
 
-          (await getUser(user.id)) ?? (await createUser(toReqUser(user, account)));
+          (await getUser(user.id)) ??
+            (await createUser(toReqUser(user, account)));
           const data = await getUser(user.id);
           setResUser(user, data as unknown as ResUser);
           return true;
