@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.rotate {
+    transform: rotate(-35deg) scale(1, -1) ;
+}
