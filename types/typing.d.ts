@@ -1,31 +1,21 @@
-export type User = {
-  email: string;
-  image?: string;
-  name: string;
-  _id: string;
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  _type: "tweet";
-};
+import { ResUser } from "../libs/users/users";
+
 export interface Tweet extends TweetBody {
-  _id: string;
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  _type: "tweet";
   blockTweet: boolean;
+  _id?: ObjectId;
+  _createdAt?: string;
+  _updatedAt?: string;
+  __v?: number;
 }
 
 export type TweetBody = {
-  text: string;
-  userID: string;
-  image?: string;
-  user: User;
-  likes: Reference[];
-  comments: Reference[];
-  retweets: Reference[];
-  bookmarks: Reference[];
+  text: string | undefined;
+  image?: string | undefined;
+  author: undefined | ResUser;
+  likes: { type?: ObjectId | undefined; ref?: unknown }[];
+  comments?: { type?: ObjectId | undefined; ref?: unknown }[];
+  retweets: { type?: ObjectId | undefined; ref?: unknown }[];
+  bookmarks: { type?: ObjectId | undefined; ref?: unknown }[];
 };
 
 export interface Comment extends CommentBody {
@@ -40,17 +30,10 @@ export type CommentBody = {
   comment: string;
   username: string;
   profileImage: string;
-  user: User;
-  likes: Reference[];
+  author: resUser;
+  likes: string[];
   tweet: {
     _type: string;
     _ref: string;
-  };
-};
-
-export type Reference = {
-  to: {
-    _ref: string;
-    _type: string;
   };
 };

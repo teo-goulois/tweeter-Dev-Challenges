@@ -1,4 +1,10 @@
-import { createContext, Dispatch, SetStateAction, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { Tweet } from "../types/typing";
 
 type ContextProps = {
@@ -19,6 +25,8 @@ type ProviderProps = {
 
 export const TweetProvider = ({ children }: ProviderProps) => {
   const [tweets, setTweets] = useState<Tweet[]>([]);
+
+
 
   const value = { tweets, setTweets };
   return (

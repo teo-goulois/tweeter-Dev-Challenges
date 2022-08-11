@@ -1,7 +1,13 @@
 import { profile } from "console";
-import NextAuth, { Account, Profile, Session, User } from "next-auth";
+import NextAuth, {
+  Account,
+  NextAuthOptions,
+  Profile,
+  Session,
+  User,
+} from "next-auth";
 import credentials from "next-auth/providers/credentials";
-import email from "next-auth/providers/email";
+import EmailProvider from "next-auth/providers/email";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -11,8 +17,9 @@ import {
   ReqUser,
   ResUser,
 } from "../../../libs/users/users";
+console.log(process.env.EMAIL_SERVER, "env");
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     GithubProvider({
@@ -24,7 +31,6 @@ export default NextAuth({
         "626850324834-ma6a0qhs51bisg0hice2609ssc6cp4q5.apps.googleusercontent.com",
       clientSecret: "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",
     }),
-    // ...add more providers here
   ],
   pages: {
     signIn: "/auth/login",
@@ -53,6 +59,7 @@ export default NextAuth({
         if (user !== null) {
           console.log("SEND TO DATABSAE");
           // get User if  not create one
+          console.log(await getUser(user.id), "getuser");
 
           (await getUser(user.id)) ??
             (await createUser(toReqUser(user, account)));
@@ -67,7 +74,9 @@ export default NextAuth({
       }
     },
   },
-});
+};
+
+export default NextAuth(authOptions);
 
 const toReqUser = (user: User, account: Account) => {
   const reqUser: ReqUser = {
@@ -81,10 +90,13 @@ const toReqUser = (user: User, account: Account) => {
 };
 
 const setResUser = (user: User, resUser: ResUser) => {
+  console.log(resUser, "resUser");
+  user._id = resUser._id;
   user.id = resUser.id;
   user.email = resUser.email;
-  user.isAdmin = resUser.isAdmin;
   user.name = resUser.name;
   user.provider = resUser.provider;
   user.image = resUser.image;
+  user.following = resUser.following;
+  user.follower = resUser.follower;
 };
