@@ -9,13 +9,19 @@ import {
   RetweetIcon,
 } from "../../icons/Icons";
 import { Tweet } from "../../types/typing";
-import { addLike } from "../../utils/addLike";
 import { useSession } from "next-auth/react";
 import useCheckIfChecked from "../../hooks/useCheckIfChecked";
 
 // import { removeLike } from "../../../utils/removeLike";
 
 import { TweetContext } from "../../context/TweetProvider";
+
+import { addLike } from "../../utils/addLike";
+import { removeLike } from "../../utils/removeLike";
+import { removeRetweet } from "../../utils/removeRetweet";
+import { addRetweet } from "../../utils/addRetweet";
+import { removeBookmark } from "../../utils/removeBookmark";
+import { addBookmark } from "../../utils/addBookmark";
 
 const variants = {
   open: { opacity: 1, x: 0 },
@@ -34,13 +40,55 @@ const TweetInfos = ({ tweet, comments }: Props) => {
   const handleLike = async () => {
     if (session?.user?._id) {
       if (useCheckIfChecked(tweet.likes, session?.user?._id as string)) {
-        /* const data = await removeLike(tweet._id, session?.user?._id, tweets);
-        setTweets(data.tweets); */
+        const data = await removeLike(tweet._id, session?.user?._id, tweets);
+        data?.tweets
+          ? setTweets(data.tweets)
+          : console.log("an errro occured please try again later");
       } else {
-        console.log("ADD like");
-
         const data = await addLike(tweet._id, session?.user._id, tweets);
-        setTweets(data.tweets);
+        data?.tweets
+          ? setTweets(data.tweets)
+          : console.log("an errro occured please try again later");
+      }
+    } else {
+      console.log("error: you should be connected to like");
+    }
+  };
+
+  const handleRetweet = async () => {
+    if (session?.user?._id) {
+      if (useCheckIfChecked(tweet.retweets, session?.user?._id as string)) {
+        const data = await removeRetweet(tweet._id, session?.user?._id, tweets);
+        data?.tweets
+          ? setTweets(data.tweets)
+          : console.log("an errro occured please try again later");
+      } else {
+        const data = await addRetweet(tweet._id, session?.user._id, tweets);
+        data?.tweets
+          ? setTweets(data.tweets)
+          : console.log("an errro occured please try again later");
+      }
+    } else {
+      console.log("error: you should be connected to like");
+    }
+  };
+
+  const handleBookmark = async () => {
+    if (session?.user?._id) {
+      if (useCheckIfChecked(tweet.bookmarks, session?.user?._id as string)) {
+        const data = await removeBookmark(
+          tweet._id,
+          session?.user?._id,
+          tweets
+        );
+        data?.tweets
+          ? setTweets(data.tweets)
+          : console.log("an errro occured please try again later");
+      } else {
+        const data = await addBookmark(tweet._id, session?.user._id, tweets);
+        data?.tweets
+          ? setTweets(data.tweets)
+          : console.log("an errro occured please try again later");
       }
     } else {
       console.log("error: you should be connected to like");
@@ -66,9 +114,10 @@ const TweetInfos = ({ tweet, comments }: Props) => {
           <p className="hidden md:block">Comment</p>
         </motion.div>
         <div
+          onClick={handleRetweet}
           className={`${
             useCheckIfChecked(tweet.retweets, session?.user?._id as string) &&
-            "text-red"
+            "text-green"
           } text-sm font-medium text-gray text-center hover:bg-gray3 rounded-lg py-2 flex-1 cursor-pointer flex justify-center items-center`}
         >
           <div className="h-4 mr-2">
@@ -89,9 +138,10 @@ const TweetInfos = ({ tweet, comments }: Props) => {
           <p className="hidden md:block">Like</p>
         </div>
         <div
+          onClick={handleBookmark}
           className={`${
             useCheckIfChecked(tweet.bookmarks, session?.user?._id as string) &&
-            "text-red"
+            "!text-blue"
           } text-sm font-medium text-gray text-center hover:bg-gray3 rounded-lg py-2 flex-1 cursor-pointer flex justify-center items-center`}
         >
           <div className="h-4 mr-2">

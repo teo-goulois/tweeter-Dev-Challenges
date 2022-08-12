@@ -19,6 +19,8 @@ export default async function handler(
       path: "author",
     })
     .populate("likes", "_id")
+    .populate("retweets", "_id")
+    .populate("bookmarks", "_id")
     .sort("-createdAt");
 
   res.status(200).json({ tweets: tweets as unknown as TweetType[] });

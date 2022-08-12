@@ -1,13 +1,13 @@
 import { Tweet } from "../types/typing";
 
-export const addLike = async (
+export const addRetweet = async (
   tweetID: string,
   userID: string,
   tweets: Tweet[]
 ) => {
   //
   const response = await fetch(
-    `/api/tweets/addLike?tweetID=${tweetID}&userID=${userID}`
+    `/api/tweets/addRetweet?tweetID=${tweetID}&userID=${userID}`
   );
   const data = await response.json();
   if (response.status === 200) {
@@ -15,8 +15,8 @@ export const addLike = async (
       if (item._id === tweetID) {
         return {
           ...item,
-          likes: [
-            ...item.likes,
+          retweets: [
+            ...item.retweets,
             {
               _id: userID,
             },

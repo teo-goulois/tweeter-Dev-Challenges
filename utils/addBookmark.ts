@@ -1,22 +1,24 @@
 import { Tweet } from "../types/typing";
 
-export const addLike = async (
+export const addBookmark = async (
   tweetID: string,
   userID: string,
   tweets: Tweet[]
 ) => {
   //
   const response = await fetch(
-    `/api/tweets/addLike?tweetID=${tweetID}&userID=${userID}`
+    `/api/tweets/addBookmark?tweetID=${tweetID}&userID=${userID}`
   );
   const data = await response.json();
+  console.log(response, 'RES BOOK');
+  
   if (response.status === 200) {
     const newArray = tweets.map((item) => {
       if (item._id === tweetID) {
         return {
           ...item,
-          likes: [
-            ...item.likes,
+          bookmarks: [
+            ...item.bookmarks,
             {
               _id: userID,
             },

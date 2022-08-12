@@ -13,9 +13,9 @@ export type TweetBody = {
   image?: string | undefined;
   author: undefined | ResUser;
   likes: { type?: ObjectId | undefined; ref?: string; _id?: string }[];
-  comments?: { type?: ObjectId | undefined; ref?: unknown }[];
-  retweets: { type?: ObjectId | undefined; ref?: unknown }[];
-  bookmarks: { type?: ObjectId | undefined; ref?: unknown }[];
+  comments?: { type?: ObjectId | undefined; ref?: unknown; _id?: string }[];
+  retweets: { type?: ObjectId | undefined; ref?: unknown; _id?: string }[];
+  bookmarks: { type?: ObjectId | undefined; ref?: unknown; _id?: string }[];
 };
 
 export interface Comment extends CommentBody {

@@ -18,9 +18,9 @@ export default async function handler(
   try {
     await Tweet.findOneAndUpdate(
       { _id: tweetID },
-      { $push: { likes: userID } }
+      { $push: { bookmarks: userID } }
     );
-    res.status(200).json({ message: "tweet liked" });
+    res.status(200).json({ message: "added to bookmarks" });
   } catch (err) {
     res.status(500).json({ message: "an error occured please try later" });
   }

@@ -14,13 +14,12 @@ export default async function handler(
   const { tweetID, userID } = req.query;
 
   await dbConnect();
-
   try {
     await Tweet.findOneAndUpdate(
       { _id: tweetID },
-      { $push: { likes: userID } }
+      { $pull: { likes: userID } }
     );
-    res.status(200).json({ message: "tweet liked" });
+    res.status(200).json({ message: "tweet unliked" });
   } catch (err) {
     res.status(500).json({ message: "an error occured please try later" });
   }
