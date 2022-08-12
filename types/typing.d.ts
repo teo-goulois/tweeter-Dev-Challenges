@@ -12,7 +12,7 @@ export type TweetBody = {
   text: string | undefined;
   image?: string | undefined;
   author: undefined | ResUser;
-  likes: { type?: ObjectId | undefined; ref?: unknown }[];
+  likes: { type?: ObjectId | undefined; ref?: string; _id?: string }[];
   comments?: { type?: ObjectId | undefined; ref?: unknown }[];
   retweets: { type?: ObjectId | undefined; ref?: unknown }[];
   bookmarks: { type?: ObjectId | undefined; ref?: unknown }[];

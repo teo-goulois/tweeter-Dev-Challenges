@@ -8,6 +8,11 @@ declare module "next-auth" {
     name: string;
     provider: string;
     image: string;
+    isAdmin: boolean;
+    _id: string;
+    following: string[];
+    follower: string[];
+    __v: number;
   }
   interface Account {
     provider: string;

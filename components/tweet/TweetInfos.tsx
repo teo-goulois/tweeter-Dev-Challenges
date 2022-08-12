@@ -9,7 +9,7 @@ import {
   RetweetIcon,
 } from "../../icons/Icons";
 import { Tweet } from "../../types/typing";
-// import { addLike } from "../../utils/addLike";
+import { addLike } from "../../utils/addLike";
 import { useSession } from "next-auth/react";
 import useCheckIfChecked from "../../hooks/useCheckIfChecked";
 
@@ -37,8 +37,10 @@ const TweetInfos = ({ tweet, comments }: Props) => {
         /* const data = await removeLike(tweet._id, session?.user?._id, tweets);
         setTweets(data.tweets); */
       } else {
-        /* const data = await addLike(tweet._id, session?.user?._id, tweets);
-        setTweets(data.tweets); */
+        console.log("ADD like");
+
+        const data = await addLike(tweet._id, session?.user._id, tweets);
+        setTweets(data.tweets);
       }
     } else {
       console.log("error: you should be connected to like");
