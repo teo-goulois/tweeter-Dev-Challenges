@@ -19,15 +19,13 @@ type Props = {
 const Home = ({ providers, tweets }: Props) => {
   const { data: session } = useSession();
   const { setTweets } = useContext(TweetContext);
-  console.log(session, "SESSION");
-  console.log(tweets, "tweets");
-  /*  
-  console.log(providers, 'PROVIDERs');
- */
+
   // useEffect
   useEffect(() => {
+    console.log('useffect index set tweets');
     setTweets(tweets);
   }, [tweets]);
+  
   return (
     <div className="p-4 w-full flex flex-col md:flex-row md:items-start md:justify-center  items-center ">
       <Head>

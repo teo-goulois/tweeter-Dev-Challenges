@@ -10,7 +10,6 @@ export const addBookmark = async (
     `/api/tweets/addBookmark?tweetID=${tweetID}&userID=${userID}`
   );
   const data = await response.json();
-  console.log(response, 'RES BOOK');
   
   if (response.status === 200) {
     const newArray = tweets.map((item) => {

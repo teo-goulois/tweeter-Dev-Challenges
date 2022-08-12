@@ -24,10 +24,8 @@ type Props = {
 
 const Login = ({ providers, csrfToken }: Props) => {
   const { data: session } = useSession();
-  console.log(session);
 
   const router = useRouter();
-  console.log(providers, "PROVIDER");
 
   const [forgetPassword, setForgetPassword] = useState<boolean>(false);
 

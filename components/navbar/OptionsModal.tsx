@@ -21,6 +21,7 @@ const OptionsModal = () => {
       ].map(([title, url]) => {
         return (
           <button
+            key={title}
             onClick={() => router.push(url)}
             className="text-gray flex items-center w-full  rounded-lg px-4 py-2  hover:bg-gray3 my-1"
           >

@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { RetweetIcon } from "../../icons/Icons";
 import { Comment as CommentType, Tweet } from "../../types/typing";
-// import { fetchComments } from "../../utils/fetchComments";
+import { fetchComments } from "../../utils/fetchComments";
 import Comment from "./Comment";
 import Reply from "./Reply";
 import TweetInfos from "./TweetInfos";
@@ -14,13 +14,13 @@ type Props = {
 const Tweet = ({ tweet }: Props) => {
   const [comments, setComments] = useState<CommentType[]>([]);
 
-  /* useEffect(() => {
+  useEffect(() => {
     const getComments = async () => {
       const comments = await fetchComments(tweet._id);
       setComments(comments);
     };
     getComments();
-  }, [tweet]); */
+  }, [tweet]);
 
   return (
     <>
@@ -64,12 +64,12 @@ const Tweet = ({ tweet }: Props) => {
         {/* tweet infos */}
         <TweetInfos tweet={tweet} comments={comments.length} />
         {/* reply */}
-        <Reply />
+        <Reply tweetID={tweet._id} setComments={setComments} />
         {/* comments */}
         <div className="border border-gray3 w-full mb-2"></div>
         {comments.length > 0 &&
           comments.map((comment) => (
-            <Comment key={comment._id} comment={comment} />
+            <Comment key={comment._id} comment={comment} comments={comments} setComments={setComments} />
           ))}
       </div>
     </>

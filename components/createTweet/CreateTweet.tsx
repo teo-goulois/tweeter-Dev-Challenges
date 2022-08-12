@@ -50,15 +50,11 @@ const CreateTweet = () => {
       author: session?.user?._id,
       image: image,
     };
-    console.log(body, "BODY");
-
     const response = await fetch(`/api/tweets/postTweet`, {
       body: JSON.stringify(body),
       method: "POST",
     });
     const data = await response.json();
-    console.log(data);
-
     setTweets((prev) =>
       [{ ...data.tweet, author: session?.user }, ...prev ]
     );

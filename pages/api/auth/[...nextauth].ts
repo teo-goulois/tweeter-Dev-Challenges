@@ -17,7 +17,6 @@ import {
   ReqUser,
   ResUser,
 } from "../../../libs/users/users";
-console.log(process.env.EMAIL_SERVER, "env");
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
@@ -57,10 +56,7 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user, account, profile, email, credentials }) {
       try {
         if (user !== null) {
-          console.log("SEND TO DATABSAE");
           // get User if  not create one
-          console.log(await getUser(user.id), "getuser");
-
           (await getUser(user.id)) ??
             (await createUser(toReqUser(user, account)));
           const data = await getUser(user.id);
@@ -90,7 +86,6 @@ const toReqUser = (user: User, account: Account) => {
 };
 
 const setResUser = (user: User, resUser: ResUser) => {
-  console.log(resUser, "resUser");
   user._id = resUser._id;
   user.id = resUser.id;
   user.email = resUser.email;

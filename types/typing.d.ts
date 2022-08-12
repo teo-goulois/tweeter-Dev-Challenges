@@ -19,21 +19,18 @@ export type TweetBody = {
 };
 
 export interface Comment extends CommentBody {
-  _id: string;
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  _type: "comment";
+  _id?: ObjectId;
+  _createdAt?: string;
+  _updatedAt?: string;
+  __v?: number;
+  isDeleted: boolean;
 }
 
 export type CommentBody = {
-  comment: string;
-  username: string;
-  profileImage: string;
-  author: resUser;
-  likes: string[];
-  tweet: {
-    _type: string;
-    _ref: string;
-  };
+  tweet: { _id: ObjectId };
+  text: string;
+  image: string;
+  author: undefined | ResUser;
+  likes:  { type?: ObjectId | undefined; ref?: string; _id?: string }[];
+  parent?: ObjectId;
 };

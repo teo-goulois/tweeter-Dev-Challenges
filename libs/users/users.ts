@@ -25,25 +25,13 @@ export type ResUser = ReqUser & {
 };
 
 export const getUser = async (id: string) => {
-  /* const { db } = await connectToDatabase();
-  const user = db.collection("users").findOne({ id });
-  */
   await dbConnect();
   const user = await User.findOne({ id }).exec();
-  console.log(user, "USER");
   return user;
 };
 
 export const createUser = async (user: ReqUser) => {
-  /*  const { db } = await connectToDatabase();
-  const response = db.collection("users").insertOne({
-    ...user,
-    completed: false,
-    createdAt: new Date(),
-  }); */
   await dbConnect();
-  console.log("CREATE USER");
-
   var newUser = new User({
     ...user,
     completed: false,
@@ -51,7 +39,6 @@ export const createUser = async (user: ReqUser) => {
   });
   // Create new user
   var usercreated = await newUser.save();
-  console.log(usercreated, "usercreated");
 
   return usercreated;
 };
