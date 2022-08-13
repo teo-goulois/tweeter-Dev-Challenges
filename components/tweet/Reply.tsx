@@ -20,13 +20,11 @@ const Reply = ({ tweetID, setComments }: Props) => {
 
   const addImageToTweet = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    value: React.RefObject<HTMLInputElement>
+    value: string
   ) => {
     e.preventDefault();
-    if (!value.current?.value) return;
     // set Imatge
-    setImage(value.current.value);
-    value.current.value = "";
+    setImage(value);
     setImageUrlBoxIsOpen(false);
   };
 
@@ -45,7 +43,6 @@ const Reply = ({ tweetID, setComments }: Props) => {
     });
     if (response.status === 200) {
       const data = await response.json();
-      console.log(data.message, data);
       setComments((prev) => [
         { ...data.comment, author: session?.user },
         ...prev,
@@ -62,7 +59,6 @@ const Reply = ({ tweetID, setComments }: Props) => {
       <AddImageModal
         isOpen={imageUrlBoxIsOpen}
         setIsOpen={setImageUrlBoxIsOpen}
-        imageURL={image}
         addImageToTweet={addImageToTweet}
       />
       <form onSubmit={handleSubmit}>

@@ -35,9 +35,11 @@ const Tweet = ({ tweet }: Props) => {
         </div>
         <p> Daniel Jensen Retweeted</p>
       </div> */}
-      <FsLightbox toggler={toggler} sources={tweet.media.images} />
+      {tweet.media.isMedia && (
+        <FsLightbox toggler={toggler} sources={tweet.media.images} />
+      )}
 
-      <div className="w-full bg-white p-4 rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] my-4 min-w-[70%] ">
+      <div className="w-full lg:w-4/5 bg-white p-4 rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] lg:min-w-[700px] mb-4">
         {/* author */}
         <div className="flex items-center">
           {/* image */}
@@ -67,11 +69,13 @@ const Tweet = ({ tweet }: Props) => {
             >
               {tweet.media.images.map((image, index) => {
                 return (
-                  <div className="relative  min-h-[20px] flex-1 basis-2/5 ">
+                  <div
+                    key={index}
+                    className="relative  min-h-[20px] flex-1 basis-2/5 "
+                  >
                     <img
-                      key={index}
                       className="h-full object-cover absolute w-full"
-                      src={image}
+                      src={image ?? ""}
                       alt="tweet image"
                     />
                   </div>

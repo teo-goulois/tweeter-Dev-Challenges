@@ -12,16 +12,16 @@ import { Tweet } from "../types/typing";
 import { fetchTweets } from "../utils/fetchTweets";
 
 type Props = {
-  tweets: Tweet[];
+  fetchTweets: Tweet[];
 };
 
-const Home = ({ tweets }: Props) => {
-  const { setTweets, tweets: tweetContext } = useContext(TweetContext);
+const Home = ({ fetchTweets }: Props) => {
+  const { setTweets, tweets } = useContext(TweetContext);
 
   // useEffect
   useEffect(() => {
-    setTweets(tweets);
-  }, [tweets]);
+    setTweets(fetchTweets);
+  }, [fetchTweets]);
 
   return (
     <div className="p-4 w-full flex flex-col md:flex-row md:items-start md:justify-center  items-center ">
@@ -30,7 +30,7 @@ const Home = ({ tweets }: Props) => {
       </Head>
       <div className="w-full md:min-w-[65%] mb-14 md:mb-0">
         <CreateTweet />
-        <Feed tweets={tweetContext} />
+        <Feed tweets={tweets} />
       </div>
       <div className="hidden md:block ml-2"></div>
     </div>
@@ -43,6 +43,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const tweets = await fetchTweets();
 
   return {
-    props: { tweets },
+    props: { fetchTweets: tweets },
   };
 };

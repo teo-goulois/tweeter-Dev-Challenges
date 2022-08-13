@@ -38,7 +38,6 @@ const AddImageModal = ({
             onClick={(e) => {
               if (imageInputRef.current) {
                 addImageToTweet(e, imageInputRef.current.value);
-                console.log(imageInputRef.current.value);
               }
             }}
             type="button"

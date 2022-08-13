@@ -1,36 +1,44 @@
+import { useSession } from "next-auth/react";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-// types
+// Types
 import { Tweet } from "../../types/typing";
+import { fetchSavedCommentedTweets } from "../../utils/bookmarks/fetchSavedCommentedTweets";
 // Hooks
-import { fetchMediaTweets } from "../../utils/explore/fetchMediaTweets";
-import { fetchTopTweets } from "../../utils/explore/fetchTopTweets";
-import { fetchTweets } from "../../utils/fetchTweets";
+import { fetchSavedMediaTweets } from "../../utils/bookmarks/fetchSavedMediaTweets";
+import { fetchSavedTopTweets } from "../../utils/bookmarks/fetchSavedTopTweets";
+import { fetchSavedTweets } from "../../utils/bookmarks/fetchSavedTweets";
 
 type Props = {
   setTweets: Dispatch<SetStateAction<Tweet[]>>;
 };
 
 const Filter = ({ setTweets }: Props) => {
-  const [filter, setfilter] = useState<string>("top");
+  const { data: session } = useSession();
+  const [filter, setfilter] = useState<string>("tweets");
 
   useEffect(() => {
     const getTweets = async () => {
+      if (!session?.user) return;
       switch (filter) {
-        case "top":
+        case "tweets":
           // code block
-          const topTweets = await fetchTopTweets();
-          setTweets(topTweets);
+          const tweets = await fetchSavedTweets(session?.user._id);
+          setTweets(tweets);
           break;
-        case "lastest":
-          const lastestTweets = await fetchTweets();
-          setTweets(lastestTweets);
-          break;
-        case "people":
-          // code block
+        case "tweets & replies":
+          const tweetsAndReplies = await fetchSavedCommentedTweets(
+            session?.user._id
+          );
+          setTweets(tweetsAndReplies);
           break;
         case "media":
-          const mediaTweets = await fetchMediaTweets();
+          // code block
+          const mediaTweets = await fetchSavedMediaTweets(session?.user._id);
           setTweets(mediaTweets);
+          break;
+        case "likes":
+          const topTweets = await fetchSavedTopTweets(session?.user._id);
+          setTweets(topTweets);
           break;
         default:
         // code block
@@ -41,7 +49,7 @@ const Filter = ({ setTweets }: Props) => {
 
   return (
     <div className="min-w-[304px] bg-white rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] font-[Poppins] font-semibold text-sm flex  lg:flex-col mb-2">
-      {["top", "lastest", "people", "media"].map((title) => {
+      {["tweets", "tweets & replies", "media", "likes"].map((title) => {
         return (
           <div
             key={title}

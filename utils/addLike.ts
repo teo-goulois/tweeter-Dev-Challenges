@@ -25,6 +25,7 @@ export const addLike = async (
       }
       return item;
     });
+    
     return { tweets: newArray };
   }
   return alert(data.message);
