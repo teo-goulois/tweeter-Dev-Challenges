@@ -25,8 +25,7 @@ type ProviderProps = {
 
 export const TweetProvider = ({ children }: ProviderProps) => {
   const [tweets, setTweets] = useState<Tweet[]>([]);
-
-
+  const [exploreTweets, setExploreTweets] = useState<Tweet[]>([]);
 
   const value = { tweets, setTweets };
   return (

@@ -1,11 +1,14 @@
-import React, { useContext } from "react";
-import { TweetContext } from "../../context/TweetProvider";
+import React, { useContext, useEffect } from "react";
+// Components
 import Tweet from "../tweet/Tweet";
+// Type
+import { Tweet as TweetType } from "../../types/typing";
 
-const Feed = () => {
-  const { tweets } = useContext(TweetContext);
-  console.log(tweets, 'TWEETS');
-  
+type Props = {
+  tweets: TweetType[];
+};
+
+const Feed = ({ tweets }: Props) => {
   return (
     <div className="h-full w-full">
       {tweets?.length > 0 ? (

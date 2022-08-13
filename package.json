@@ -7,14 +7,16 @@
   },
   "dependencies": {
     "@next-auth/firebase-adapter": "^1.0.1",
-    "firebase": "^9.9.2",
+    "@types/fslightbox-react": "^1.4.2",
     "framer-motion": "^7.1.0",
+    "fslightbox-react": "^1.6.2-2",
     "moment": "^2.29.4",
     "mongodb": "^4.8.1",
     "mongoose": "^6.5.2",
     "next": "latest",
     "next-auth": "^4.10.3",
     "nodemailer": "^6.7.7",
+    "prop-types": "^15.8.1",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "tailwindcss-no-scrollbar": "^1.0.1"

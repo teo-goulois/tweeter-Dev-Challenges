@@ -7,6 +7,10 @@ const TweetSchema = new Schema(
     author: { type: Schema.Types.ObjectId, ref: "User" },
     blockTweet: Boolean,
     image: String,
+    media: {
+      isMedia: Boolean,
+      images: [String],
+    },
     likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
     retweets: [{ type: Schema.Types.ObjectId, ref: "User" }],
     bookmarks: [{ type: Schema.Types.ObjectId, ref: "User" }],

@@ -5,7 +5,7 @@ import Tweet from "../../../models/Tweet";
 import dbConnect from "../../../libs/dbConnect";
 
 type Data = {
-  tweet: TweetType;
+  topTweets: TweetType[];
 };
 
 export default async function handler(
@@ -13,19 +13,15 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   await dbConnect();
-  const data: TweetBody = JSON.parse(req.body);
-  var newTweet = new Tweet({
-    text: data.text,
-    blockTweet: false,
-    image: data.image,
-    media: {
-      isMedia: data.media.images.length > 0 ? true : false,
-      images: data.media.images
-    },
-    author: data.author,
-  });
-  // Create new user
-  var tweetCreated = await newTweet.save();
 
-  res.status(200).json({ tweet: tweetCreated as TweetType });
+  const topTweets = await Tweet.find({})
+    .populate({
+      path: "author",
+    })
+    .populate("likes", "_id")
+    .populate("retweets", "_id")
+    .populate("bookmarks", "_id")
+    .sort({ likes: -1});
+
+  res.status(200).json({ topTweets: topTweets as unknown as TweetType[] });
 }

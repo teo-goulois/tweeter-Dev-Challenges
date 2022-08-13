@@ -18,7 +18,6 @@ const CreateTweet = () => {
   const { setTweets } = useContext(TweetContext);
   // Ref
   const textareaRef = useRef<null | HTMLTextAreaElement>(null);
-  const imageInputRef = useRef<HTMLInputElement>(null);
   // state
   const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false);
   const [textareaHeight, setTextareaHeight] = useState<string>("auto");
@@ -28,17 +27,14 @@ const CreateTweet = () => {
   });
 
   const [input, setInput] = useState<string>("");
-  const [image, setImage] = useState<string | null>(null);
+  const [images, setImages] = useState<string[]>([]);
 
   const addImageToTweet = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    value: React.RefObject<HTMLInputElement>
+    value: string
   ) => {
     e.preventDefault();
-    if (!value.current?.value) return;
-    // set Imatge
-    setImage(value.current.value);
-    value.current.value = "";
+    setImages((prev) => [value, ...prev]);
     setImageUrlBoxIsOpen(false);
   };
 
@@ -48,19 +44,18 @@ const CreateTweet = () => {
     const body = {
       text: input,
       author: session?.user?._id,
-      image: image,
+      media: {
+        images: images,
+      },
     };
     const response = await fetch(`/api/tweets/postTweet`, {
       body: JSON.stringify(body),
       method: "POST",
     });
     const data = await response.json();
-    setTweets((prev) =>
-      [{ ...data.tweet, author: session?.user }, ...prev ]
-    );
-
-    // if tweet posted correctly
-    const tweets = await fetchTweets();
+    setTweets((prev) => [{ ...data.tweet, author: session?.user }, ...prev]);
+    setInput("");
+    setImages([]);
   };
 
   return (
@@ -68,7 +63,6 @@ const CreateTweet = () => {
       <AddImageModal
         isOpen={imageUrlBoxIsOpen}
         setIsOpen={setImageUrlBoxIsOpen}
-        imageURL={image}
         addImageToTweet={addImageToTweet}
       />
       <div className="bg-white min-w-[400px] w-full rounded-xl p-4 font-[Noto Sans] relative ">
@@ -99,12 +93,32 @@ const CreateTweet = () => {
               placeholder="Whats's happening?"
             ></textarea>
           </div>
-          <div className="rounded-lg overflow-hidden pb-2">
-            {image && <img src={image} alt="tweet image" />}
-          </div>
+
+          {/* image in tweets */}
+          {images.length > 0 && (
+            <div
+              id="my-container"
+              className="aspect-[4/2] rounded-2xl flex flex-col h-[300px] flex-wrap gap-2 overflow-hidden w-full mb-2"
+            >
+              {images.map((image, index) => {
+                return (
+                  <div className="relative  min-h-[20px] flex-1 basis-2/5 ">
+                    <img
+                      key={index}
+                      className="h-full object-cover absolute w-full"
+                      src={image}
+                      alt="tweet image"
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
           <div className="flex justify-between items-center">
             <div className="text-blue flex items-center">
               <button
+                type="button"
                 onClick={() => setImageUrlBoxIsOpen((prev) => !prev)}
                 className="h-6 w-6 mr-2 cursor-pointer"
                 aria-label="add image"
@@ -134,7 +148,10 @@ const CreateTweet = () => {
               </button>
               {/* modale */}
             </div>
-            <button className="bg-blue text-white rounded-[4px] px-6 py-2 cursor-pointer ">
+            <button
+              type="submit"
+              className="bg-blue text-white rounded-[4px] px-6 py-2 cursor-pointer "
+            >
               Tweet
             </button>
           </div>

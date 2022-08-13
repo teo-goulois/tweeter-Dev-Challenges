@@ -1,39 +1,36 @@
-import type { GetServerSideProps, NextPage } from "next";
-import { Provider } from "next-auth/providers";
-import { getProviders, signIn, signOut, useSession } from "next-auth/react";
+import type { GetServerSideProps } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import { useContext, useEffect } from "react";
 // Components
 import CreateTweet from "../components/createTweet/CreateTweet";
 import Feed from "../components/feed/Feed";
+// Context
 import { TweetContext } from "../context/TweetProvider";
+// types
 import { Tweet } from "../types/typing";
+// Hooks
 import { fetchTweets } from "../utils/fetchTweets";
 
 type Props = {
   tweets: Tweet[];
-  providers: Provider;
 };
 
-const Home = ({ providers, tweets }: Props) => {
-  const { data: session } = useSession();
-  const { setTweets } = useContext(TweetContext);
+const Home = ({ tweets }: Props) => {
+  const { setTweets, tweets: tweetContext } = useContext(TweetContext);
 
   // useEffect
   useEffect(() => {
-    console.log('useffect index set tweets');
     setTweets(tweets);
   }, [tweets]);
-  
+
   return (
     <div className="p-4 w-full flex flex-col md:flex-row md:items-start md:justify-center  items-center ">
       <Head>
         <title>tweeter</title>
       </Head>
-      <div className="w-full md:min-w-[65%]">
+      <div className="w-full md:min-w-[65%] mb-14 md:mb-0">
         <CreateTweet />
-        <Feed />
+        <Feed tweets={tweetContext} />
       </div>
       <div className="hidden md:block ml-2"></div>
     </div>
@@ -43,10 +40,9 @@ const Home = ({ providers, tweets }: Props) => {
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const providers = await getProviders();
   const tweets = await fetchTweets();
 
   return {
-    props: { providers, tweets },
+    props: { tweets },
   };
 };

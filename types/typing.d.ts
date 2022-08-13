@@ -11,6 +11,10 @@ export interface Tweet extends TweetBody {
 export type TweetBody = {
   text: string | undefined;
   image?: string | undefined;
+  media: {
+    isMedia: boolean;
+    images: string[];
+  };
   author: undefined | ResUser;
   likes: { type?: ObjectId | undefined; ref?: string; _id?: string }[];
   comments?: { type?: ObjectId | undefined; ref?: unknown; _id?: string }[];
@@ -31,6 +35,6 @@ export type CommentBody = {
   text: string;
   image: string;
   author: undefined | ResUser;
-  likes:  { type?: ObjectId | undefined; ref?: string; _id?: string }[];
+  likes: { type?: ObjectId | undefined; ref?: string; _id?: string }[];
   parent?: ObjectId;
 };

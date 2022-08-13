@@ -33,8 +33,6 @@ export default async function handler(
     });
     // Create new user
     var commentCreated = await newComment.save();
-    console.log(commentCreated, "Comment create");
-
     res
       .status(200)
       .json({
