@@ -6,9 +6,10 @@ import { Tweet as TweetType } from "../../types/typing";
 
 type Props = {
   tweets: TweetType[];
+  textIfNoTweets?: string;
 };
 
-const Feed = ({ tweets }: Props) => {
+const Feed = ({ tweets, textIfNoTweets }: Props) => {
   return (
     <div className="h-full w-full">
       {tweets?.length > 0 ? (
@@ -16,7 +17,9 @@ const Feed = ({ tweets }: Props) => {
           return <Tweet key={tweet._id} tweet={tweet} />;
         })
       ) : (
-        <div>no tweets yet create one</div>
+        <div className="bg-white py-2 rounded-lg shadow-sm">
+          <p className="text-primary font-semibold text-center text-lg">{textIfNoTweets ?? "no tweets yet create one"} </p>
+        </div>
       )}
     </div>
   );

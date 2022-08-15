@@ -1,5 +1,19 @@
 import { ResUser } from "../libs/users/users";
 
+export interface User {
+  _id: string;
+  following: String[];
+  follower: String[];
+  __v: number;
+  id: string;
+  email: string;
+  name: string;
+  image: string;
+  provider: string;
+  bio?: string;
+  banner?: string;
+}
+
 export interface Tweet extends TweetBody {
   blockTweet: boolean;
   _id?: ObjectId;

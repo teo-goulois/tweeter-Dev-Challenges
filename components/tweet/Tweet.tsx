@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import moment from "moment";
 import FsLightbox from "fslightbox-react";
 // Types
@@ -9,14 +9,16 @@ import { fetchComments } from "../../utils/fetchComments";
 import Comment from "./Comment";
 import Reply from "./Reply";
 import TweetInfos from "./TweetInfos";
+import { AuthContext } from "../../context/AuthProvider";
 
 type Props = {
   tweet: Tweet;
 };
 
 const Tweet = ({ tweet }: Props) => {
+  const { user } = useContext(AuthContext);
   const [toggler, setToggler] = useState(false);
-
+  const [commentIsOpen, setCommentIsOpen] = useState<boolean>(false);
   const [comments, setComments] = useState<CommentType[]>([]);
   useEffect(() => {
     const getComments = async () => {
@@ -39,7 +41,7 @@ const Tweet = ({ tweet }: Props) => {
         <FsLightbox toggler={toggler} sources={tweet.media.images} />
       )}
 
-      <div className="w-full lg:w-4/5 bg-white p-4 rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] lg:min-w-[700px] mb-4">
+      <div className="w-full  bg-white p-4 rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)]  mb-4">
         {/* author */}
         <div className="flex items-center">
           {/* image */}
@@ -58,7 +60,7 @@ const Tweet = ({ tweet }: Props) => {
         </div>
         {/* text */}
         <div className="my-2">
-          <p className="text-gray">{tweet.text}</p>
+          <p className="text-gray">{tweet.text ?? ''}</p>
           {/* image */}
 
           {tweet.media.isMedia && (
@@ -85,11 +87,15 @@ const Tweet = ({ tweet }: Props) => {
           )}
         </div>
         {/* tweet infos */}
-        <TweetInfos tweet={tweet} comments={comments.length} />
+        <TweetInfos tweet={tweet} comments={comments.length} setCommentIsOpen={setCommentIsOpen} />
         {/* reply */}
-        <Reply tweetID={tweet._id} setComments={setComments} />
+        {commentIsOpen && (
+          <>
+            <Reply tweetID={tweet._id} setComments={setComments} />
+            <div className="border border-gray3 w-full mb-2"></div>
+          </>
+        )}
         {/* comments */}
-        <div className="border border-gray3 w-full mb-2"></div>
         {comments.length > 0 &&
           comments.map((comment) => (
             <Comment

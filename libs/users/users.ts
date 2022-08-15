@@ -2,6 +2,10 @@ import { connectToDatabase } from "../mongodb";
 import dbConnect from "../dbConnect";
 
 import User from "../../models/User";
+import { ObjectId } from "mongoose";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthProvider";
+import { User as UserType } from "../../types/typing";
 
 export type ReqUser = {
   id: string;
@@ -17,7 +21,7 @@ export type userTokens = {
 };
 
 export type ResUser = ReqUser & {
-  isAdmin: boolean;
+  isAdmin?: boolean;
   _id: string;
   following: string[];
   follower: string[];
@@ -42,3 +46,9 @@ export const createUser = async (user: ReqUser) => {
 
   return usercreated;
 };
+
+/* export const CreateUserContext = (user: UserType) => {
+  const { setUser } = useContext(AuthContext);
+  setUser(user);
+  return 
+} */

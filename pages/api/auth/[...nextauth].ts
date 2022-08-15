@@ -48,15 +48,13 @@ export const authOptions: NextAuthOptions = {
       }
       return Promise.resolve(token);
     },
-    async session({ session, token }) {
-      // @ts-ignore
-      session.user = token.user;
+    async session({ session, token, user }) {
+      session.user = token.user as User;
       return Promise.resolve(session);
     },
     async signIn({ user, account, profile, email, credentials }) {
       try {
         if (user !== null) {
-          // get User if  not create one
           (await getUser(user.id)) ??
             (await createUser(toReqUser(user, account)));
           const data = await getUser(user.id);

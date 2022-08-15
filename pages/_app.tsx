@@ -1,14 +1,20 @@
 import "../styles/globals.css";
-import type { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode, useState } from "react";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 // Layout
 import Layout from "../components/layouts/Layout";
 // Providers
+import { Toaster } from "react-hot-toast";
 import { SessionProvider } from "next-auth/react";
 import { TweetProvider } from "../context/TweetProvider";
+import { AuthProvider } from "../context/AuthProvider";
 import AuthLayout from "../components/layouts/AuthLayout";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+
+import useSWR, { SWRConfig } from "swr";
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -23,21 +29,31 @@ export default function MyApp({
   pageProps: { session, ...pageProps },
 }: AppPropsWithLayout) {
   const router = useRouter();
-  // Use the layout defined at the page level, if available
+  const [queryClient] = useState(() => new QueryClient());
 
   return (
     <SessionProvider session={session}>
-      <TweetProvider>
-        {router.route.search("auth") === 1 ? (
-          <AuthLayout>
-            <Component {...pageProps} />
-          </AuthLayout>
-        ) : (
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        )}
-      </TweetProvider>
+      <SWRConfig
+        value={{
+          fetcher: (resource, init) =>
+            fetch(resource, init).then((res) => res.json()),
+        }}
+      >
+        <AuthProvider>
+          <TweetProvider>
+            <Toaster />
+            {router.route.search("auth") === 1 ? (
+              <AuthLayout>
+                <Component {...pageProps} />
+              </AuthLayout>
+            ) : (
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            )}
+          </TweetProvider>
+        </AuthProvider>
+      </SWRConfig>
     </SessionProvider>
   );
 }

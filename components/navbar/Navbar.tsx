@@ -78,9 +78,11 @@ const Navbar = ({ openTab, setOpenTab }: Props) => {
               className="flex items-center float-right cursor-pointer"
             >
               <img
+                alt="user image"
                 src={
-                  session.user?.image ||
-                  "https://api.iconify.design/carbon:user-avatar-filled-alt.svg"
+                  session.user.image.length > 0
+                    ? session.user.image
+                    : "https://lh3.googleusercontent.com/a/AItbvmm325lr8zSnqbAsJgMAkOOiA0ptP4JqVzzTVpOT=s96-c"
                 }
                 className="w-8 h-8 bg-blue rounded-lg float-right"
               ></img>

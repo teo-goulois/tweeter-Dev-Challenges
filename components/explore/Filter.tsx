@@ -3,6 +3,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Tweet } from "../../types/typing";
 // Hooks
 import { fetchMediaTweets } from "../../utils/explore/fetchMediaTweets";
+import { fetchPeoples } from "../../utils/explore/fetchPeoples";
 import { fetchTopTweets } from "../../utils/explore/fetchTopTweets";
 import { fetchTweets } from "../../utils/fetchTweets";
 
@@ -26,6 +27,9 @@ const Filter = ({ setTweets }: Props) => {
           setTweets(lastestTweets);
           break;
         case "people":
+          const peoples = await fetchPeoples()
+          console.log(peoples, 'PEOPLEs');
+          
           // code block
           break;
         case "media":

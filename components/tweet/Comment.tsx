@@ -46,9 +46,9 @@ const Comment = ({ comment, comments, setComments }: Props) => {
   };
   return (
     <div className="flex items-start mb-1 ">
-      <div className="w-10 h-10 bg-[#C4C4C4] rounded-lg overflow-hidden">
+      <div className="w-10 h-10 bg-[#C4C4C4] rounded-lg overflow-hidden mt-2">
         <img
-          className="h-full w-full  object-center"
+          className="h-full w-full  object-center "
           src={comment.author?.image ?? ""}
           alt=""
         />

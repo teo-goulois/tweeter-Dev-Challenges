@@ -10,6 +10,8 @@ const UserSchema = new Schema(
     provider: String,
     following: [{ type: Schema.Types.ObjectId, ref: "User" }],
     follower: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    bio: String,
+    banner: String,
   },
   {
     timestamps: {},

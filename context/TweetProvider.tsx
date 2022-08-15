@@ -27,6 +27,10 @@ export const TweetProvider = ({ children }: ProviderProps) => {
   const [tweets, setTweets] = useState<Tweet[]>([]);
   const [exploreTweets, setExploreTweets] = useState<Tweet[]>([]);
 
+  useEffect(() => {
+    console.log(tweets, "TWEETS CONTEXT");
+  }, [tweets]);
+
   const value = { tweets, setTweets };
   return (
     <TweetContext.Provider value={value}>{children}</TweetContext.Provider>

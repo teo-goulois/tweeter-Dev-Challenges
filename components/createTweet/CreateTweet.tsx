@@ -65,7 +65,7 @@ const CreateTweet = () => {
         setIsOpen={setImageUrlBoxIsOpen}
         addImageToTweet={addImageToTweet}
       />
-      <div className="bg-white min-w-[400px] w-full rounded-xl p-4 font-[Noto Sans] relative ">
+      <div className="bg-white min-w-[400px] w-full rounded-xl p-4 font-[Noto Sans] relative mb-4">
         <h3 className="font-semibold text-primary font-[Poppins]">
           Tweet something
         </h3>
