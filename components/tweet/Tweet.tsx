@@ -10,23 +10,22 @@ import Comment from "./Comment";
 import Reply from "./Reply";
 import TweetInfos from "./TweetInfos";
 import { AuthContext } from "../../context/AuthProvider";
+import { useRouter } from "next/router";
 
 type Props = {
   tweet: Tweet;
 };
 
 const Tweet = ({ tweet }: Props) => {
+  const router = useRouter()
   const { user } = useContext(AuthContext);
   const [toggler, setToggler] = useState(false);
   const [commentIsOpen, setCommentIsOpen] = useState<boolean>(false);
   const [comments, setComments] = useState<CommentType[]>([]);
-  useEffect(() => {
-    const getComments = async () => {
-      const comments = await fetchComments(tweet._id);
-      setComments(comments);
-    };
-    getComments();
-  }, [tweet]);
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    
+  }
 
   return (
     <>
@@ -41,7 +40,7 @@ const Tweet = ({ tweet }: Props) => {
         <FsLightbox toggler={toggler} sources={tweet.media.images} />
       )}
 
-      <div className="w-full  bg-white p-4 rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)]  mb-4">
+      <div onClick={(e) => router.push(`/tweets/${tweet._id}`)} className="w-full  bg-white p-4 rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] relative z-0 mb-4">
         {/* author */}
         <div className="flex items-center">
           {/* image */}

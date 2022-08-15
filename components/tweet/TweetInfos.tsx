@@ -34,10 +34,12 @@ type Props = {
 };
 
 const TweetInfos = ({ tweet, comments, setCommentIsOpen }: Props) => {
+
   const { data: session } = useSession();
   const { tweets, setTweets } = useContext(TweetContext);
 
-  const handleActivities = async (title: string) => {
+  const handleActivities = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, title: string) => {
+    e.stopPropagation()
     if (!session?.user)
       return toast.error(`you should be connected to ${title}`);
 
@@ -98,7 +100,7 @@ const TweetInfos = ({ tweet, comments, setCommentIsOpen }: Props) => {
 
   return (
     <>
-      <div className="flex justify-end pb-1 font-medium text-xs text-gray4">
+      <div className="flex justify-end pb-1 font-medium text-xs text-gray4 relative z-10">
         <p className="mx-2">{comments} Comments</p>
         <p className="mx-2">
           {tweet.retweets ? tweet.retweets.length : "0"} Retweets
@@ -115,8 +117,10 @@ const TweetInfos = ({ tweet, comments, setCommentIsOpen }: Props) => {
           ["save", <OutlineBookmarkIcon />, tweet.bookmarks, "!text-blue"],
         ].map(([title, component, array, color]) => {
           return (
-            <div
-              onClick={() => handleActivities(title as string)}
+            <button
+              type="button"
+              key={title as string}
+              onClick={(e) => handleActivities(e, title as string)}
               className={`${
                 useCheckIfChecked(
                   array as {
@@ -128,7 +132,7 @@ const TweetInfos = ({ tweet, comments, setCommentIsOpen }: Props) => {
             >
               <div className="h-4 mr-2">{component as ReactNode}</div>
               <p className="hidden md:block capitalize">{title as string}</p>
-            </div>
+            </button>
           );
         })}
       </div>

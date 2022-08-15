@@ -13,12 +13,13 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   await dbConnect();
-  const tweets = await Tweet.find({})
-    .populate("author")
+  const tweets = await Tweet.find({}).populate('comments')
+    /* .populate("author")
     .populate("likes", "_id")
     .populate("retweets", "_id")
-    .populate("bookmarks", "_id")
+    .populate("bookmarks", "_id") */
     .sort("-createdAt"); 
+  console.log(tweets, 'TWEETS');
   
   res.status(200).json({ tweets: tweets as TweetType[] });
 }

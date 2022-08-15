@@ -25,6 +25,8 @@ const Index = ({ fetchTweets }: Props) => {
   // useEffect
   useEffect(() => {
     data && setTweets(data.tweets);
+    data && console.log(data.tweets, 'EXCPLORE TWEETS');
+    
     return () => {
       console.log("CLEAR");
 

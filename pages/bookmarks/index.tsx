@@ -1,5 +1,5 @@
 import { ReactElement, useContext, useEffect, useState } from "react";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, NextPage } from "next";
 
 // Components
 import Filter from "../../components/bookmarks/Filter";
@@ -16,12 +16,10 @@ import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
 import useSWR from "swr";
 import { AuthContext } from "../../context/AuthProvider";
+import withAuth from "../../libs/withAuth";
+import toast from "react-hot-toast";
 
-type Props = {
-  fetchTweets: TweetType[];
-};
-
-const Index = ({ fetchTweets }: Props) => {
+const Index: NextPage = () => {
   const { setTweets, tweets } = useContext(TweetContext);
   const { user } = useContext(AuthContext);
 
@@ -60,8 +58,26 @@ const Index = ({ fetchTweets }: Props) => {
   );
 };
 
-Index.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>;
-};
-
 export default Index;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  // ...
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/auth/login",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

@@ -13,6 +13,7 @@ import SignupButton from "./buttons/Signup";
 import Logo from "./Logo";
 import OptionsModal from "./OptionsModal";
 import { RoundArrowDropDownIcon } from "../../icons/Icons";
+import LinkButton from "./buttons/LinkButton";
 
 type Props = {
   openTab: string;
@@ -39,33 +40,17 @@ const Navbar = ({ openTab, setOpenTab }: Props) => {
         {/* nav links on desktop */}
         <nav className="hidden md:flex ">
           {[
-            ["Home", "/"],
-            ["Explore", "/explore"],
-            ["Bookmarks", "/bookmarks"],
-          ].map(([title, url]) => (
-            <div
-              key={title}
-              onClick={() => handleClick(url)}
-              className="flex-1 flex flex-col  items-center justify-between cursor-pointer"
-            >
-              <Link href={url}>
-                <a
-                  className={`h-full flex items-center mx-2 font-semibold text-sm ${
-                    router.route === url
-                      ? "text-blue"
-                      : "text-secondary !font-medium"
-                  }`}
-                >
-                  {title}
-                </a>
-              </Link>
-              <div
-                className={` h-1 w-full rounded-t-lg ${
-                  router.route === url ? "bg-blue" : ""
-                } `}
-              ></div>
-            </div>
-          ))}
+            ["home", "/"],
+            ["explore", "/explore"],
+            ["bookmarks", "/bookmarks"],
+          ].map(([title, url]) => {
+            if (!session?.user && (title === "home" || title === "bookmarks")) { // manage Auth
+              return;
+            }
+            return (
+              <LinkButton title={title} url={url} handleClick={handleClick} />
+            );
+          })}
         </nav>
 
         {/* profile */}
@@ -101,7 +86,7 @@ const Navbar = ({ openTab, setOpenTab }: Props) => {
             </div>
           )}
         </div>
-        {optionModalIsOpen && <OptionsModal />}
+        {optionModalIsOpen && <OptionsModal setOptionModaleIsOpen={setOptionModaleIsOpen} />}
       </div>
     </>
   );

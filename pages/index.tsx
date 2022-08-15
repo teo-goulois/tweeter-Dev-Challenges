@@ -85,7 +85,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (!session) {
     return {
       redirect: {
-        destination: "/explore",
+        destination: "/auth/login",
         permanent: false,
       },
     };

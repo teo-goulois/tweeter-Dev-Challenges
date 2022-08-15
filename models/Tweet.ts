@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Comment from "./Comment";
 const { Schema } = mongoose;
 
 const TweetSchema = new Schema(
@@ -19,8 +20,15 @@ const TweetSchema = new Schema(
     timestamps: {},
   }
 );
+
+TweetSchema.virtual("comments", {
+  ref: "Comment",
+  localField: "_id",
+  foreignField: "tweet",
+});
+
 // @ts-ignore
 mongoose.models = {};
-var Tweet = mongoose.model("Tweet", TweetSchema);
+const Tweet = mongoose.model("Tweet", TweetSchema);
 
 export default Tweet;
