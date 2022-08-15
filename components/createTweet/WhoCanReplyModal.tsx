@@ -8,7 +8,6 @@ import React, {
 import { EarthIconerre, PeopleIcon } from "../../icons/Icons";
 
 type Props = {
- 
   setOpenModal: Dispatch<
     SetStateAction<{
       isOpen: boolean;
@@ -17,11 +16,9 @@ type Props = {
   >;
 };
 const ReplyModal = ({ setOpenModal }: Props) => {
-
-
   return (
-    <div>
-      <div className="min-h-[150px] min-w-[230px] bg-white rounded-xl border border-[#E0E0E0] absolute left-12 z-10 p-2">
+    <div className="">
+      <div className="min-h-[150px] min-w-[230px] bg-white rounded-xl border border-[#E0E0E0] absolute left-12 z-[2] p-2">
         <h3 className="font-[Poppins] text-xs font-semibold text-primary ">
           Who can reply?
         </h3>

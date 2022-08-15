@@ -7,6 +7,9 @@ import { TweetContext } from "../../context/TweetProvider";
 
 import ReplyModal from "./WhoCanReplyModal";
 import AddImageModal from "./AddImageModal";
+import ProfileImage from "../global/ProfileImage";
+import { AuthContext } from "../../context/AuthProvider";
+import useAutoIncreaseHeight from "../../hooks/useAutoIncreaseHeight";
 
 type OpenModal = {
   isOpen: boolean;
@@ -14,19 +17,20 @@ type OpenModal = {
 };
 
 const CreateTweet = () => {
+  // Context
   const { data: session } = useSession();
+  const { user } = useContext(AuthContext);
   const { setTweets } = useContext(TweetContext);
-  // Ref
-  const textareaRef = useRef<null | HTMLTextAreaElement>(null);
   // state
   const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false);
-  const [textareaHeight, setTextareaHeight] = useState<string>("auto");
+
   const [openModal, setOpenModal] = useState<OpenModal>({
     isOpen: false,
     value: "everyone",
   });
-
   const [input, setInput] = useState<string>("");
+  const textareaRef = useAutoIncreaseHeight(input);
+
   const [images, setImages] = useState<string[]>([]);
 
   const addImageToTweet = (
@@ -54,6 +58,7 @@ const CreateTweet = () => {
     });
     const data = await response.json();
     setTweets((prev) => [{ ...data.tweet, author: session?.user }, ...prev]);
+    // reinitialize input fomrs
     setInput("");
     setImages([]);
   };
@@ -65,30 +70,37 @@ const CreateTweet = () => {
         setIsOpen={setImageUrlBoxIsOpen}
         addImageToTweet={addImageToTweet}
       />
+      {openModal.isOpen && (
+        <div
+          onClick={() =>
+            setOpenModal((prev) => ({
+              ...prev,
+              isOpen: !prev.isOpen,
+            }))
+          }
+          className="fixed w-screen h-screen left-0 top-0 z-[2]"
+        ></div>
+      )}
+      {/* Container */}
       <div className="bg-white min-w-[400px] w-full rounded-xl p-4 font-[Noto Sans] relative mb-4">
-        <h3 className="font-semibold text-primary font-[Poppins]">
+        <h3 className="font-semibold text-primary font-[Poppins] capitalize">
           Tweet something
         </h3>
-        <div id="divider" className="w-full border border-gray3 my-2"></div>
-
+        <div id="divider" className="w-full border border-gray3 my-2" />
+        {/* form */}
         <form onSubmit={handleSubmitTweet}>
           <div className="flex">
             {/* image */}
-            <div className="w-10 h-10 bg-[#C4C4C4] rounded-lg overflow-hidden">
-              <img
-                className="h-full w-full  object-center"
-                src={session?.user?.image ?? ""}
-                alt=""
-              />
-            </div>
+            <ProfileImage url={user?.image} />
 
             <textarea
+              aria-label="Write your tweet"
               onChange={(e) => {
-                setTextareaHeight(textareaRef.current?.scrollHeight + "px");
                 setInput(e.target.value);
               }}
-              style={{ height: textareaHeight }}
-              ref={textareaRef}
+              ref={(element) => {
+                textareaRef.current = element;
+              }}
               className="font-medium text-secondary p-2 outline-none w-full resize-none overflow-hidden"
               placeholder="Whats's happening?"
             ></textarea>
