@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { ReactNode, useContext } from "react";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
@@ -108,54 +108,29 @@ const TweetInfos = ({ tweet, comments, setCommentIsOpen }: Props) => {
         </p>
       </div>
       <div className="border-y border-gray3 py-1 flex ">
-           {
-            
-           }
-        <motion.div
-          onClick={() => handleActivities("comment")}
-          className="text-sm font-medium text-gray text-center hover:bg-gray3 rounded-lg py-2 flex-1 cursor-pointer flex justify-center items-center"
-        >
-          <div className="h-4 mr-2">
-            <OutlineCommentIcon />
-          </div>
-          <p className="hidden md:block">Comment</p>
-        </motion.div>
-        <div
-          onClick={() => handleActivities("retweet")}
-          className={`${
-            useCheckIfChecked(tweet.retweets, session?.user?._id as string) &&
-            "text-green"
-          } text-sm font-medium text-gray text-center hover:bg-gray3 rounded-lg py-2 flex-1 cursor-pointer flex justify-center items-center`}
-        >
-          <div className="h-4 mr-2">
-            <RetweetIcon />
-          </div>
-          <p className="hidden md:block">Retweet</p>
-        </div>
-        <div
-          onClick={() => handleActivities("like")}
-          className={`${
-            useCheckIfChecked(tweet.likes, session?.user?._id as string) &&
-            "text-red"
-          } text-sm font-medium text-gray text-center hover:bg-gray3 rounded-lg py-2 flex-1 cursor-pointer flex justify-center items-center`}
-        >
-          <div className={`h-4 mr-2 `}>
-            <OutlineHeartIcon />
-          </div>
-          <p className="hidden md:block">Like</p>
-        </div>
-        <div
-          onClick={() => handleActivities("save")}
-          className={`${
-            useCheckIfChecked(tweet.bookmarks, session?.user?._id as string) &&
-            "!text-blue"
-          } text-sm font-medium text-gray text-center hover:bg-gray3 rounded-lg py-2 flex-1 cursor-pointer flex justify-center items-center`}
-        >
-          <div className="h-4 mr-2">
-            <OutlineBookmarkIcon />
-          </div>
-          <p className="hidden md:block">Save</p>
-        </div>
+        {[
+          ["comment", <OutlineCommentIcon />, tweet.comments, "!text-primary"],
+          ["retweet", <RetweetIcon />, tweet.retweets, "!text-green"],
+          ["like", <OutlineHeartIcon />, tweet.likes, "!text-red"],
+          ["save", <OutlineBookmarkIcon />, tweet.bookmarks, "!text-blue"],
+        ].map(([title, component, array, color]) => {
+          return (
+            <div
+              onClick={() => handleActivities(title as string)}
+              className={`${
+                useCheckIfChecked(
+                  array as {
+                    _id?: string;
+                  }[],
+                  session?.user?._id as string
+                ) && color
+              } text-sm font-medium text-gray text-center hover:bg-gray3 rounded-lg py-2 flex-1 cursor-pointer flex justify-center items-center`}
+            >
+              <div className="h-4 mr-2">{component as ReactNode}</div>
+              <p className="hidden md:block capitalize">{title as string}</p>
+            </div>
+          );
+        })}
       </div>
     </>
   );
