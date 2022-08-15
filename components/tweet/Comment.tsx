@@ -18,6 +18,7 @@ type Props = {
 
 const Comment = ({ comment, comments, setComments }: Props) => {
   const { data: session } = useSession();
+  console.log(moment(comment.createdAt).format("DD MMMM [at] h:mm"), "Comment");
 
   const handleCommentLike = async () => {
     if (session?.user?._id) {
@@ -45,7 +46,10 @@ const Comment = ({ comment, comments, setComments }: Props) => {
     }
   };
   return (
-    <div className="flex items-start my-2 ">
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="flex items-start my-2 "
+    >
       <div className="w-10 h-10 bg-[#C4C4C4] rounded-lg overflow-hidden mt-2">
         <img
           className="h-full w-full  object-center "
@@ -61,7 +65,7 @@ const Comment = ({ comment, comments, setComments }: Props) => {
               {comment.author?.name}
             </h2>
             <p className="ml-2 text-gray4 font-medium text-xs">
-              {moment(comment._createdAt).format("DD MMMM [at] h:mm")}
+              {moment(comment.createdAt).format("DD MMMM [at] h:mm")}
             </p>
           </div>
           <p className="text-gray mt-1">{comment.text}</p>

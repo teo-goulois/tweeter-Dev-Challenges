@@ -6,7 +6,7 @@ import { fetchComments } from "../../utils/fetchComments";
 import useSWR from "swr";
 
 // Component
-import TweetComponent from "../../components/tweet/Tweet";
+import TweetComponent from "../../components/tweet/SingleTweet";
 import { TweetContext } from "../../context/TweetProvider";
 import { fetchTweet } from "../../utils/fetchTweet";
 type Props = {
@@ -15,6 +15,7 @@ type Props = {
 
 const Tweet = ({ comments }: Props) => {
   const router = useRouter();
+  const { setActiveTweet } = useContext(TweetContext);
   const { data, error } = useSWR(
     `/api/tweets/getTweet?tweetID=${router.query.id}`
   );
@@ -22,15 +23,21 @@ const Tweet = ({ comments }: Props) => {
   const [currentTweet, setCurrentTweet] = useState<Tweet>();
 
   useEffect(() => {
-    data && console.log(data.tweet[0]);
-
-    data && setCurrentTweet(data.tweet[0]);
+    // fetch tweet
+    if (data) {
+      data && console.log(data.tweet[0]);
+      setActiveTweet(data.tweet[0]);
+      data && setCurrentTweet(data.tweet[0]);
+    }
   }, [data]);
 
   return (
     <div className="p-2">
       {currentTweet ? (
-        <TweetComponent tweet={currentTweet} />
+        <TweetComponent
+          tweet={currentTweet}
+          setCurrentTweet={setCurrentTweet}
+        />
       ) : (
         <p>loading...</p>
       )}

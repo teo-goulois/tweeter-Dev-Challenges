@@ -44,6 +44,9 @@ export default async function handler(
             },
           },
           {
+            $sort: { createdAt: -1 },
+          },
+          {
             $project: {
               "author.email": 0,
               "author.follower": 0,

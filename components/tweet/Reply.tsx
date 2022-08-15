@@ -61,7 +61,7 @@ const Reply = ({ tweetID, setComments }: Props) => {
         setIsOpen={setImageUrlBoxIsOpen}
         addImageToTweet={addImageToTweet}
       />
-      <form onSubmit={handleSubmit}>
+      <form onClick={(e) => e.stopPropagation()} onSubmit={handleSubmit}>
         <div className="py-2 flex items-center font-[Noto Sans font-medium text-sm] ">
           {/* image */}
           <div className="w-10 h-10 bg-[#C4C4C4] rounded-lg overflow-hidden">

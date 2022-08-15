@@ -32,6 +32,7 @@ const Home: NextPage = () => {
     {
       body: JSON.stringify({
         following: user?.following,
+        _id: user?._id,
       }),
       method: "POST",
     },

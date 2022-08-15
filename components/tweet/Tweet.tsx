@@ -11,21 +11,22 @@ import Reply from "./Reply";
 import TweetInfos from "./TweetInfos";
 import { AuthContext } from "../../context/AuthProvider";
 import { useRouter } from "next/router";
+import { OptionsVerticalIcons } from "../../icons/Icons";
+import OptionModal from "./OptionModal";
 
 type Props = {
   tweet: Tweet;
 };
 
 const Tweet = ({ tweet }: Props) => {
-  const router = useRouter()
+  const router = useRouter();
   const { user } = useContext(AuthContext);
   const [toggler, setToggler] = useState(false);
   const [commentIsOpen, setCommentIsOpen] = useState<boolean>(false);
   const [comments, setComments] = useState<CommentType[]>([]);
+  const [optionModalIsOpen, setOptionModalIsOpen] = useState<boolean>(false);
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    
-  }
+  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {};
 
   return (
     <>
@@ -36,11 +37,21 @@ const Tweet = ({ tweet }: Props) => {
         </div>
         <p> Daniel Jensen Retweeted</p>
       </div> */}
+      {optionModalIsOpen && (
+        <div
+          onClick={() => setOptionModalIsOpen((prev) => !prev)}
+          className="fixed w-screen h-screen left-0 top-0 z-[1]"
+        ></div>
+      )}
       {tweet.media.isMedia && (
         <FsLightbox toggler={toggler} sources={tweet.media.images} />
       )}
 
-      <div onClick={(e) => router.push(`/tweets/${tweet._id}`)} className="w-full  bg-white p-4 rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] relative z-0 mb-4">
+      <div
+        onClick={(e) => router.push(`/tweets/${tweet._id}`)}
+        className="w-full hover:shadow-sm bg-white p-4 rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] relative  mb-4 border border-white hover:border-gray4"
+      >
+        {optionModalIsOpen && <OptionModal />}
         {/* author */}
         <div className="flex items-center">
           {/* image */}
@@ -57,9 +68,20 @@ const Tweet = ({ tweet }: Props) => {
             </p>
           </div>
         </div>
+        {tweet.author?._id === user?._id && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setOptionModalIsOpen((prev) => !prev);
+            }}
+            className="h-9 w-9 text-primary hover:bg-gray3 p-2 rounded-full absolute right-4 top-4"
+          >
+            <OptionsVerticalIcons />{" "}
+          </button>
+        )}
         {/* text */}
         <div className="my-2">
-          <p className="text-gray">{tweet.text ?? ''}</p>
+          <p className="text-gray">{tweet.text ?? ""}</p>
           {/* image */}
 
           {tweet.media.isMedia && (
@@ -86,7 +108,11 @@ const Tweet = ({ tweet }: Props) => {
           )}
         </div>
         {/* tweet infos */}
-        <TweetInfos tweet={tweet} comments={comments.length} setCommentIsOpen={setCommentIsOpen} />
+        <TweetInfos
+          tweet={tweet}
+          comments={comments.length}
+          setCommentIsOpen={setCommentIsOpen}
+        />
         {/* reply */}
         {commentIsOpen && (
           <>

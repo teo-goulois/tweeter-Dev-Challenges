@@ -14,7 +14,7 @@ export default async function handler(
 ) {
   const data: User = JSON.parse(req.body);
   await dbConnect();
-  const tweets = await Tweet.find({author: {$in: data.following}})
+  const tweets = await Tweet.find({author: {$in: [...data.following, data._id]}})
     .populate("author")
     .populate("likes", "_id")
     .populate("retweets", "_id")

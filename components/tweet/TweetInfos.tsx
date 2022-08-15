@@ -100,7 +100,7 @@ const TweetInfos = ({ tweet, comments, setCommentIsOpen }: Props) => {
 
   return (
     <>
-      <div className="flex justify-end pb-1 font-medium text-xs text-gray4 relative z-10">
+      <div className="flex justify-end pb-1 font-medium text-xs text-gray4 relative ">
         <p className="mx-2">{comments} Comments</p>
         <p className="mx-2">
           {tweet.retweets ? tweet.retweets.length : "0"} Retweets
