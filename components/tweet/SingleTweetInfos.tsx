@@ -21,6 +21,7 @@ import { removeBookmark } from "../../utils/removeBookmark";
 import { addBookmark } from "../../utils/addBookmark";
 // Context
 import { TweetContext } from "../../context/TweetProvider";
+import useFollow from "../../utils/useFollow";
 
 const variants = {
   open: { opacity: 1, x: 0 },
@@ -49,7 +50,18 @@ const TweetInfos = ({ tweet, comments, setCommentIsOpen }: Props) => {
 
     switch (title) {
       case "comment":
-        setCommentIsOpen((prev) => !prev);
+        console.log(tweet);
+        
+        if(tweet.everyoneCanReply) {
+          return setCommentIsOpen((prev) => !prev);
+        }
+        // check if we are follower
+        if (useFollow(session.user, tweet.author)) {
+          setCommentIsOpen((prev) => !prev);
+        } else {
+          console.log(toast.error("only the follower can reply"));
+          
+        }
         break;
       case "retweet":
         if (useCheckIfChecked(tweet.retweets, session?.user?._id as string)) {

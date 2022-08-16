@@ -49,8 +49,6 @@ export default async function handler(
           {
             $project: {
               "author.email": 0,
-              "author.follower": 0,
-              "author.following": 0,
               "author.id": 0,
               "author.provider": 0,
               "author.updatedAt": 0,
@@ -93,8 +91,6 @@ export default async function handler(
     {
       $project: {
         "author.email": 0,
-        "author.follower": 0,
-        "author.following": 0,
         "author.id": 0,
         "author.provider": 0,
         "author.updatedAt": 0,
@@ -108,6 +104,7 @@ export default async function handler(
         comments: 1,
         createdAt: 1,
         media: 1,
+        everyoneCanReply: 1,
         text: 1,
         likes: {
           $map: {

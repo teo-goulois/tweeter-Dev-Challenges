@@ -16,12 +16,12 @@ export default async function handler(
   const data: TweetBody = JSON.parse(req.body);
   var newTweet = new Tweet({
     text: data.text,
-    blockTweet: false,
     image: data.image,
     media: {
       isMedia: data.media.images.length > 0 ? true : false,
-      images: data.media.images
+      images: data.media.images,
     },
+    everyoneCanReply: data.everyoneCanReply,
     author: data.author,
   });
   // Create new user

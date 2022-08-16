@@ -29,7 +29,8 @@ export type TweetBody = {
     isMedia: boolean;
     images: string[];
   };
-  author: undefined | ResUser;
+  everyoneCanReply: boolean;
+  author: User;
   likes: { type?: ObjectId | undefined; ref?: string; _id?: string }[];
   comments: Comment[];
   retweets: { type?: ObjectId | undefined; ref?: unknown; _id?: string }[];

@@ -51,6 +51,7 @@ const CreateTweet = () => {
       media: {
         images: images,
       },
+      everyoneCanReply: openModal.value === "everyone" ? true : false,
     };
     const response = await fetch(`/api/tweets/postTweet`, {
       body: JSON.stringify(body),

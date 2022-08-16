@@ -20,5 +20,5 @@ export default async function handler(
     .populate("bookmarks", "_id")
     .sort("-createdAt"); 
   
-  res.status(200).json({ tweets: tweets as TweetType[] });
+  res.status(200).json({ tweets: tweets as unknown as TweetType[] });
 }
