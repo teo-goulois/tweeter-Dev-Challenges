@@ -12,7 +12,6 @@ const LinkButton = ({ title, url, handleClick }: Props) => {
   const router = useRouter();
   return (
     <div
-      key={title}
       onClick={() => handleClick(url)}
       className="flex-1 flex flex-col  items-center justify-between cursor-pointer"
     >

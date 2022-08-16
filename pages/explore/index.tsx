@@ -13,26 +13,25 @@ import { fetchTweets } from "../../utils/fetchTweets";
 import { Tweet as TweetType } from "../../types/typing";
 import { TweetContext } from "../../context/TweetProvider";
 
-type Props = {
-  fetchTweets: TweetType[];
-};
 
-const Index = ({ fetchTweets }: Props) => {
+
+const Index = () => {
   const { setTweets, tweets } = useContext(TweetContext);
   const { data, error } = useSWR("/api/tweets/getTweets");
+
   const [input, setInput] = useState<string>('')
 
   // useEffect
-  useEffect(() => {
+ /*  useEffect(() => {
+    data && console.log(data.tweets, 'EXPLORE TWEETS');
     data && setTweets(data.tweets);
-    data && console.log(data.tweets, 'EXCPLORE TWEETS');
     
     return () => {
       console.log("CLEAR");
 
-      setTweets([]);
+      //setTweets([]);
     };
-  }, [data]);
+  }, [data]); */
 
   return (
     <div className="p-4 w-full flex flex-col lg:flex-row lg:items-start lg:justify-center ">
@@ -61,10 +60,4 @@ Index.getLayout = function getLayout(page: ReactElement) {
 
 export default Index;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const tweets = await fetchTweets();
 
-  return {
-    props: { fetchTweets: tweets },
-  };
-};

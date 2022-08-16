@@ -1,6 +1,6 @@
 import { Tweet } from "../types/typing";
 
-export const addRetweet = async (
+export const  addRetweet = async (
   tweetID: string,
   userID: string,
   tweets: Tweet[]

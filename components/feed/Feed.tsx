@@ -10,6 +10,7 @@ type Props = {
 };
 
 const Feed = ({ tweets, textIfNoTweets }: Props) => {
+  
   return (
     <div className="h-full w-full">
       {tweets?.length > 0 ? (

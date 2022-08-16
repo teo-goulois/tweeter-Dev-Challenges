@@ -5,20 +5,23 @@ import dbConnect from "../../../libs/dbConnect";
 import Tweet from "../../../models/Tweet";
 
 type Data = {
-  tweets: TweetType[];
+  message: string;
 };
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  const { tweetID } = req.query;
   await dbConnect();
-  const tweets = await Tweet.find({}).populate('comments')
-    .populate("author")
-    .populate("likes", "_id")
-    .populate("retweets", "_id")
-    .populate("bookmarks", "_id")
-    .sort("-createdAt"); 
-  
-  res.status(200).json({ tweets: tweets as TweetType[] });
+
+  try {
+    // Create new user
+    await Tweet.findByIdAndRemove(tweetID);
+    res.status(200).json({
+      message: "tweet successfully deleted",
+    });
+  } catch (err) {
+    res.status(500).json({ message: "an error occured please try later" });
+  }
 }

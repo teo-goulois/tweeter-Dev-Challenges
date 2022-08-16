@@ -6,7 +6,7 @@ import { AuthContext } from "../../context/AuthProvider";
 import { OptionsVerticalIcons } from "../../icons/Icons";
 import OptionModal from "./OptionModal";
 import Reply from "./Reply";
-import TweetInfos from "./TweetInfos";
+import TweetInfos from "./SingleTweetInfos";
 import Comment from "./Comment";
 import { Comment as CommentType, Tweet } from "../../types/typing";
 import ProfileImage from "../global/ProfileImage";
@@ -15,18 +15,15 @@ import ImagesViewer from "./ImagesViewer";
 
 type Props = {
   tweet: Tweet;
-  setCurrentTweet: React.Dispatch<React.SetStateAction<Tweet | undefined>>;
 };
 
-const SingleTweet = ({ tweet, setCurrentTweet }: Props) => {
+const SingleTweet = ({ tweet }: Props) => {
   const router = useRouter();
   const { user } = useContext(AuthContext);
   const [toggler, setToggler] = useState(false);
   const [commentIsOpen, setCommentIsOpen] = useState<boolean>(false);
   const [comments, setComments] = useState<CommentType[]>([]);
   const [optionModalIsOpen, setOptionModalIsOpen] = useState<boolean>(false);
-
-  console.log(tweet, "tweet SINGLE");
 
   return (
     <>
@@ -45,7 +42,7 @@ const SingleTweet = ({ tweet, setCurrentTweet }: Props) => {
 
       {/* Tweet Component */}
 
-      <div className="w-full hover:shadow-sm bg-white p-4 rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] relative  mb-4 border border-white hover:border-gray4">
+      <div className="w-full hover:shadow-sm bg-white p-4 rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] relative  mb-4 border  border-gray4 ">
         {optionModalIsOpen && (
           <OptionModal
             setOptionModalIsOpen={setOptionModalIsOpen}
@@ -77,7 +74,6 @@ const SingleTweet = ({ tweet, setCurrentTweet }: Props) => {
           )}
         </div>
 
-
         {/* tweet infos */}
         <TweetInfos
           tweet={tweet}
@@ -91,7 +87,7 @@ const SingleTweet = ({ tweet, setCurrentTweet }: Props) => {
             <div className="border border-gray3 w-full mb-2"></div>
           </>
         )}
-        
+
         {/* comments */}
         {tweet.comments.length > 0 &&
           tweet.comments.map((comment) => (

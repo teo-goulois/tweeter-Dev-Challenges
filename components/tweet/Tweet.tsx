@@ -13,6 +13,7 @@ import { AuthContext } from "../../context/AuthProvider";
 import { useRouter } from "next/router";
 import { OptionsVerticalIcons } from "../../icons/Icons";
 import OptionModal from "./OptionModal";
+import UserInfos from "./UserInfos";
 
 type Props = {
   tweet: Tweet;
@@ -51,23 +52,16 @@ const Tweet = ({ tweet }: Props) => {
         onClick={(e) => router.push(`/tweets/${tweet._id}`)}
         className="w-full hover:shadow-sm bg-white p-4 rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] relative  mb-4 border border-white hover:border-gray4"
       >
-        {optionModalIsOpen && <OptionModal />}
+        {optionModalIsOpen && (
+          <OptionModal
+            setOptionModalIsOpen={setOptionModalIsOpen}
+            tweetID={tweet._id}
+          />
+        )}
         {/* author */}
-        <div className="flex items-center">
-          {/* image */}
-          <div className="w-10 h-10 bg-gray rounded-lg mr-2">
-            <img src={tweet.author?.image} alt="" />
-          </div>
-          {/* username and date */}
-          <div>
-            <h3 className="font-[Poppins] text-black font-medium ">
-              {tweet.author?.name}
-            </h3>
-            <p className="font-medium text-xs text-gray4">
-              {moment(tweet._createdAt).format("DD MMMM [at] h:mm")}
-            </p>
-          </div>
-        </div>
+        <UserInfos tweet={tweet} />
+
+        {/* options if it is your tweet */}
         {tweet.author?._id === user?._id && (
           <button
             onClick={(e) => {
@@ -76,9 +70,10 @@ const Tweet = ({ tweet }: Props) => {
             }}
             className="h-9 w-9 text-primary hover:bg-gray3 p-2 rounded-full absolute right-4 top-4"
           >
-            <OptionsVerticalIcons />{" "}
+            <OptionsVerticalIcons />
           </button>
         )}
+
         {/* text */}
         <div className="my-2">
           <p className="text-gray">{tweet.text ?? ""}</p>
@@ -121,7 +116,7 @@ const Tweet = ({ tweet }: Props) => {
           </>
         )}
         {/* comments */}
-        {comments.length > 0 &&
+       {/*  {comments.length > 0 &&
           comments.map((comment) => (
             <Comment
               key={comment._id}
@@ -129,7 +124,7 @@ const Tweet = ({ tweet }: Props) => {
               comments={comments}
               setComments={setComments}
             />
-          ))}
+          ))} */}
       </div>
     </>
   );

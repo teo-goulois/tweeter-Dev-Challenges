@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
-import { Comment, Tweet } from "../../types/typing";
+import { Comment } from "../../types/typing";
 import { fetchComments } from "../../utils/fetchComments";
 import useSWR from "swr";
 
@@ -15,28 +15,25 @@ type Props = {
 
 const Tweet = ({ comments }: Props) => {
   const router = useRouter();
-  const { setActiveTweet } = useContext(TweetContext);
+  const { setActiveTweet, activeTweet } = useContext(TweetContext);
   const { data, error } = useSWR(
     `/api/tweets/getTweet?tweetID=${router.query.id}`
   );
 
-  const [currentTweet, setCurrentTweet] = useState<Tweet>();
 
   useEffect(() => {
     // fetch tweet
     if (data) {
       data && console.log(data.tweet[0]);
       setActiveTweet(data.tweet[0]);
-      data && setCurrentTweet(data.tweet[0]);
     }
   }, [data]);
 
   return (
     <div className="p-2">
-      {currentTweet ? (
+      {activeTweet ? (
         <TweetComponent
-          tweet={currentTweet}
-          setCurrentTweet={setCurrentTweet}
+          tweet={activeTweet}
         />
       ) : (
         <p>loading...</p>

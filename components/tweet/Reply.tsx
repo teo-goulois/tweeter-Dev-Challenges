@@ -1,11 +1,12 @@
 import { useSession } from "next-auth/react";
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 // Icons
 import { ImageIcon } from "../../icons/Icons";
 // components
 import AddImageModal from "../createTweet/AddImageModal";
 // types
 import { Comment as CommentType, Tweet } from "../../types/typing";
+import { TweetContext } from "../../context/TweetProvider";
 
 type Props = {
   tweetID: string;
@@ -13,6 +14,7 @@ type Props = {
 };
 
 const Reply = ({ tweetID, setComments }: Props) => {
+  const { setActiveTweet } = useContext(TweetContext);
   const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false);
   const [image, setImage] = useState<string | null>(null);
   const [input, setInput] = useState<string>("");
@@ -43,10 +45,22 @@ const Reply = ({ tweetID, setComments }: Props) => {
     });
     if (response.status === 200) {
       const data = await response.json();
-      setComments((prev) => [
+      /*   setComments((prev) => [
         { ...data.comment, author: session?.user },
         ...prev,
-      ]);
+      ]); */
+
+      setActiveTweet((prev) => {
+        if (!prev) return prev;
+
+        return {
+          ...prev,
+          comments: [
+            { ...data.comment, author: session?.user },
+            ...prev.comments,
+          ],
+        };
+      });
       setInput("");
       setImage("");
     } else {
@@ -80,14 +94,14 @@ const Reply = ({ tweetID, setComments }: Props) => {
               placeholder="Tweet your reply"
               type="text"
             />
-            <button
+            {/* <button
               type="button"
               onClick={() => setImageUrlBoxIsOpen((prev) => !prev)}
               aria-label="add image"
               className="h-4 cursor-pointer pr-2"
             >
               <ImageIcon />
-            </button>
+            </button> */}
           </div>
         </div>
         {input.length > 0 && (

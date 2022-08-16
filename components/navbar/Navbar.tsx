@@ -44,11 +44,17 @@ const Navbar = ({ openTab, setOpenTab }: Props) => {
             ["explore", "/explore"],
             ["bookmarks", "/bookmarks"],
           ].map(([title, url]) => {
-            if (!session?.user && (title === "home" || title === "bookmarks")) { // manage Auth
+            if (!session?.user && (title === "home" || title === "bookmarks")) {
+              // manage Auth
               return;
             }
             return (
-              <LinkButton title={title} url={url} handleClick={handleClick} />
+              <LinkButton
+                key={title}
+                title={title}
+                url={url}
+                handleClick={handleClick}
+              />
             );
           })}
         </nav>
@@ -86,7 +92,9 @@ const Navbar = ({ openTab, setOpenTab }: Props) => {
             </div>
           )}
         </div>
-        {optionModalIsOpen && <OptionsModal setOptionModaleIsOpen={setOptionModaleIsOpen} />}
+        {optionModalIsOpen && (
+          <OptionsModal setOptionModaleIsOpen={setOptionModaleIsOpen} />
+        )}
       </div>
     </>
   );

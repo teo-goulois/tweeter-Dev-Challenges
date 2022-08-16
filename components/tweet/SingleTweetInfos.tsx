@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext, useEffect, useState } from "react";
+import React, { ReactNode, useContext } from "react";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
@@ -21,8 +21,6 @@ import { removeBookmark } from "../../utils/removeBookmark";
 import { addBookmark } from "../../utils/addBookmark";
 // Context
 import { TweetContext } from "../../context/TweetProvider";
-import { useRouter } from "next/router";
-import { fetchComments } from "../../utils/fetchComments";
 
 const variants = {
   open: { opacity: 1, x: 0 },
@@ -36,76 +34,71 @@ type Props = {
 };
 
 const TweetInfos = ({ tweet, comments, setCommentIsOpen }: Props) => {
-  const router = useRouter();
   const { data: session } = useSession();
-  const { tweets, setTweets } = useContext(TweetContext);
-
-  const [commentsLength, setCommentsLength] = useState<number>(0);
-
-  useEffect(() => {
-    const getComments = async () => {
-      const comments = await fetchComments(tweet._id);
-      setCommentsLength(comments.length);
-    };
-    getComments();
-  }, [tweet]);
+  const { tweets, setTweets, setActiveTweet, activeTweet } =
+    useContext(TweetContext);
 
   const handleActivities = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     title: string
   ) => {
     e.stopPropagation();
+    if (!activeTweet) return toast.error("no active tweet selected");
     if (!session?.user)
       return toast.error(`you should be connected to ${title}`);
 
     switch (title) {
       case "comment":
-        router.push(`/tweets/${tweet._id}`);
+        setCommentIsOpen((prev) => !prev);
         break;
       case "retweet":
         if (useCheckIfChecked(tweet.retweets, session?.user?._id as string)) {
-          const data = await removeRetweet(
-            tweet._id,
-            session?.user?._id,
-            tweets
-          );
+          const data = await removeRetweet(tweet._id, session?.user?._id, [
+            activeTweet,
+          ]);
           data?.tweets
-            ? setTweets(data.tweets)
+            ? setActiveTweet(data.tweets[0])
             : console.log("an errro occured please try again later");
         } else {
-          const data = await addRetweet(tweet._id, session?.user._id, tweets);
+          const data = await addRetweet(tweet._id, session?.user._id, [
+            activeTweet,
+          ]);
           data?.tweets
-            ? setTweets(data.tweets)
+            ? setActiveTweet(data.tweets[0])
             : console.log("an errro occured please try again later");
         }
         break;
       case "like":
         if (useCheckIfChecked(tweet.likes, session?.user?._id as string)) {
-          const data = await removeLike(tweet._id, session?.user?._id, tweets);
+          const data = await removeLike(tweet._id, session?.user?._id, [
+            activeTweet,
+          ]);
           data?.tweets
-            ? setTweets(data.tweets)
+            ? setActiveTweet(data.tweets[0])
             : console.log("an errro occured please try again later");
         } else {
-          const data = await addLike(tweet._id, session?.user._id, tweets);
+          const data = await addLike(tweet._id, session?.user._id, [
+            activeTweet,
+          ]);
           data?.tweets
-            ? setTweets(data.tweets)
+            ? setActiveTweet(data.tweets[0])
             : console.log("an errro occured please try again later");
         }
         break;
       case "save":
         if (useCheckIfChecked(tweet.bookmarks, session?.user?._id as string)) {
-          const data = await removeBookmark(
-            tweet._id,
-            session?.user?._id,
-            tweets
-          );
+          const data = await removeBookmark(tweet._id, session?.user?._id, [
+            activeTweet,
+          ]);
           data?.tweets
-            ? setTweets(data.tweets)
+            ? setActiveTweet(data.tweets[0])
             : toast.error("an errro occured please try again later");
         } else {
-          const data = await addBookmark(tweet._id, session?.user._id, tweets);
+          const data = await addBookmark(tweet._id, session?.user._id, [
+            activeTweet,
+          ]);
           data?.tweets
-            ? setTweets(data.tweets)
+            ? setActiveTweet(data.tweets[0])
             : toast.error("an errro occured please try again later");
         }
         break;
@@ -116,7 +109,7 @@ const TweetInfos = ({ tweet, comments, setCommentIsOpen }: Props) => {
   return (
     <>
       <div className="flex justify-end pb-1 font-medium text-xs text-gray4 relative ">
-        <p className="mx-2">{commentsLength} Comments</p>
+        <p className="mx-2">{tweet.comments.length} Comments</p>
         <p className="mx-2">
           {tweet.retweets ? tweet.retweets.length : "0"} Retweets
         </p>

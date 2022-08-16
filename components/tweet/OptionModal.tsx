@@ -1,4 +1,7 @@
+import Router, { useRouter } from "next/router";
 import React, { Dispatch, SetStateAction } from "react";
+import toast from "react-hot-toast";
+import useSWR from "swr";
 
 type Props = {
   setOptionModalIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -6,11 +9,27 @@ type Props = {
 };
 
 const OptionModal = ({ setOptionModalIsOpen, tweetID }: Props) => {
+  const router = useRouter();
+
   const handleDelete = async () => {
     const res = confirm("do you really want to delete ?");
     if (res) {
       // delete tweet
-      console.log("delete", tweetID);
+      const response = await fetch(
+        `/api/tweets/deleteTweet?tweetID=${tweetID}`
+      );
+      const data = await response.json();
+      if (response.status === 200) {
+        setOptionModalIsOpen((prev) => !prev);
+        toast(data.message);
+
+        setTimeout(() => {
+          router.push("/explore");
+        }, 500);
+      } else {
+        toast.error(data.message);
+        setOptionModalIsOpen((prev) => !prev);
+      }
     }
     setOptionModalIsOpen((prev) => !prev);
   };

@@ -12,14 +12,14 @@ type Props = {
 };
 
 const Filter = ({ setTweets }: Props) => {
-  const [filter, setfilter] = useState<string>("top");
+  const [filter, setfilter] = useState<string>("lastest");
 
   useEffect(() => {
     const getTweets = async () => {
       switch (filter) {
-        case "top":
+        case "top":          
           // code block
-          const topTweets = await fetchTopTweets();
+          const topTweets = await fetchTopTweets();          
           setTweets(topTweets);
           break;
         case "lastest":

@@ -16,7 +16,6 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const { tweetID } = req.query;
-  console.log(tweetID);
 
   await dbConnect();
   const tweet = await Tweet.aggregate([
@@ -28,8 +27,9 @@ export default async function handler(
     {
       $lookup: {
         from: Comment.collection.name,
-        let: { commentID: "$_id" },
+        let: { tweetID: "$tweet" },
         pipeline: [
+          { $match: { tweet: new mongoose.Types.ObjectId(tweetID as string) } },
           {
             $lookup: {
               from: User.collection.name,
@@ -55,6 +55,22 @@ export default async function handler(
               "author.provider": 0,
               "author.updatedAt": 0,
               "author.__v": 0,
+            },
+          },
+          {
+            $project: {
+              isDeleted: 1,
+              text: 1,
+              images: 1,
+              author: 1,
+              createdAt: 1,
+              likes: {
+                $map: {
+                  input: "$likes",
+                  as: "like",
+                  in: { _id: "$$like" },
+                },
+              },
             },
           },
         ],

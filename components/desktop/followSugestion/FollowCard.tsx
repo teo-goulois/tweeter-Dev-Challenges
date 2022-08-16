@@ -12,17 +12,13 @@ type Props = {
 const FollowCard = ({ user, fetchFollowSugestions }: Props) => {
   const { data: session  } = useSession();
   const handleFollow = async () => {
-    console.log(
-      `/api/users/follow?userID=${user._id}&myID=${session?.user._id}`
-    );
-
     const response = await fetch(
       `/api/users/follow?userID=${user._id}&myID=${session?.user._id}`
     );
     const data = await response.json();
-    console.log(data.message);
     fetchFollowSugestions(session?.user._id);
   };
+
   return (
     <div className="mb-4">
       <div className="flex items-center justify-between">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useSession } from "next-auth/react";
 import moment from "moment";
 // Hooks
@@ -9,6 +9,7 @@ import { removeCommentLike } from "../../utils/removeCommentLike";
 import { OutlineHeartIcon } from "../../icons/Icons";
 // Types
 import { Comment } from "../../types/typing";
+import { TweetContext } from "../../context/TweetProvider";
 
 type Props = {
   comment: Comment;
@@ -18,7 +19,7 @@ type Props = {
 
 const Comment = ({ comment, comments, setComments }: Props) => {
   const { data: session } = useSession();
-  console.log(moment(comment.createdAt).format("DD MMMM [at] h:mm"), "Comment");
+  const { setActiveTweet } = useContext(TweetContext);
 
   const handleCommentLike = async () => {
     if (session?.user?._id) {
@@ -29,7 +30,23 @@ const Comment = ({ comment, comments, setComments }: Props) => {
           comments
         );
         data?.comments
-          ? setComments(data.comments)
+          ? setActiveTweet((prev) => {
+              if (!prev) return prev;
+              const comments = prev?.comments.map((item) => {
+                if (item._id === comment._id) {
+                  return {
+                    ...item,
+                    likes: [
+                      ...item.likes.filter(
+                        (like) => like._id !== session.user._id
+                      ),
+                    ],
+                  };
+                }
+                return item;
+              });
+              return { ...prev, comments: comments };
+            })
           : console.log("an errro occured please try again later");
       } else {
         const data = await addCommentLike(
@@ -38,7 +55,24 @@ const Comment = ({ comment, comments, setComments }: Props) => {
           comments
         );
         data?.comments
-          ? setComments(data.comments)
+          ? setActiveTweet((prev) => {
+              if (!prev) return prev;
+              const comments = prev?.comments.map((item) => {
+                if (item._id === comment._id) {
+                  return {
+                    ...item,
+                    likes: [
+                      ...item.likes,
+                      {
+                        _id: session.user._id,
+                      },
+                    ],
+                  };
+                }
+                return item;
+              });
+              return { ...prev, comments: comments };
+            })
           : console.log("an errro occured please try again later");
       }
     } else {
