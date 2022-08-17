@@ -6,7 +6,6 @@ export const fetchFollowSugestions = async (userID: string | undefined) => {
   );
   const data = await res.json();
   const followSugestions: User[] = data.followSugestions;
-  console.log(followSugestions, "followSugestions");
 
   return followSugestions;
 };

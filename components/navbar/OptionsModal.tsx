@@ -28,11 +28,11 @@ const OptionsModal = ({ setOptionModaleIsOpen }: Props) => {
   return (
     <div
       onClick={handleExitClick}
-      className="fixed w-screen h-screen left-0 top-0 z-0"
+      className="fixed w-screen h-screen left-0 top-0 z-[1]"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="z-10 min-w-[192px] absolute top-[5rem] right-[1rem] bg-white rounded-xl p-4 border border-[#E0E0E0] shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] "
+        className="z-20 min-w-[192px] absolute top-[5rem] right-[1rem] bg-white rounded-xl p-4 border border-[#E0E0E0] shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] "
       >
         {[
           ["My Profile", "/profile"],

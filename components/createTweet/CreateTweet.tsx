@@ -83,7 +83,7 @@ const CreateTweet = () => {
         ></div>
       )}
       {/* Container */}
-      <div className="bg-white min-w-[400px] w-full rounded-xl p-4 font-[Noto Sans] relative mb-4">
+      <div className="bg-white min-w-[400px] w-full rounded-xl p-4 font-[Noto Sans] relative mb-2 flex flex-col justify-between" >
         <h3 className="font-semibold text-primary font-[Poppins] capitalize">
           Tweet something
         </h3>
@@ -102,7 +102,7 @@ const CreateTweet = () => {
               ref={(element) => {
                 textareaRef.current = element;
               }}
-              className="font-medium text-secondary p-2 outline-none w-full resize-none overflow-hidden"
+              className="font-medium text-secondary p-2 outline-none w-full resize-none overflow-hidden  mb-2"
               placeholder="Whats's happening?"
             ></textarea>
           </div>

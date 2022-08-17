@@ -6,7 +6,6 @@ export const fetchTweet = async (tweetID: string) => {
   );
   const data = await res.json();
   const tweet: Tweet = data.tweet;
-  console.log("fetchtweet", tweet);
 
   return tweet;
 };

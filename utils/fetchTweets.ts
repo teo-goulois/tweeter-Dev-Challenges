@@ -6,7 +6,6 @@ export const fetchTweets = async () => {
   );
   const data = await res.json();
   const tweets: Tweet[] = data.tweets;
-  console.log(tweets);
 
   return tweets;
 };

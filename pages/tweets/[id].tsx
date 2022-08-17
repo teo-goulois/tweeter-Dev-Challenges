@@ -24,7 +24,6 @@ const Tweet = ({ comments }: Props) => {
   useEffect(() => {
     // fetch tweet
     if (data) {
-      data && console.log(data.tweet[0]);
       setActiveTweet(data.tweet[0]);
     }
   }, [data]);

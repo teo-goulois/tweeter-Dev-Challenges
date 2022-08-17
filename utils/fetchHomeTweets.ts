@@ -1,7 +1,6 @@
 import { Tweet } from "../types/typing"
 
 export const fetchHomeTweets = async (following: string[]) => {
-    console.log(following, 'FOLLOOWING');
     
     const body = {
         following

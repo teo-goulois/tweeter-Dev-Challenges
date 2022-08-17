@@ -21,17 +21,7 @@ const Index = () => {
 
   const [input, setInput] = useState<string>('')
 
-  // useEffect
- /*  useEffect(() => {
-    data && console.log(data.tweets, 'EXPLORE TWEETS');
-    data && setTweets(data.tweets);
-    
-    return () => {
-      console.log("CLEAR");
-
-      //setTweets([]);
-    };
-  }, [data]); */
+ 
 
   return (
     <div className="p-4 w-full flex flex-col lg:flex-row lg:items-start lg:justify-center ">

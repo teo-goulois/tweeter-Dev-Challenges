@@ -18,7 +18,6 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const { userID } = req.query;
-  console.log(userID, 'USERSI');
   
   await dbConnect();
   const followSugestions = await User.find({ follower: { $nin: userID }, _id: {$ne: userID} })

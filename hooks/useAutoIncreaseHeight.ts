@@ -9,9 +9,9 @@ const useAutoIncreaseHeight = (watch: string) => {
     if (!textarea) return;
 
     if (textarea.value === "")
-      return textarea.style.setProperty("height", "3rem");
+      return textarea.style.setProperty("height", "6rem");
 
-    textarea.style.setProperty("height", "auto");
+    textarea.style.setProperty("height", "6rem");
     textarea.style.setProperty("height", `${textarea.scrollHeight}px`);
   }, [watch]);
 

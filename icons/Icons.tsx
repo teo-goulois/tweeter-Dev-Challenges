@@ -302,3 +302,25 @@ export function OptionsVerticalIcons(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function EditIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="current" height="current" viewBox="0 0 24 24" {...props}>
+      <path
+        fill="currentColor"
+        d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83l3.75 3.75l1.83-1.83z"
+      ></path>
+    </svg>
+  );
+}
+
+export function ArrowForwardIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="current" height="current" viewBox="0 0 24 24" {...props}>
+      <path
+        fill="currentColor"
+        d="M7.38 21.01c.49.49 1.28.49 1.77 0l8.31-8.31a.996.996 0 0 0 0-1.41L9.15 2.98c-.49-.49-1.28-.49-1.77 0s-.49 1.28 0 1.77L14.62 12l-7.25 7.25c-.48.48-.48 1.28.01 1.76z"
+      ></path>
+    </svg>
+  );
+}

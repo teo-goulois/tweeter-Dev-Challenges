@@ -50,17 +50,14 @@ const TweetInfos = ({ tweet, comments, setCommentIsOpen }: Props) => {
 
     switch (title) {
       case "comment":
-        console.log(tweet);
-        
-        if(tweet.everyoneCanReply) {
+        if (tweet.everyoneCanReply) {
           return setCommentIsOpen((prev) => !prev);
         }
         // check if we are follower
         if (useFollow(session.user, tweet.author)) {
           setCommentIsOpen((prev) => !prev);
         } else {
-          console.log(toast.error("only the follower can reply"));
-          
+          toast.error("only the follower can reply");
         }
         break;
       case "retweet":

@@ -9,11 +9,7 @@ const useFollow = (currentUser: User, tweetAuthor: User) => {
   const isTweetAuthorFollowingCurrentUser = tweetAuthor.following.filter(
     (user) => user === currentUser._id
   )[0];
-  /* console.log(
-    isCurrentUserFollowingTweetAuthor,
-    "isCurrentUserFollowingTweetAuthor",
-    isTweetAuthorFollowingCurrentUser
-  ); */
+
   if (isCurrentUserFollowingTweetAuthor && isTweetAuthorFollowingCurrentUser)
     return true;
 
