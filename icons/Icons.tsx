@@ -5,8 +5,8 @@ export function CompassIcon(props: SVGProps<SVGSVGElement>) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      width="1em"
-      height="1em"
+      height="100%"
+      width="100%"
       viewBox="0 0 512 512"
       {...props}
     >
@@ -24,6 +24,8 @@ export function HomeIcon(props: SVGProps<SVGSVGElement>) {
       xmlns="http://www.w3.org/2000/svg"
       className="h-5 w-5"
       viewBox="0 0 20 20"
+      height="100%"
+      width="100%"
       fill="currentColor"
     >
       <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
@@ -34,9 +36,10 @@ export function BookmarkIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="h-5 w-5"
       viewBox="0 0 20 20"
       fill="currentColor"
+      height="100%"
+      width="100%"
     >
       <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
     </svg>
@@ -46,9 +49,10 @@ export function BookmarkIcon(props: SVGProps<SVGSVGElement>) {
 export function ImageIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
+      height="100%"
+      width="100%"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      height="current"
       viewBox="0 0 24 24"
       {...props}
     >
@@ -65,8 +69,9 @@ export function EarthIconerre(props: SVGProps<SVGSVGElement>) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      height="current"
       viewBox="0 0 24 24"
+      height="100%"
+      width="100%"
       {...props}
     >
       <path
@@ -82,7 +87,8 @@ export function RetweetIcon(props: SVGProps<SVGSVGElement>) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      height="current"
+      height="100%"
+      width="100%"
       viewBox="0 0 24 24"
       {...props}
     >
@@ -94,15 +100,13 @@ export function RetweetIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/* 
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M21 7L9 19l-5.5-5.5l1.41-1.41L9 16.17L19.59 5.59L21 7Z"></path></svg> */
-
 export function PeopleIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      height="current"
+      height="100%"
+      width="100%"
       viewBox="0 0 24 24"
       {...props}
     >
@@ -119,7 +123,8 @@ export function OutlineCommentIcon(props: SVGProps<SVGSVGElement>) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      height="current"
+      height="100%"
+      width="100%"
       viewBox="0 0 24 24"
       {...props}
     >
@@ -136,7 +141,8 @@ export function OutlineHeartIcon(props: SVGProps<SVGSVGElement>) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      height="current"
+      height="100%"
+      width="100%"
       viewBox="0 0 24 24"
       {...props}
     >
@@ -153,8 +159,8 @@ export function OutlineBookmarkIcon(props: SVGProps<SVGSVGElement>) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      width="1em"
-      height="1em"
+      height="100%"
+      width="100%"
       viewBox="0 0 20 20"
       {...props}
     >
@@ -171,7 +177,8 @@ export function FollowIcon(props: SVGProps<SVGSVGElement>) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      height="current"
+      height="100%"
+      width="100%"
       viewBox="0 0 24 24"
       {...props}
     >
@@ -188,7 +195,8 @@ export function SearchIcon(props: SVGProps<SVGSVGElement>) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      height="current"
+      height="100%"
+      width="100%"
       viewBox="0 0 24 24"
       {...props}
     >
@@ -205,7 +213,8 @@ export function UserIcon(props: SVGProps<SVGSVGElement>) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      height="current"
+      height="100%"
+      width="100%"
       viewBox="0 0 32 32"
       {...props}
     >
@@ -226,7 +235,8 @@ export function SettingsIcon(props: SVGProps<SVGSVGElement>) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      height="current"
+      height="100%"
+      width="100%"
       viewBox="0 0 24 24"
       {...props}
     >
@@ -243,7 +253,8 @@ export function SignoutIcon(props: SVGProps<SVGSVGElement>) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      height="current"
+      height="100%"
+      width="100%"
       viewBox="0 0 24 24"
       {...props}
     >
@@ -260,8 +271,8 @@ export function RoundArrowDropDownIcon(props: SVGProps<SVGSVGElement>) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      width="current"
-      height="current"
+      height="100%"
+      width="100%"
       viewBox="0 0 24 24"
       {...props}
     >
@@ -278,8 +289,8 @@ export function AvatarIcon(props: SVGProps<SVGSVGElement>) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      width="current"
-      height="current"
+      height="100%"
+      width="100%"
       viewBox="0 0 32 32"
       {...props}
     >
@@ -294,7 +305,7 @@ export function AvatarIcon(props: SVGProps<SVGSVGElement>) {
 
 export function OptionsVerticalIcons(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg width="current" height="current" viewBox="0 0 1024 1024" {...props}>
+    <svg height="100%" width="100%" viewBox="0 0 1024 1024" {...props}>
       <path
         fill="currentColor"
         d="M388.8 896.4v-27.198c.6-2.2 1.6-4.2 2-6.4c8.8-57.2 56.4-102.4 112.199-106.2c62.4-4.4 115.2 31.199 132.4 89.199c2.2 7.6 3.8 15.6 5.8 23.4v27.2c-.6 1.8-1.6 3.399-1.8 5.399c-8.6 52.8-46.6 93-98.6 104.4c-4 .8-8 2-12 3h-27.2c-1.8-.6-3.6-1.6-5.4-1.8c-52-8.4-91.599-45.4-103.6-96.8c-1.2-5-2.6-9.6-3.8-14.2zm252.4-768.797l-.001 27.202c-.6 2.2-1.6 4.2-1.8 6.4c-9 57.6-56.8 102.6-113.2 106.2c-62.2 4-114.8-32-131.8-90.2c-2.2-7.401-3.8-15-5.6-22.401v-27.2c.6-1.8 1.6-3.4 2-5.2c9.6-52 39.8-86 90.2-102.2c6.6-2.2 13.6-3.4 20.4-5.2h27.2c1.8.6 3.6 1.6 5.4 1.8c52.2 8.6 91.6 45.4 103.6 96.8c1.201 4.8 2.401 9.4 3.601 13.999zm-.001 370.801v27.2c-.6 2.2-1.6 4.2-2 6.4c-9 57.4-58.6 103.6-114.6 106c-63 2.8-116.4-35.2-131.4-93.8c-1.6-6.2-3-12.4-4.4-18.6v-27.2c.6-2.2 1.6-4.2 2-6.4c8.8-57.4 58.6-103.601 114.6-106.2c63-3 116.4 35.2 131.4 93.8c1.6 6.4 3 12.6 4.4 18.8z"
@@ -305,7 +316,7 @@ export function OptionsVerticalIcons(props: SVGProps<SVGSVGElement>) {
 
 export function EditIcon(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg width="current" height="current" viewBox="0 0 24 24" {...props}>
+    <svg height="100%" width="100%" viewBox="0 0 24 24" {...props}>
       <path
         fill="currentColor"
         d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83l3.75 3.75l1.83-1.83z"
@@ -316,7 +327,7 @@ export function EditIcon(props: SVGProps<SVGSVGElement>) {
 
 export function ArrowForwardIcon(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg width="current" height="current" viewBox="0 0 24 24" {...props}>
+    <svg height="100%" width="100%" viewBox="0 0 24 24" {...props}>
       <path
         fill="currentColor"
         d="M7.38 21.01c.49.49 1.28.49 1.77 0l8.31-8.31a.996.996 0 0 0 0-1.41L9.15 2.98c-.49-.49-1.28-.49-1.77 0s-.49 1.28 0 1.77L14.62 12l-7.25 7.25c-.48.48-.48 1.28.01 1.76z"

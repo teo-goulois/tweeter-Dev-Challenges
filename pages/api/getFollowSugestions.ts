@@ -18,12 +18,16 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const { userID } = req.query;
-  
-  await dbConnect();
-  const followSugestions = await User.find({ follower: { $nin: userID }, _id: {$ne: userID} })
-    .populate("following", "_id")
-    .populate("follower", "_id")
-    .limit(3);
+  //console.log("API FOLLOW SUGESTION");
 
-  res.status(200).json({ followSugestions: followSugestions as unknown as UserType[] });
+  await dbConnect();
+  const followSugestions = await User.find({
+    follower: { $nin: userID },
+    _id: { $ne: userID },
+  }).limit(3);
+  //console.log("API follow sugestions", followSugestions);
+
+  res
+    .status(200)
+    .json({ followSugestions: followSugestions as unknown as UserType[] });
 }

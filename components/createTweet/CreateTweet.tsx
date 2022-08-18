@@ -10,6 +10,9 @@ import AddImageModal from "./AddImageModal";
 import ProfileImage from "../global/ProfileImage";
 import { AuthContext } from "../../context/AuthProvider";
 import useAutoIncreaseHeight from "../../hooks/useAutoIncreaseHeight";
+import { useSWRConfig } from "swr";
+import { Tweet } from "../../types/typing";
+import useUser from "../../utils/home/useUser";
 
 type OpenModal = {
   isOpen: boolean;
@@ -17,22 +20,21 @@ type OpenModal = {
 };
 
 const CreateTweet = () => {
+  const { mutate } = useSWRConfig();
   // Context
-  const { data: session } = useSession();
-  const { user } = useContext(AuthContext);
-  const { setTweets } = useContext(TweetContext);
-  // state
+  const { user } = useUser();
+    // state
   const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false);
-
   const [openModal, setOpenModal] = useState<OpenModal>({
     isOpen: false,
     value: "everyone",
   });
+  
   const [input, setInput] = useState<string>("");
-  const textareaRef = useAutoIncreaseHeight(input);
-
   const [images, setImages] = useState<string[]>([]);
-
+  
+  const textareaRef = useAutoIncreaseHeight(input);
+  
   const addImageToTweet = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     value: string
@@ -42,28 +44,49 @@ const CreateTweet = () => {
     setImageUrlBoxIsOpen(false);
   };
 
+
   const handleSubmitTweet = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const body = {
       text: input,
-      author: session?.user?._id,
+      author: user?._id,
       media: {
         images: images,
       },
       everyoneCanReply: openModal.value === "everyone" ? true : false,
     };
-    const response = await fetch(`/api/tweets/postTweet`, {
-      body: JSON.stringify(body),
-      method: "POST",
-    });
-    const data = await response.json();
-    setTweets((prev) => [{ ...data.tweet, author: session?.user }, ...prev]);
+
+    mutate(
+      user?._id
+        ? [
+            `/api/home/getTweets`,
+            {
+              method: "POST",
+              body: JSON.stringify({
+                _id: user._id,
+                following: user.following,
+              }),
+            },
+          ]
+        : null,
+      async (tweets: Tweet[]) => {
+        // await post reponse
+        const response = await fetch(`/api/tweets/postTweet`, {
+          body: JSON.stringify(body),
+          method: "POST",
+        });
+        const data = await response.json();
+
+        return [{ ...data.tweet, author: user }, ...tweets];
+      }
+    );
     // reinitialize input fomrs
     setInput("");
     setImages([]);
   };
 
+  if (!user) return <div></div>;
   return (
     <>
       <AddImageModal
@@ -83,7 +106,7 @@ const CreateTweet = () => {
         ></div>
       )}
       {/* Container */}
-      <div className="bg-white min-w-[400px] w-full rounded-xl p-4 font-[Noto Sans] relative mb-2 flex flex-col justify-between" >
+      <div className="bg-white min-w-[400px] w-full rounded-xl p-4 font-[Noto Sans] relative mb-2 flex flex-col justify-between">
         <h3 className="font-semibold text-primary font-[Poppins] capitalize">
           Tweet something
         </h3>
@@ -92,10 +115,11 @@ const CreateTweet = () => {
         <form onSubmit={handleSubmitTweet}>
           <div className="flex">
             {/* image */}
-            <ProfileImage url={user?.image} />
+            <ProfileImage url={user.image} />
 
             <textarea
               aria-label="Write your tweet"
+              value={input}
               onChange={(e) => {
                 setInput(e.target.value);
               }}

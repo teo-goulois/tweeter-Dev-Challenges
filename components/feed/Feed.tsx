@@ -10,7 +10,6 @@ type Props = {
 };
 
 const Feed = ({ tweets, textIfNoTweets }: Props) => {
-  
   return (
     <div className="h-full w-full">
       {tweets?.length > 0 ? (
@@ -19,7 +18,9 @@ const Feed = ({ tweets, textIfNoTweets }: Props) => {
         })
       ) : (
         <div className="bg-white py-2 rounded-lg shadow-sm">
-          <p className="text-primary font-semibold text-center text-lg">{textIfNoTweets ?? "no tweets yet create one"} </p>
+          <p className="text-primary font-semibold text-center text-lg">
+            {textIfNoTweets ?? "no tweets yet create one"}{" "}
+          </p>
         </div>
       )}
     </div>

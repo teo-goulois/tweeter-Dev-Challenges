@@ -11,6 +11,7 @@ import { ResUser } from "../../../libs/users/users";
 
 type Data = {
   message: string;
+  user?: UserType;
 };
 
 export default async function handler(
@@ -22,14 +23,16 @@ export default async function handler(
 
   try {
     // add to my following
-    await User.findOneAndUpdate(
+    const currentUser = await User.findOneAndUpdate(
       { _id: myID },
       { $push: { following: userID } }
     );
     await User.findOneAndUpdate({ _id: userID }, { $push: { follower: myID } });
 
     // add to his follower
-    res.status(200).json({ message: "person followed" });
+    if (currentUser) {
+      res.status(200).json({ message: "person followed", user: currentUser as unknown as UserType });
+    }
   } catch (err) {
     res.status(500).json({ message: "an error occured please try later" });
   }

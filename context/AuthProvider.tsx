@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import { Tweet, User } from "../types/typing";
+import useUser from "../utils/home/useUser";
 
 type ContextProps = {
   user: User | undefined;
@@ -26,12 +27,17 @@ type ProviderProps = {
 
 export const AuthProvider = ({ children }: ProviderProps) => {
   const { data: session } = useSession();
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | undefined>(undefined);
 
   useEffect(() => {
-    setUser(session?.user)
-  }, [session])
-
+    if (session?.user) {
+      setUser(session?.user);
+    }
+  }, [session]);
+  /* useEffect(() => {
+       
+  }, [currentUser]); */
+  
   const value = { user, setUser };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

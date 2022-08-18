@@ -2,8 +2,8 @@ import { ResUser } from "../libs/users/users";
 
 export interface User {
   _id: string;
-  following: String[];
-  follower: String[];
+  following: string[];
+  follower: string[];
   __v: number;
   id: string;
   email: string;

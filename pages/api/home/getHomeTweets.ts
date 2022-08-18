@@ -13,8 +13,10 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const data: User = JSON.parse(req.body);
+  //console.log(data, 'DATA');
+  
   await dbConnect();
-  const tweets = await Tweet.find({author: {$in: [...data.following, data._id]}})
+  const tweets = await Tweet.find({/* author: {$in: [...data.following, data._id]} */})
     .populate("author")
     .populate("likes", "_id")
     .populate("retweets", "_id")

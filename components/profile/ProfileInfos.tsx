@@ -7,13 +7,15 @@ import { User } from "../../types/typing";
 import { useRouter } from "next/router";
 import { AuthContext } from "../../context/AuthProvider";
 import EditModal from "./EditModal";
+import useUser from "../../utils/home/useUser";
 
 type Props = {
   user: User;
 };
 
 const ProfileInfos = ({ user }: Props) => {
-  const { user: currentUser } = useContext(AuthContext);
+  //const { user: currentUser } = useContext(AuthContext);
+  const { user: currentUser } = useUser();
 
   const [editIsOpen, setEditIsOpen] = useState<boolean>(false);
 
@@ -35,6 +37,7 @@ const ProfileInfos = ({ user }: Props) => {
             {/* image */}
             <div className="w-[122.43px] h-[122.43px] -mt-[90px] md:-mt-[65px] block bg-[#C4C4C4] rounded-lg border-4 border-white shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)]">
               <img
+                className="w-full h-full object-cover object-center"
                 src={
                   user.image ??
                   "https://vectorified.com/images/default-user-icon-33.jpg"

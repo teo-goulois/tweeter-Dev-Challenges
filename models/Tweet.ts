@@ -12,6 +12,7 @@ const TweetSchema = new Schema(
       isMedia: Boolean,
       images: [String],
     },
+    tags: [String],
     everyoneCanReply: { type: Boolean, default: true },
     likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
     retweets: [{ type: Schema.Types.ObjectId, ref: "User" }],
