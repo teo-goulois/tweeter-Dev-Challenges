@@ -12,7 +12,7 @@ import { AuthContext } from "../../context/AuthProvider";
 import useAutoIncreaseHeight from "../../hooks/useAutoIncreaseHeight";
 import { useSWRConfig } from "swr";
 import { Tweet } from "../../types/typing";
-import useUser from "../../utils/home/useUser";
+import useConnectedUser from "../../utils/home/useConnectedUser";
 
 type OpenModal = {
   isOpen: boolean;
@@ -22,7 +22,7 @@ type OpenModal = {
 const CreateTweet = () => {
   const { mutate } = useSWRConfig();
   // Context
-  const { user } = useUser();
+  const { user } = useConnectedUser();
     // state
   const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<OpenModal>({

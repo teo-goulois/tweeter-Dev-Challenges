@@ -7,7 +7,6 @@ import {
   useState,
 } from "react";
 import { Tweet, User } from "../types/typing";
-import useUser from "../utils/home/useUser";
 
 type ContextProps = {
   user: User | undefined;

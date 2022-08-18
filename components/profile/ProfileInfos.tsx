@@ -7,18 +7,58 @@ import { User } from "../../types/typing";
 import { useRouter } from "next/router";
 import { AuthContext } from "../../context/AuthProvider";
 import EditModal from "./EditModal";
-import useUser from "../../utils/home/useUser";
+import useConnectedUser from "../../utils/home/useConnectedUser";
+import { mutate } from "swr";
 
 type Props = {
-  user: User;
+  user: User | undefined;
 };
 
 const ProfileInfos = ({ user }: Props) => {
   //const { user: currentUser } = useContext(AuthContext);
-  const { user: currentUser } = useUser();
+  const router = useRouter();
+  const { user: currentUser } = useConnectedUser();
 
+  const handleFollow = async () => {
+    const response = await fetch(
+      `/api/users/follow?userID=${user?._id}&myID=${currentUser?._id}`
+    );
+    const data = await response.json();
+
+    // mutate user
+    mutate(user?._id ? `/api/user/${user._id}` : null, async (user: User) => {
+      return { ...user, follower: [...user.follower, currentUser?._id] };
+    });
+
+    // mutate connected User
+    mutate(
+      currentUser ? `/api/user/${currentUser._id}` : null,
+      async (user: User) => {
+        return { ...user, following: [...user.following, user._id] };
+      }
+    );
+  };
+  const handleUnfollow = async () => {
+    const response = await fetch(
+      `/api/users/unfollow?userID=${user?._id}&myID=${currentUser?._id}`
+    );
+    const data = await response.json();
+    // mutate user
+    mutate(user?._id ? `/api/user/${user._id}` : null, async (user: User) => {
+      const newFollower = user.follower.filter((id) => id !== user?._id);
+      return { ...user, follower: [...newFollower] };
+    });
+    // mutate connected User
+    mutate(
+      currentUser ? `/api/user/${currentUser._id}` : null,
+      async (user: User) => {
+        const newFollowing = user.following.filter((id) => id !== user?._id);
+        return { ...user, following: [...newFollowing] };
+      }
+    );
+  };
   const [editIsOpen, setEditIsOpen] = useState<boolean>(false);
-
+  if (!user) return <p>Loading...</p>;
   return (
     <div>
       {editIsOpen && <EditModal user={user} setEditIsOpen={setEditIsOpen} />}
@@ -35,7 +75,7 @@ const ProfileInfos = ({ user }: Props) => {
         <div className="flex md:flex-row flex-col items-center md:items-start justify-around md:justify-between  w-full md:max-w-[1450px] py-2 md:p-4  h-fit bg-white rounded-xl shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] -translate-y-6 relative">
           <div className="flex md:flex-row flex-col justify-start items-center md:items-start ">
             {/* image */}
-            <div className="w-[122.43px] h-[122.43px] -mt-[90px] md:-mt-[65px] block bg-[#C4C4C4] rounded-lg border-4 border-white shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)]">
+            <div className="overflow-hidden w-[122.43px] h-[122.43px] -mt-[90px] md:-mt-[65px] block bg-[#C4C4C4] rounded-lg border-4 border-white shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)]">
               <img
                 className="w-full h-full object-cover object-center"
                 src={
@@ -84,8 +124,18 @@ const ProfileInfos = ({ user }: Props) => {
               </div>
               <p className="capitalize ">Edit</p>
             </button>
+          ) : // if current user follow him return unfollow
+          currentUser?.following.includes(router.query.id as string) ? (
+            <button
+              onClick={handleUnfollow}
+              type="button"
+              className="text-white font-[Noto Sans] text-xs font-medium bg-blue flex items-center px-6 py-3 rounded-[4px] "
+            >
+              <p className="capitalize ">unFollow</p>
+            </button>
           ) : (
             <button
+              onClick={handleFollow}
               type="button"
               className="text-white font-[Noto Sans] text-xs font-medium bg-blue flex items-center px-6 py-2 rounded-[4px] "
             >

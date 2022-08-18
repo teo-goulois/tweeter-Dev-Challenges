@@ -2,14 +2,14 @@ import { useSession } from "next-auth/react";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/AuthProvider";
 import { User } from "../../../types/typing";
-import useUser from "../../../utils/home/useUser";
+import useConnectedUser from "../../../utils/home/useConnectedUser";
 import { fetchFollowSugestions } from "../../../utils/widget/fetchFollowSugestions";
 import useFollowSugestions from "../../../utils/widget/useFollowSugestions";
 // Components
 import FollowCard from "./FollowCard";
 
 const FollowSugestion = () => {
-  const { user } = useUser();
+  const { user } = useConnectedUser();
 
   // const [followSugestions, setFollowSugestions] = useState<User[]>([]);
 

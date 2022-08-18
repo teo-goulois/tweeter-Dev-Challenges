@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import { OptionsVerticalIcons } from "../../icons/Icons";
 import OptionModal from "./OptionModal";
 import UserInfos from "./UserInfos";
-import useUser from "../../utils/home/useUser";
+import useConnectedUser from "../../utils/home/useConnectedUser";
 
 type Props = {
   tweet: Tweet;
@@ -22,7 +22,7 @@ type Props = {
 
 const Tweet = ({ tweet }: Props) => {
   const router = useRouter();
-  const { user } = useUser();
+  const { user } = useConnectedUser();
   const [toggler, setToggler] = useState(false);
   const [commentIsOpen, setCommentIsOpen] = useState<boolean>(false);
   const [comments, setComments] = useState<CommentType[]>([]);

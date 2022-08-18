@@ -22,13 +22,13 @@ import { fetchHomeTweets } from "../utils/fetchHomeTweets";
 // Hooks
 import { fetchTweets } from "../utils/fetchTweets";
 import useTweet from "../utils/home/useTweets";
-import useUser from "../utils/home/useUser";
+import useConnectedUser from "../utils/home/useConnectedUser";
 import { authOptions } from "./api/auth/[...nextauth]";
 
 type Props = {};
 
 const Home = ({}: Props) => {
-  const { user } = useUser();
+  const { user } = useConnectedUser();
   const { tweets, isLoading, isError } = useTweet(user?._id, user?.following);
 
   // fetch whan current user following change
