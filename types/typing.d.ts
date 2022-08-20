@@ -31,10 +31,10 @@ export type TweetBody = {
   };
   everyoneCanReply: boolean;
   author: User;
-  likes: { type?: ObjectId | undefined; ref?: string; _id?: string }[];
+  likes: string[];
   comments: Comment[];
-  retweets: { type?: ObjectId | undefined; ref?: unknown; _id?: string }[];
-  bookmarks: { type?: ObjectId | undefined; ref?: unknown; _id?: string }[];
+  retweets: string[];
+  bookmarks: string[];
 };
 
 export interface Comment extends CommentBody {
@@ -50,6 +50,6 @@ export type CommentBody = {
   text: string;
   image: string;
   author: undefined | ResUser;
-  likes: { type?: ObjectId | undefined; ref?: string; _id?: string }[];
+  likes: string[];
   parent?: ObjectId;
 };

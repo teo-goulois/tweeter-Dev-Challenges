@@ -5,51 +5,28 @@ import { Tweet } from "../../types/typing";
 import { fetchMediaTweets } from "../../utils/explore/fetchMediaTweets";
 import { fetchPeoples } from "../../utils/explore/fetchPeoples";
 import { fetchTopTweets } from "../../utils/explore/fetchTopTweets";
+import useTweet from "../../utils/explore/useTweets";
 import { fetchTweets } from "../../utils/fetchTweets";
 
 type Props = {
-  setTweets: Dispatch<SetStateAction<Tweet[]>>;
+  filter: "lastest" | "top" | "people" | "media",
+  setFilter: Dispatch<SetStateAction<"lastest" | "top" | "people" | "media">>;
+  
 };
 
-const Filter = ({ setTweets }: Props) => {
-  const [filter, setfilter] = useState<string>("lastest");
-
-  useEffect(() => {
-    const getTweets = async () => {
-      switch (filter) {
-        case "top":          
-          // code block
-          const topTweets = await fetchTopTweets();          
-          setTweets(topTweets);
-          break;
-        case "lastest":
-          const lastestTweets = await fetchTweets();
-          setTweets(lastestTweets);
-          break;
-        case "people":
-          const peoples = await fetchPeoples()
-          console.log(peoples, 'PEOPLEs');
-          
-          // code block
-          break;
-        case "media":
-          const mediaTweets = await fetchMediaTweets();
-          setTweets(mediaTweets);
-          break;
-        default:
-        // code block
-      }
-    };
-    getTweets();
-  }, [filter]);
+const Filter = ({ filter, setFilter }: Props) => {
 
   return (
     <div className="min-w-[304px] bg-white rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] font-[Poppins] font-semibold text-sm flex  lg:flex-col mb-2">
-      {["top", "lastest", "people", "media"].map((title) => {
+      {(
+        ["top", "lastest", "people", "media"] as Array<
+          "lastest" | "top" | "people" | "media"
+        >
+      ).map((title) => {
         return (
           <div
             key={title}
-            onClick={() => setfilter(title)}
+            onClick={() => setFilter(title)}
             className="lg:py-4 flex-1 flex flex-col-reverse lg:flex-row items-center cursor-pointer"
           >
             <div

@@ -2,9 +2,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "../../../libs/dbConnect";
 import Tweet from "../../../models/Tweet";
+import { Tweet as TweetType } from "../../../types/typing";
 
 type Data = {
   message: string;
+  tweet?: TweetType | null;
 };
 
 export default async function handler(
@@ -16,11 +18,16 @@ export default async function handler(
   await dbConnect();
 
   try {
-    await Tweet.findOneAndUpdate(
+    const tweet = await Tweet.findOneAndUpdate(
       { _id: tweetID },
       { $push: { likes: userID } }
     );
-    res.status(200).json({ message: "tweet liked" });
+console.log(tweet, 'API add tweet like');
+
+
+    res
+      .status(200)
+      .json({ message: "tweet liked", tweet: tweet as unknown as TweetType });
   } catch (err) {
     res.status(500).json({ message: "an error occured please try later" });
   }

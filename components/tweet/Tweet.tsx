@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import { OptionsVerticalIcons } from "../../icons/Icons";
 import OptionModal from "./OptionModal";
 import UserInfos from "./UserInfos";
-import useConnectedUser from "../../utils/home/useConnectedUser";
+import useConnectedUser from "../../utils/users/useConnectedUser";
 
 type Props = {
   tweet: Tweet;
@@ -45,7 +45,7 @@ const Tweet = ({ tweet }: Props) => {
           className="fixed w-screen h-screen left-0 top-0 z-[1]"
         ></div>
       )}
-      {tweet.media.isMedia && (
+      {tweet?.media?.isMedia && (
         <FsLightbox toggler={toggler} sources={tweet.media.images} />
       )}
 
@@ -80,7 +80,7 @@ const Tweet = ({ tweet }: Props) => {
           <p className="text-gray">{tweet.text ?? ""}</p>
           {/* image */}
 
-          {tweet.media.isMedia && (
+          {tweet?.media?.isMedia && (
             <div
               onClick={() => setToggler((prev) => !prev)}
               id="my-container"

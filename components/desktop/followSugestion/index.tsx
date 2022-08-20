@@ -2,7 +2,7 @@ import { useSession } from "next-auth/react";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/AuthProvider";
 import { User } from "../../../types/typing";
-import useConnectedUser from "../../../utils/home/useConnectedUser";
+import useConnectedUser from "../../../utils/users/useConnectedUser";
 import { fetchFollowSugestions } from "../../../utils/widget/fetchFollowSugestions";
 import useFollowSugestions from "../../../utils/widget/useFollowSugestions";
 // Components

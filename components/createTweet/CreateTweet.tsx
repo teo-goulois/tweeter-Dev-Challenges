@@ -12,7 +12,7 @@ import { AuthContext } from "../../context/AuthProvider";
 import useAutoIncreaseHeight from "../../hooks/useAutoIncreaseHeight";
 import { useSWRConfig } from "swr";
 import { Tweet } from "../../types/typing";
-import useConnectedUser from "../../utils/home/useConnectedUser";
+import useConnectedUser from "../../utils/users/useConnectedUser";
 
 type OpenModal = {
   isOpen: boolean;

@@ -15,16 +15,14 @@ type Data = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse
 ) {
   const { tweetID } = req.query;
   await dbConnect();
 
   const comments = await Comment.find({ tweet: tweetID })
     .populate("author")
-    .populate("tweet", "_id")
-    .populate("likes", "_id")
     .sort("-createdAt");
 
-  res.status(200).json({ comments: comments as CommentType[] });
+  res.status(200).json(comments);
 }

@@ -10,33 +10,40 @@ import Feed from "../../components/feed/Feed";
 // Hooks
 import { fetchTweets } from "../../utils/fetchTweets";
 // Types
-import { Tweet as TweetType } from "../../types/typing";
+import { Tweet, Tweet as TweetType } from "../../types/typing";
 import { TweetContext } from "../../context/TweetProvider";
-
-
+import useTweet from "../../utils/explore/useTweets";
+import PeopleCard from "../../components/explore/PeopleCard";
+import PeopleFeed from "../../components/explore/PeopleFeed";
 
 const Index = () => {
-  const { setTweets, tweets } = useContext(TweetContext);
-  const { data, error } = useSWR("/api/tweets/getTweets");
-
-  const [input, setInput] = useState<string>('')
-
- 
+  const [filter, setfilter] = useState<"lastest" | "top" | "people" | "media">(
+    "lastest"
+  );
+  const [input, setInput] = useState<string>("");
+  const { tweets, isError, isLoading } = useTweet(filter, input);
 
   return (
     <div className="p-4 w-full flex flex-col lg:flex-row lg:items-start lg:justify-center ">
       <div className="block lg:mr-2">
-        <Filter setTweets={setTweets} />
+        <Filter filter={filter} setFilter={setfilter} />
       </div>
       <div className="lg:ml-2 md:min-w-[60%] lg:min-w-[40%] ">
         <Searchbar input={input} setInput={setInput} />
-        {data ? (
-          <Feed tweets={tweets} />
+
+        {!isLoading ? (
+          filter === "people" ? (
+            <PeopleFeed input={input} peoples={tweets} />
+          ) : (
+            <Feed tweets={tweets} />
+          )
+        ) : isError ? (
+          <p>Error {isError} </p>
         ) : (
           <div>
-            <div className="w-full h-[200px] bg-gray4 animate-pulse rounded-xl mb-4"></div>
-            <div className="w-full h-[200px] bg-gray4 animate-pulse rounded-xl mb-4"></div>
-            <div className="w-full h-[200px] bg-gray4 animate-pulse rounded-xl mb-4"></div>
+            <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
+            <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
+            <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
           </div>
         )}
       </div>
@@ -49,5 +56,3 @@ Index.getLayout = function getLayout(page: ReactElement) {
 };
 
 export default Index;
-
-

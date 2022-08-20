@@ -7,7 +7,7 @@ import { User } from "../../types/typing";
 import { useRouter } from "next/router";
 import { AuthContext } from "../../context/AuthProvider";
 import EditModal from "./EditModal";
-import useConnectedUser from "../../utils/home/useConnectedUser";
+import useConnectedUser from "../../utils/users/useConnectedUser";
 import { mutate } from "swr";
 
 type Props = {

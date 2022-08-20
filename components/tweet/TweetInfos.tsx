@@ -10,7 +10,7 @@ import {
   RetweetIcon,
 } from "../../icons/Icons";
 // Types
-import { Tweet } from "../../types/typing";
+import { Tweet, Comment, User } from "../../types/typing";
 // Hooks
 import useCheckIfChecked from "../../hooks/useCheckIfChecked";
 import { addLike } from "../../utils/addLike";
@@ -19,10 +19,13 @@ import { removeRetweet } from "../../utils/removeRetweet";
 import { addRetweet } from "../../utils/addRetweet";
 import { removeBookmark } from "../../utils/removeBookmark";
 import { addBookmark } from "../../utils/addBookmark";
+import updateTweetInfos from "../../utils/home/updateTweetInfos";
 // Context
 import { TweetContext } from "../../context/TweetProvider";
 import { useRouter } from "next/router";
 import { fetchComments } from "../../utils/fetchComments";
+import useConnectedUser from "../../utils/users/useConnectedUser";
+import useComments from "../../utils/home/useComments";
 
 const variants = {
   open: { opacity: 1, x: 0 },
@@ -35,78 +38,94 @@ type Props = {
   setCommentIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const TweetInfos = ({ tweet, comments, setCommentIsOpen }: Props) => {
+const TweetInfos = ({ tweet, setCommentIsOpen }: Props) => {
   const router = useRouter();
-  const { data: session } = useSession();
-  const { tweets, setTweets } = useContext(TweetContext);
+  const { user } = useConnectedUser();
 
   const [commentsLength, setCommentsLength] = useState<number>(0);
-
-  useEffect(() => {
+  const { comments } = useComments(tweet._id);
+ /*  useEffect(() => {
     const getComments = async () => {
       const comments = await fetchComments(tweet._id);
       setCommentsLength(comments.length);
     };
     getComments();
-  }, [tweet]);
+  }, [tweet]); */
 
   const handleActivities = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     title: string
   ) => {
     e.stopPropagation();
-    if (!session?.user)
-      return toast.error(`you should be connected to ${title}`);
+    if (!user) return toast.error(`you should be connected to ${title}`);
 
     switch (title) {
       case "comment":
         router.push(`/tweets/${tweet._id}`);
         break;
       case "retweet":
-        if (useCheckIfChecked(tweet.retweets, session?.user?._id as string)) {
-          const data = await removeRetweet(
+        if (tweet.retweets.includes(user._id)) {
+          updateTweetInfos(
+            user._id,
+            user.following,
             tweet._id,
-            session?.user?._id,
-            tweets
+            "retweets",
+            `/api/tweets/removeRetweet?tweetID=${tweet._id}&userID=${user._id}`,
+            true
           );
-          data?.tweets
-            ? setTweets(data.tweets)
-            : console.log("an errro occured please try again later");
         } else {
-          const data = await addRetweet(tweet._id, session?.user._id, tweets);
-          data?.tweets
-            ? setTweets(data.tweets)
-            : console.log("an errro occured please try again later");
+          updateTweetInfos(
+            user._id,
+            user.following,
+            tweet._id,
+            "retweets",
+            `/api/tweets/addRetweet?tweetID=${tweet._id}&userID=${user._id}`,
+            true
+          );
         }
         break;
       case "like":
-        if (useCheckIfChecked(tweet.likes, session?.user?._id as string)) {
-          const data = await removeLike(tweet._id, session?.user?._id, tweets);
-          data?.tweets
-            ? setTweets(data.tweets)
-            : console.log("an errro occured please try again later");
+        if (tweet.likes.includes(user._id)) {
+          // remove like
+          updateTweetInfos(
+            user._id,
+            user.following,
+            tweet._id,
+            "likes",
+            `/api/tweets/removeLike?tweetID=${tweet._id}&userID=${user._id}`,
+            false
+          );
         } else {
-          const data = await addLike(tweet._id, session?.user._id, tweets);
-          data?.tweets
-            ? setTweets(data.tweets)
-            : console.log("an errro occured please try again later");
+          updateTweetInfos(
+            user._id,
+            user.following,
+            tweet._id,
+            "likes",
+            `/api/tweets/addLike?tweetID=${tweet._id}&userID=${user._id}`,
+            true
+          );
         }
         break;
       case "save":
-        if (useCheckIfChecked(tweet.bookmarks, session?.user?._id as string)) {
-          const data = await removeBookmark(
+        if (tweet.bookmarks.includes(user._id)) {
+          // remove bookmark
+          updateTweetInfos(
+            user._id,
+            user.following,
             tweet._id,
-            session?.user?._id,
-            tweets
+            "bookmarks",
+            `/api/tweets/removeBookmark?tweetID=${tweet._id}&userID=${user._id}`,
+            true
           );
-          data?.tweets
-            ? setTweets(data.tweets)
-            : toast.error("an errro occured please try again later");
         } else {
-          const data = await addBookmark(tweet._id, session?.user._id, tweets);
-          data?.tweets
-            ? setTweets(data.tweets)
-            : toast.error("an errro occured please try again later");
+          updateTweetInfos(
+            user._id,
+            user.following,
+            tweet._id,
+            "bookmarks",
+            `/api/tweets/addBookmark?tweetID=${tweet._id}&userID=${user._id}`,
+            true
+          );
         }
         break;
       default:
@@ -116,7 +135,7 @@ const TweetInfos = ({ tweet, comments, setCommentIsOpen }: Props) => {
   return (
     <>
       <div className="flex justify-end pb-1 font-medium text-xs text-gray4 relative ">
-        <p className="mx-2">{commentsLength} Comments</p>
+        <p className="mx-2">{comments?.length ?? 0} Comments</p>
         <p className="mx-2">
           {tweet.retweets ? tweet.retweets.length : "0"} Retweets
         </p>
@@ -126,10 +145,30 @@ const TweetInfos = ({ tweet, comments, setCommentIsOpen }: Props) => {
       </div>
       <div className="border-y border-gray3 py-1 flex ">
         {[
-          ["comment", <OutlineCommentIcon />, tweet.comments, "!text-primary"],
-          ["retweet", <RetweetIcon />, tweet.retweets, "!text-green"],
-          ["like", <OutlineHeartIcon />, tweet.likes, "!text-red"],
-          ["save", <OutlineBookmarkIcon />, tweet.bookmarks, "!text-blue"],
+          [
+            "comment",
+            <OutlineCommentIcon />,
+            tweet.comments,
+            "!text-primary",
+          ] as [string, JSX.Element, Comment[], string],
+          ["retweet", <RetweetIcon />, tweet.retweets, "!text-green"] as [
+            string,
+            JSX.Element,
+            string[],
+            string
+          ],
+          ["like", <OutlineHeartIcon />, tweet.likes, "!text-red"] as [
+            string,
+            JSX.Element,
+            string[],
+            string
+          ],
+          ["save", <OutlineBookmarkIcon />, tweet.bookmarks, "!text-blue"] as [
+            string,
+            JSX.Element,
+            string[],
+            string
+          ],
         ].map(([title, component, array, color]) => {
           return (
             <button
@@ -137,12 +176,8 @@ const TweetInfos = ({ tweet, comments, setCommentIsOpen }: Props) => {
               key={title as string}
               onClick={(e) => handleActivities(e, title as string)}
               className={`${
-                useCheckIfChecked(
-                  array as {
-                    _id?: string;
-                  }[],
-                  session?.user?._id as string
-                ) && color
+                // @ts-ignore
+                user && title !== "comment" && array.includes(user._id) && color
               } text-sm font-medium text-gray text-center hover:bg-gray3 rounded-lg py-2 flex-1 cursor-pointer flex justify-center items-center`}
             >
               <div className="h-4 mr-2">{component as ReactNode}</div>

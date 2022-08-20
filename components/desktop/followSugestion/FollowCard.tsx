@@ -7,7 +7,7 @@ import { AuthContext } from "../../../context/AuthProvider";
 // Icons
 import { FollowIcon } from "../../../icons/Icons";
 import { User } from "../../../types/typing";
-import useConnectedUser from "../../../utils/home/useConnectedUser";
+import useConnectedUser from "../../../utils/users/useConnectedUser";
 
 type Props = {
   user: User;

@@ -12,7 +12,7 @@ import { AuthContext } from "../../context/AuthProvider";
 import type { NextPageWithLayout } from "../_app";
 import { TweetContext } from "../../context/TweetProvider";
 import Feed from "../../components/feed/Feed";
-import useConnectedUser from "../../utils/home/useConnectedUser";
+import useConnectedUser from "../../utils/users/useConnectedUser";
 
 const Index: NextPageWithLayout = () => {
   // const { user } = useContext(AuthContext);

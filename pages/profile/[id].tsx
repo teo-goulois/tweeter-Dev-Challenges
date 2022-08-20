@@ -6,8 +6,8 @@ import Filter from "../../components/bookmarks/Filter";
 import CreateTweet from "../../components/createTweet/CreateTweet";
 import Feed from "../../components/feed/Feed";
 import ProfileInfos from "../../components/profile/ProfileInfos";
-import useConnectedUser from "../../utils/home/useConnectedUser";
-import useUser from "../../utils/home/useUser";
+import useConnectedUser from "../../utils/users/useConnectedUser";
+import useUser from "../../utils/users/useUser";
 import useTweet from "../../utils/profile/useTweets";
 
 const Profile = () => {

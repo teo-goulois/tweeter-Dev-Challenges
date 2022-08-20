@@ -22,7 +22,7 @@ import { fetchHomeTweets } from "../utils/fetchHomeTweets";
 // Hooks
 import { fetchTweets } from "../utils/fetchTweets";
 import useTweet from "../utils/home/useTweets";
-import useConnectedUser from "../utils/home/useConnectedUser";
+import useConnectedUser from "../utils/users/useConnectedUser";
 import { authOptions } from "./api/auth/[...nextauth]";
 
 type Props = {};

@@ -21,7 +21,7 @@ export default async function handler(
   const { userID, myID } = req.query;
   await dbConnect();
 
-  try {
+  try {    
     // add to my following
     const currentUser = await User.findOneAndUpdate(
       { _id: myID },
