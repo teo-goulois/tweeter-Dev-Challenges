@@ -1,20 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
-import moment from "moment";
+import React, { useState } from "react";
 import FsLightbox from "fslightbox-react";
+import { useRouter } from "next/router";
 // Types
 import { Comment as CommentType, Tweet } from "../../types/typing";
 // Hooks
-import { fetchComments } from "../../utils/fetchComments";
+import useConnectedUser from "../../utils/users/useConnectedUser";
 // Components
-import Comment from "./Comment";
-import Reply from "./Reply";
+import Reply from "../singleTweet/Reply";
 import TweetInfos from "./TweetInfos";
-import { AuthContext } from "../../context/AuthProvider";
-import { useRouter } from "next/router";
-import { OptionsVerticalIcons } from "../../icons/Icons";
 import OptionModal from "./OptionModal";
 import UserInfos from "./UserInfos";
-import useConnectedUser from "../../utils/users/useConnectedUser";
+// Icons
+import { OptionsVerticalIcons } from "../../icons/Icons";
 
 type Props = {
   tweet: Tweet;
@@ -24,7 +21,6 @@ const Tweet = ({ tweet }: Props) => {
   const router = useRouter();
   const { user } = useConnectedUser();
   const [toggler, setToggler] = useState(false);
-  const [commentIsOpen, setCommentIsOpen] = useState<boolean>(false);
   const [comments, setComments] = useState<CommentType[]>([]);
   const [optionModalIsOpen, setOptionModalIsOpen] = useState<boolean>(false);
 
@@ -104,28 +100,7 @@ const Tweet = ({ tweet }: Props) => {
           )}
         </div>
         {/* tweet infos */}
-        <TweetInfos
-          tweet={tweet}
-          comments={comments.length}
-          setCommentIsOpen={setCommentIsOpen}
-        />
-        {/* reply */}
-        {commentIsOpen && (
-          <>
-            <Reply tweetID={tweet._id} setComments={setComments} />
-            <div className="border border-gray3 w-full mb-2"></div>
-          </>
-        )}
-        {/* comments */}
-        {/*  {comments.length > 0 &&
-          comments.map((comment) => (
-            <Comment
-              key={comment._id}
-              comment={comment}
-              comments={comments}
-              setComments={setComments}
-            />
-          ))} */}
+        <TweetInfos tweet={tweet} comments={comments.length} />
       </div>
     </>
   );

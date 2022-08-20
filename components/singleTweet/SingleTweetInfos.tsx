@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 // Icons
 import {
@@ -9,12 +8,12 @@ import {
   RetweetIcon,
 } from "../../icons/Icons";
 // Types
-import { Tweet, Comment } from "../../types/typing";
+import { Tweet } from "../../types/typing";
 // Hooks
-import updateTweetInfos from "../../utils/home/updateTweetInfos";
-import useConnectedUser from "../../utils/users/useConnectedUser";
+import useFollow from "../../utils/useFollow";
 import useCommentsLength from "../../utils/comments/useCommentsLength";
-// Context
+import useConnectedUser from "../../utils/users/useConnectedUser";
+import updateTweetInfos from "../../utils/tweet/updateTweetInfos";
 
 const variants = {
   open: { opacity: 1, x: 0 },
@@ -23,13 +22,11 @@ const variants = {
 
 type Props = {
   tweet: Tweet;
-  comments: number;
+  setCommentIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const TweetInfos = ({ tweet }: Props) => {
-  const router = useRouter();
+const TweetInfos = ({ tweet, setCommentIsOpen }: Props) => {
   const { user } = useConnectedUser();
-
   const { commentsLength } = useCommentsLength(tweet._id);
 
   const handleActivities = async (
@@ -41,13 +38,20 @@ const TweetInfos = ({ tweet }: Props) => {
 
     switch (title) {
       case "comment":
-        router.push(`/tweets/${tweet._id}`);
+        if (tweet.everyoneCanReply) {
+          return setCommentIsOpen((prev) => !prev);
+        }
+        // check if we are follower
+        if (useFollow(user, tweet.author)) {
+          setCommentIsOpen((prev) => !prev);
+        } else {
+          toast.error("only the follower can reply");
+        }
         break;
       case "retweet":
         if (tweet.retweets.includes(user._id)) {
           updateTweetInfos(
             user._id,
-            user.following,
             tweet._id,
             "retweets",
             `/api/tweets/removeRetweet?tweetID=${tweet._id}&userID=${user._id}`,
@@ -56,7 +60,6 @@ const TweetInfos = ({ tweet }: Props) => {
         } else {
           updateTweetInfos(
             user._id,
-            user.following,
             tweet._id,
             "retweets",
             `/api/tweets/addRetweet?tweetID=${tweet._id}&userID=${user._id}`,
@@ -69,7 +72,6 @@ const TweetInfos = ({ tweet }: Props) => {
           // remove like
           updateTweetInfos(
             user._id,
-            user.following,
             tweet._id,
             "likes",
             `/api/tweets/removeLike?tweetID=${tweet._id}&userID=${user._id}`,
@@ -78,7 +80,6 @@ const TweetInfos = ({ tweet }: Props) => {
         } else {
           updateTweetInfos(
             user._id,
-            user.following,
             tweet._id,
             "likes",
             `/api/tweets/addLike?tweetID=${tweet._id}&userID=${user._id}`,
@@ -91,7 +92,6 @@ const TweetInfos = ({ tweet }: Props) => {
           // remove bookmark
           updateTweetInfos(
             user._id,
-            user.following,
             tweet._id,
             "bookmarks",
             `/api/tweets/removeBookmark?tweetID=${tweet._id}&userID=${user._id}`,
@@ -100,7 +100,6 @@ const TweetInfos = ({ tweet }: Props) => {
         } else {
           updateTweetInfos(
             user._id,
-            user.following,
             tweet._id,
             "bookmarks",
             `/api/tweets/addBookmark?tweetID=${tweet._id}&userID=${user._id}`,
@@ -111,7 +110,6 @@ const TweetInfos = ({ tweet }: Props) => {
       default:
     }
   };
-
   return (
     <>
       <div className="flex justify-end pb-1 font-medium text-xs text-gray4 relative ">
@@ -125,12 +123,11 @@ const TweetInfos = ({ tweet }: Props) => {
       </div>
       <div className="border-y border-gray3 py-1 flex ">
         {[
-          [
-            "comment",
-            <OutlineCommentIcon />,
-            tweet.comments,
-            "!text-primary",
-          ] as [string, JSX.Element, Comment[], string],
+          ["comment", <OutlineCommentIcon />, "!text-primary"] as [
+            string,
+            JSX.Element,
+            string
+          ],
           ["retweet", <RetweetIcon />, tweet.retweets, "!text-green"] as [
             string,
             JSX.Element,

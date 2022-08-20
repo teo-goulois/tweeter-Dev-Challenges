@@ -46,10 +46,10 @@ export interface Comment extends CommentBody {
 }
 
 export type CommentBody = {
-  tweet: { _id: ObjectId };
+  tweet: string;
   text: string;
   image: string;
   author: undefined | ResUser;
   likes: string[];
-  parent?: ObjectId;
+  parent?: string;
 };

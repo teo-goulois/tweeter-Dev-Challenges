@@ -1,29 +1,32 @@
-import FsLightbox from "fslightbox-react";
-import moment from "moment";
-import { useRouter } from "next/router";
 import React, { useContext, useState } from "react";
-import { AuthContext } from "../../context/AuthProvider";
+import FsLightbox from "fslightbox-react";
+// Icons
 import { OptionsVerticalIcons } from "../../icons/Icons";
-import OptionModal from "./OptionModal";
+// Components
+import OptionModal from "../tweet/OptionModal";
 import Reply from "./Reply";
 import TweetInfos from "./SingleTweetInfos";
 import Comment from "./Comment";
-import { Comment as CommentType, Tweet } from "../../types/typing";
-import ProfileImage from "../global/ProfileImage";
-import UserInfos from "./UserInfos";
-import ImagesViewer from "./ImagesViewer";
+import UserInfos from "../tweet/UserInfos";
+import ImagesViewer from "../tweet/ImagesViewer";
+// Types
+import { Tweet } from "../../types/typing";
+// Hooks
+import useComments from "../../utils/comments/useComments";
+import useConnectedUser from "../../utils/users/useConnectedUser";
 
 type Props = {
   tweet: Tweet;
 };
 
 const SingleTweet = ({ tweet }: Props) => {
-  const router = useRouter();
-  const { user } = useContext(AuthContext);
+  const { user } = useConnectedUser();
+
   const [toggler, setToggler] = useState(false);
   const [commentIsOpen, setCommentIsOpen] = useState<boolean>(false);
-  const [comments, setComments] = useState<CommentType[]>([]);
   const [optionModalIsOpen, setOptionModalIsOpen] = useState<boolean>(false);
+
+  const { comments, isLoading } = useComments(tweet._id);
 
   return (
     <>
@@ -75,29 +78,28 @@ const SingleTweet = ({ tweet }: Props) => {
         </div>
 
         {/* tweet infos */}
-        <TweetInfos
-          tweet={tweet}
-          comments={comments.length}
-          setCommentIsOpen={setCommentIsOpen}
-        />
+        <TweetInfos tweet={tweet} setCommentIsOpen={setCommentIsOpen} />
         {/* reply */}
         {commentIsOpen && (
           <>
-            <Reply tweetID={tweet._id} setComments={setComments} />
+            <Reply tweetID={tweet._id} />
             <div className="border border-gray3 w-full mb-2"></div>
           </>
         )}
 
         {/* comments */}
-        {tweet.comments.length > 0 &&
-          tweet.comments.map((comment) => (
+        {isLoading ? (
+          <div>loading...</div>
+        ) : (
+          comments.map((comment) => (
             <Comment
               key={comment._id}
               comment={comment}
               comments={comments}
-              setComments={setComments}
+              setComments={() => {}}
             />
-          ))}
+          ))
+        )}
       </div>
     </>
   );

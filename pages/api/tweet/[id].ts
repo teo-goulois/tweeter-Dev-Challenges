@@ -5,7 +5,8 @@ import dbConnect from "../../../libs/dbConnect";
 import Tweet from "../../../models/Tweet";
 
 type Data = {
-  tweets: TweetType[];
+  message: string;
+  tweet?: TweetType[];
 };
 
 export default async function handler(
@@ -13,9 +14,17 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   await dbConnect();
-  const tweets = await Tweet.find({}).populate('comments')
-    .populate("author")
-    .sort("-createdAt"); 
-  
-  res.status(200).json({ tweets: tweets as unknown as TweetType[] });
+  const { id } = req.query;
+  try {
+    const tweet = await Tweet.findOne({ _id: id }).populate("author");
+    console.log(tweet, "API TWEET");
+
+    res
+      .status(200)
+      .json({ message: "success", tweet: tweet as unknown as TweetType[] });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "An error occured please try again later" });
+  }
 }

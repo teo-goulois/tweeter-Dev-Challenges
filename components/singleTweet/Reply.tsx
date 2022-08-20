@@ -1,25 +1,25 @@
-import { useSession } from "next-auth/react";
-import React, { useContext, useRef, useState } from "react";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
+import { mutate } from "swr";
 // Icons
-import { ImageIcon } from "../../icons/Icons";
+
 // components
 import AddImageModal from "../createTweet/AddImageModal";
 // types
-import { Comment as CommentType, Tweet } from "../../types/typing";
-import { TweetContext } from "../../context/TweetProvider";
-import toast from "react-hot-toast";
+
+// Hooks
+import { key } from "../../utils/comments/useComments";
+import useConnectedUser from "../../utils/users/useConnectedUser";
 
 type Props = {
   tweetID: string;
-  setComments: React.Dispatch<React.SetStateAction<CommentType[]>>;
 };
 
-const Reply = ({ tweetID, setComments }: Props) => {
-  const { setActiveTweet } = useContext(TweetContext);
+const Reply = ({ tweetID }: Props) => {
   const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false);
   const [image, setImage] = useState<string | null>(null);
   const [input, setInput] = useState<string>("");
-  const { data: session } = useSession();
+  const { user } = useConnectedUser();
 
   const addImageToTweet = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -37,7 +37,7 @@ const Reply = ({ tweetID, setComments }: Props) => {
     const body = {
       tweet: { _id: tweetID },
       text: input,
-      author: session?.user?._id,
+      author: user?._id,
       image: image,
     };
     const response = await fetch(`/api/tweets/postComment`, {
@@ -46,18 +46,12 @@ const Reply = ({ tweetID, setComments }: Props) => {
     });
     if (response.status === 200) {
       const data = await response.json();
-     // TODO: use SWR
-      setActiveTweet((prev) => {
-        if (!prev) return prev;
+      console.log(data, "data add commment");
 
-        return {
-          ...prev,
-          comments: [
-            { ...data.comment, author: session?.user },
-            ...prev.comments,
-          ],
-        };
-      });
+      // TODO: use SWR
+      mutate(key(tweetID), async (comments: Comment[]) => {
+        return [{ ...data.comment, author: user }, ...comments];
+      }, {revalidate: false});
 
       setInput("");
       setImage("");
@@ -79,7 +73,7 @@ const Reply = ({ tweetID, setComments }: Props) => {
           <div className="w-10 h-10 bg-[#C4C4C4] rounded-lg overflow-hidden">
             <img
               className="h-full w-full  object-center"
-              src={session?.user?.image ?? ""}
+              src={user?.image ?? ""}
               alt=""
             />
           </div>
