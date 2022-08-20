@@ -66,59 +66,61 @@ const PeopleCard = ({ people, input }: Props) => {
   };
 
   return (
-    <div className="mb-4 p-4 border bg-white border-white hover:shadow rounded-lg ">
-      <div className="flex items-center justify-between  ">
-        <div className="flex items-center justify-start">
-          {/* image */}
-          <div className="w-10 h-10 bg-[#C4C4C4] rounded-lg mr-2 overflow-hidden">
-            <img src={people.image} alt="" />
-          </div>
-          <div className="flex flex-col">
-            <div className="flex items-center">
-              <Link href={`/profile/${people._id}`}>
-                <a className="text-black font-medium font-[Poppins] ">
-                  {people.name}
-                </a>
-              </Link>
-              <p className="text-xs text-secondary font-medium ml-2">
-                | {people.follower.length} followers | {people.following.length}{" "}
-                following
+    <>
+      <div className="mb-4 p-4 w-full  border bg-white border-white hover:shadow rounded-lg ">
+        <div className="flex items-center justify-between  ">
+          <div className="flex items-center justify-start">
+            {/* image */}
+            <div className="w-10 h-10 bg-[#C4C4C4] rounded-lg mr-2 overflow-hidden">
+              <img src={people.image} alt="" />
+            </div>
+            <div className="flex flex-col">
+              <div className="flex items-center">
+                <Link href={`/profile/${people._id}`}>
+                  <a className="text-black font-medium font-[Poppins] ">
+                    {people.name}
+                  </a>
+                </Link>
+                <p className="text-xs text-secondary font-medium ml-2">
+                  | {people.follower.length} followers |{" "}
+                  {people.following.length} following
+                </p>
+              </div>
+              <p className="text-sm text-primary font-medium">
+                {people.bio ?? "no bio for this user"}
               </p>
             </div>
-            <p className="text-sm text-primary font-medium">
-              {people.bio ?? "no bio for this user"}
-            </p>
           </div>
-        </div>
 
-        {user && people.follower.includes(user._id) ? (
-          <button
-            type="button"
-            onClick={handleUnfollow}
-            className="bg-blue flex items-center text-white px-4 py-2 rounded-[4px] relative z-10 "
-          >
-            <p>unfollow</p>
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={handleFollow}
-            className="bg-blue flex items-center text-white px-4 py-2 rounded-[4px] relative z-10 "
-          >
-            <div className="h-6 mr-2">
-              <FollowIcon />
-            </div>
-            <p>Follow</p>
-          </button>
-        )}
+          {user && people.follower.includes(user._id) ? (
+            <button
+              type="button"
+              onClick={handleUnfollow}
+              className="bg-blue flex items-center text-white px-4 py-2 rounded-[4px] relative z-10 "
+            >
+              <p>unfollow</p>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handleFollow}
+              className="bg-blue flex items-center text-white px-4 py-2 rounded-[4px] relative z-10 "
+            >
+              <div className="h-6 mr-2">
+                <FollowIcon />
+              </div>
+              <p>Follow</p>
+            </button>
+          )}
+        </div>
+        {/* desc */}
+        <p className="font-medium text-sm text-secondary my-2">{people.bio}</p>
+        {/* image */}
+        <div className="bg-[#C4C4C4] h-[78px] rounded-lg overflow-hidden">
+          <img src={people.banner} alt="people banner" />
+        </div>
       </div>
-      {/* desc */}
-      <p className="font-medium text-sm text-secondary my-2">{people.bio}</p>
-      {/* image */}
-      <div className="bg-[#C4C4C4] w-full  h-[78px] rounded-lg overflow-hidden">
-        <img src={people.banner} alt="people banner" />
-      </div>
-    </div>
+    </>
   );
 };
 

@@ -16,6 +16,7 @@ import useConnectedUser from "../../utils/users/useConnectedUser";
 
 const Index: NextPageWithLayout = () => {
   // const { user } = useContext(AuthContext);
+  // TODO: useSWR
   const {user} = useConnectedUser()
   const { setTweets, tweets } = useContext(TweetContext);
 

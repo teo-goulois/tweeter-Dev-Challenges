@@ -18,40 +18,37 @@ import useSWR from "swr";
 import { AuthContext } from "../../context/AuthProvider";
 import withAuth from "../../libs/withAuth";
 import toast from "react-hot-toast";
+import useConnectedUser from "../../utils/users/useConnectedUser";
+import useTweet from "../../utils/bookmarks/useTweet";
 
 const Index: NextPage = () => {
-  const { setTweets, tweets } = useContext(TweetContext);
-  const { user } = useContext(AuthContext);
+  const { user } = useConnectedUser();
+  const [filter, setFilter] = useState<
+    "tweets" | "replies" | "media" | "likes"
+  >("tweets");
 
-  const { data, error } = useSWR(
-    `/api/tweets/getSavedTweets?userID=${user?._id}`
-  );
-
-  // useEffect
-  useEffect(() => {
-    data && setTweets(data.savedTweets);
-    return () => {
-      setTweets([]);
-    };
-  }, [data]);
+  const { tweets, isLoading, isError } = useTweet(filter, user?._id);
+  
 
   return (
     <div className="p-4 w-full flex flex-col lg:flex-row lg:items-start lg:justify-center ">
       <div className="block lg:mr-2">
-        <Filter setTweets={setTweets} />
+        <Filter filter={filter} setFilter={setFilter} />
       </div>
       <div className="lg:ml-2 md:min-w-[60%] lg:min-w-[40%] ">
-        {data ? (
-          <Feed
-            tweets={tweets}
-            textIfNoTweets="no tweets saved, save one to start see them"
-          />
-        ) : (
+        {isLoading ? (
           <div>
             <div className="w-full h-[200px] bg-gray4 animate-pulse rounded-xl mb-4"></div>
             <div className="w-full h-[200px] bg-gray4 animate-pulse rounded-xl mb-4"></div>
             <div className="w-full h-[200px] bg-gray4 animate-pulse rounded-xl mb-4"></div>
           </div>
+        ) : isError ? (
+          <p>Error </p>
+        ) : (
+          <Feed
+            tweets={tweets}
+            textIfNoTweets="no tweets saved, save one to start see them"
+          />
         )}
       </div>
     </div>

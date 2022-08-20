@@ -45,7 +45,7 @@ const SingleTweet = ({ tweet }: Props) => {
 
       {/* Tweet Component */}
 
-      <div className="w-full hover:shadow-sm bg-white p-4 rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] relative  mb-4 border  border-gray4 ">
+      <div className="w-full max-w-5xl hover:shadow-sm bg-white p-4 rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] relative  mb-4 border  border-gray4 ">
         {optionModalIsOpen && (
           <OptionModal
             setOptionModalIsOpen={setOptionModalIsOpen}

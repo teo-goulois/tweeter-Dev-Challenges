@@ -21,7 +21,7 @@ const Tweet = ({ comments }: Props) => {
 
 
   return (
-    <div className="p-2">
+    <div className="p-2 flex justify-center">
       {isLoading && (
         <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
       )}

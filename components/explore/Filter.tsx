@@ -1,12 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-// types
-import { Tweet } from "../../types/typing";
-// Hooks
-import { fetchMediaTweets } from "../../utils/explore/fetchMediaTweets";
-import { fetchPeoples } from "../../utils/explore/fetchPeoples";
-import { fetchTopTweets } from "../../utils/explore/fetchTopTweets";
-import useTweet from "../../utils/explore/useTweets";
-import { fetchTweets } from "../../utils/fetchTweets";
+import React, { Dispatch, SetStateAction } from "react";
 
 type Props = {
   filter: "lastest" | "top" | "people" | "media",

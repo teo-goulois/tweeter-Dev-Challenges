@@ -6,7 +6,7 @@ import useSWR from "swr";
 import Filter from "../../components/explore/Filter";
 import Searchbar from "../../components/explore/Searchbar";
 import Layout from "../../components/layouts/Layout";
-import Feed from "../../components/feed/Feed";
+import Feed from "../../components/explore/Feed";
 // Hooks
 import { fetchTweets } from "../../utils/fetchTweets";
 // Types
@@ -25,17 +25,17 @@ const Index = () => {
 
   return (
     <div className="p-4 w-full flex flex-col lg:flex-row lg:items-start lg:justify-center ">
-      <div className="block lg:mr-2">
+      <div className="lg:mr-2">
         <Filter filter={filter} setFilter={setfilter} />
       </div>
-      <div className="lg:ml-2 md:min-w-[60%] lg:min-w-[40%] ">
+      <div className="lg:ml-2 w-full lg:max-w-4xl ">
         <Searchbar input={input} setInput={setInput} />
 
         {!isLoading ? (
           filter === "people" ? (
             <PeopleFeed input={input} peoples={tweets} />
           ) : (
-            <Feed tweets={tweets} />
+            <Feed tweets={tweets} filter={filter} query={input} />
           )
         ) : isError ? (
           <p>Error {isError} </p>

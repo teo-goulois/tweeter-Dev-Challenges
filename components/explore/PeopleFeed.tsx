@@ -14,7 +14,7 @@ type Props = {
 const PeopleFeed = ({ peoples, input }: Props) => {
   const { user } = useConnectedUser();
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full ">
       {peoples?.length > 0 ? (
         peoples.map((people, index) => {
           if (user?._id === people._id) return;

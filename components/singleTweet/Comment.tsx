@@ -23,7 +23,6 @@ const Comment = ({ comment, comments, setComments }: Props) => {
     if (!user)
       return toast.error(`you should be connected to like this comment`);
     if (comment.likes.includes(user._id)) {
-      // TODO use SWR
       const response = await fetch(
         `/api/tweets/removeCommentLike?commentID=${comment._id}&userID=${user._id}`
       );

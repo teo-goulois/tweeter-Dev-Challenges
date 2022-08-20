@@ -47,8 +47,6 @@ const Reply = ({ tweetID }: Props) => {
     if (response.status === 200) {
       const data = await response.json();
       console.log(data, "data add commment");
-
-      // TODO: use SWR
       mutate(key(tweetID), async (comments: Comment[]) => {
         return [{ ...data.comment, author: user }, ...comments];
       }, {revalidate: false});

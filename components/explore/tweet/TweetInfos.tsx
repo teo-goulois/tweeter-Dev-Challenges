@@ -7,13 +7,13 @@ import {
   OutlineCommentIcon,
   OutlineHeartIcon,
   RetweetIcon,
-} from "../../icons/Icons";
+} from "../../../icons/Icons";
 // Types
-import { Tweet, Comment } from "../../types/typing";
+import { Tweet, Comment } from "../../../types/typing";
 // Hooks
-import updateTweetInfos from "../../utils/home/updateTweetInfos";
-import useConnectedUser from "../../utils/users/useConnectedUser";
-import useCommentsLength from "../../utils/comments/useCommentsLength";
+import updateTweetInfos from "../../../utils/explore/updateTweetInfos";
+import useConnectedUser from "../../../utils/users/useConnectedUser";
+import useCommentsLength from "../../../utils/comments/useCommentsLength";
 // Context
 
 const variants = {
@@ -24,11 +24,11 @@ const variants = {
 type Props = {
   tweet: Tweet;
   comments: number;
+  filter: "lastest" | "top" | "people" | "media";
+  query: string;
 };
 
-const TweetInfos = ({ tweet }: Props) => {
-  console.log(tweet, 'TWEET Profile');
-  
+const TweetInfos = ({ tweet, filter, query }: Props) => {
   const router = useRouter();
   const { user } = useConnectedUser();
 
@@ -49,7 +49,8 @@ const TweetInfos = ({ tweet }: Props) => {
         if (tweet.retweets.includes(user._id)) {
           updateTweetInfos(
             user._id,
-            user.following,
+            filter,
+            query,
             tweet._id,
             "retweets",
             `/api/tweets/removeRetweet?tweetID=${tweet._id}&userID=${user._id}`,
@@ -58,7 +59,8 @@ const TweetInfos = ({ tweet }: Props) => {
         } else {
           updateTweetInfos(
             user._id,
-            user.following,
+            filter,
+            query,
             tweet._id,
             "retweets",
             `/api/tweets/addRetweet?tweetID=${tweet._id}&userID=${user._id}`,
@@ -71,7 +73,8 @@ const TweetInfos = ({ tweet }: Props) => {
           // remove like
           updateTweetInfos(
             user._id,
-            user.following,
+            filter,
+            query,
             tweet._id,
             "likes",
             `/api/tweets/removeLike?tweetID=${tweet._id}&userID=${user._id}`,
@@ -80,7 +83,8 @@ const TweetInfos = ({ tweet }: Props) => {
         } else {
           updateTweetInfos(
             user._id,
-            user.following,
+            filter,
+            query,
             tweet._id,
             "likes",
             `/api/tweets/addLike?tweetID=${tweet._id}&userID=${user._id}`,
@@ -93,7 +97,8 @@ const TweetInfos = ({ tweet }: Props) => {
           // remove bookmark
           updateTweetInfos(
             user._id,
-            user.following,
+            filter,
+            query,
             tweet._id,
             "bookmarks",
             `/api/tweets/removeBookmark?tweetID=${tweet._id}&userID=${user._id}`,
@@ -102,7 +107,8 @@ const TweetInfos = ({ tweet }: Props) => {
         } else {
           updateTweetInfos(
             user._id,
-            user.following,
+            filter,
+            query,
             tweet._id,
             "bookmarks",
             `/api/tweets/addBookmark?tweetID=${tweet._id}&userID=${user._id}`,

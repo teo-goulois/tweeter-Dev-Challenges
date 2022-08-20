@@ -41,7 +41,7 @@ const Home = ({}: Props) => {
       <Head>
         <title>tweeter</title>
       </Head>
-      <div className="w-full md:max-w-[60%] lg:max-w-[50%] md:min-w-[45%] mb-14 md:mb-0">
+      <div className=" w-full lg:max-w-4xl  mb-14 md:mb-0">
         <CreateTweet />
         {!isLoading ? (
           <Feed tweets={tweets} />
