@@ -2,6 +2,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useContext } from "react";
+import toast from "react-hot-toast";
 import { useSWRConfig } from "swr";
 import { AuthContext } from "../../../context/AuthProvider";
 // Icons
@@ -11,15 +12,11 @@ import useConnectedUser from "../../../utils/users/useConnectedUser";
 
 type Props = {
   user: User;
-  //fetchFollowSugestions: (userID: string | undefined) => Promise<void>;
 };
 
-const FollowCard = ({ user /* fetchFollowSugestions */ }: Props) => {
-  const router = useRouter();
+const FollowCard = ({ user  }: Props) => {
   const { mutate } = useSWRConfig();
   const { user: currentUser } = useConnectedUser();
-  const { setUser } = useContext(AuthContext);
-  const { data: session } = useSession();
 
   const handleFollow = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -27,14 +24,12 @@ const FollowCard = ({ user /* fetchFollowSugestions */ }: Props) => {
     e.stopPropagation();
     try {
       const response = await fetch(
-        `/api/users/follow?userID=${user._id}&myID=${session?.user._id}`
+        `/api/users/follow?userID=${user._id}&myID=${currentUser?._id}`
       );
-      const data = await response.json();
-
+      
       mutate(
         currentUser ? `/api/user/${currentUser._id}` : null,
         async (user: User) => {
-          console.log(user, "USER");
           return { ...user, following: [...user.following, user._id] };
         }
       );
@@ -44,16 +39,16 @@ const FollowCard = ({ user /* fetchFollowSugestions */ }: Props) => {
           ? `/api/getFollowSugestions?userID=${currentUser._id}`
           : null,
         async ({ followSugestions }: { followSugestions: User[] }) => {
-          console.log(followSugestions, "sugestion smutate");
           const newSugestions = followSugestions.filter(
             (sug) => sug._id !== user._id
           );
-          console.log(newSugestions, "newSugestions");
 
           return newSugestions;
         }
       );
-    } catch (err) {}
+    } catch (err) {
+      toast.error(err as string)
+    }
   };
 
   return (

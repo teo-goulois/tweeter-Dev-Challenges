@@ -22,8 +22,6 @@ export default async function handler(
       { _id: tweetID },
       { $push: { likes: userID } }
     );
-console.log(tweet, 'API add tweet like');
-
 
     res
       .status(200)

@@ -10,6 +10,8 @@ import { OutlineHeartIcon } from "../../icons/Icons";
 // Types
 import { Comment } from "../../types/typing";
 import { TweetContext } from "../../context/TweetProvider";
+import useConnectedUser from "../../utils/users/useConnectedUser";
+import toast from "react-hot-toast";
 
 type Props = {
   comment: Comment;
@@ -18,65 +20,65 @@ type Props = {
 };
 
 const Comment = ({ comment, comments, setComments }: Props) => {
+  const { user } = useConnectedUser();
   const { data: session } = useSession();
   const { setActiveTweet } = useContext(TweetContext);
 
   const handleCommentLike = async () => {
-    if (session?.user?._id) {
-      if (useCheckIfChecked(comment.likes, session?.user?._id as string)) {
-        const data = await removeCommentLike(
-          comment._id,
-          session?.user?._id,
-          comments
-        );
-        data?.comments
-          ? setActiveTweet((prev) => {
-              if (!prev) return prev;
-              const comments = prev?.comments.map((item) => {
-                if (item._id === comment._id) {
-                  return {
-                    ...item,
-                    likes: [
-                      ...item.likes.filter(
-                        (like) => like._id !== session.user._id
-                      ),
-                    ],
-                  };
-                }
-                return item;
-              });
-              return { ...prev, comments: comments };
-            })
-          : console.log("an errro occured please try again later");
-      } else {
-        const data = await addCommentLike(
-          comment._id,
-          session?.user._id,
-          comments
-        );
-        data?.comments
-          ? setActiveTweet((prev) => {
-              if (!prev) return prev;
-              const comments = prev?.comments.map((item) => {
-                if (item._id === comment._id) {
-                  return {
-                    ...item,
-                    likes: [
-                      ...item.likes,
-                      {
-                        _id: session.user._id,
-                      },
-                    ],
-                  };
-                }
-                return item;
-              });
-              return { ...prev, comments: comments };
-            })
-          : console.log("an errro occured please try again later");
-      }
+    if (!user)
+      return toast.error(`you should be connected to like this comment`);
+    if (comment.likes.includes(user._id)) {
+      // TODO use SWR
+      const data = await removeCommentLike(
+        comment._id,
+        user._id,
+        comments
+      );
+      data?.comments
+        ? setActiveTweet((prev) => {
+            if (!prev) return prev;
+            const comments = prev?.comments.map((item) => {
+              if (item._id === comment._id) {
+                return {
+                  ...item,
+                  likes: [
+                    ...item.likes.filter(
+                      (like) => like._id !== session.user._id
+                    ),
+                  ],
+                };
+              }
+              return item;
+            });
+            return { ...prev, comments: comments };
+          })
+        : console.log("an errro occured please try again later");
     } else {
-      console.log("error: you should be connected to like");
+      const data = await addCommentLike(
+        comment._id,
+        session?.user._id,
+        comments
+      );
+      data?.comments
+        ? setActiveTweet((prev) => {
+            if (!prev) return prev;
+            const comments = prev?.comments.map((item) => {
+              if (item._id === comment._id) {
+                return {
+                  ...item,
+                  likes: [
+                    ...item.likes,
+                    {
+                      _id: session.user._id,
+                    },
+                  ],
+                };
+              }
+              return item;
+            });
+            return { ...prev, comments: comments };
+          })
+        : console.log("an errro occured please try again later");
     }
   };
   return (
@@ -110,7 +112,7 @@ const Comment = ({ comment, comments, setComments }: Props) => {
             onClick={handleCommentLike}
             type="button"
             className={`flex items-center ${
-              useCheckIfChecked(comment.likes, session?.user?._id as string) &&
+              useCheckIfChecked(comment.likes, user._id as string) &&
               "text-red"
             }`}
           >
@@ -118,7 +120,7 @@ const Comment = ({ comment, comments, setComments }: Props) => {
               <OutlineHeartIcon />
             </div>
             <p>
-              {useCheckIfChecked(comment.likes, session?.user?._id as string)
+              {useCheckIfChecked(comment.likes, user._id as string)
                 ? "Like(d)"
                 : "like"}
             </p>

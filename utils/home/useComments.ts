@@ -2,9 +2,7 @@ import useSWR from "swr";
 import { Comment } from "../../types/typing";
 
 function useComments(tweetID: string | undefined) {
-  // get all user following tweet and his tweet
   const { data, error } = useSWR(key(tweetID));
-  console.log(data, 'data comments');
   
   return {
     comments: data as Comment[],

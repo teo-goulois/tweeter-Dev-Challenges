@@ -7,6 +7,7 @@ import AddImageModal from "../createTweet/AddImageModal";
 // types
 import { Comment as CommentType, Tweet } from "../../types/typing";
 import { TweetContext } from "../../context/TweetProvider";
+import toast from "react-hot-toast";
 
 type Props = {
   tweetID: string;
@@ -45,11 +46,7 @@ const Reply = ({ tweetID, setComments }: Props) => {
     });
     if (response.status === 200) {
       const data = await response.json();
-      /*   setComments((prev) => [
-        { ...data.comment, author: session?.user },
-        ...prev,
-      ]); */
-
+     // TODO: use SWR
       setActiveTweet((prev) => {
         if (!prev) return prev;
 
@@ -61,10 +58,11 @@ const Reply = ({ tweetID, setComments }: Props) => {
           ],
         };
       });
+
       setInput("");
       setImage("");
     } else {
-      console.log("an error occured plase try again later");
+      toast.error("an error occured plase try again later");
     }
   };
 

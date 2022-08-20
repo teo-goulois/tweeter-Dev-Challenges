@@ -19,9 +19,7 @@ export const key = (
   title: "lastest" | "top" | "people" | "media",
   query: string
 ) => {
-  if (query.length > 0) {
-    console.log(query, 'usertwets query');
-    
+  if (query.length > 0) {    
     return `/api/explore/${title}?query=${query}`;
   }
   return `/api/explore/${title}`;

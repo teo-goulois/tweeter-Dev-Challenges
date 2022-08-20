@@ -21,7 +21,7 @@ import { Tweet, User } from "../types/typing";
 import { fetchHomeTweets } from "../utils/fetchHomeTweets";
 // Hooks
 import { fetchTweets } from "../utils/fetchTweets";
-import useTweet from "../utils/home/useTweets";
+import useTweet, { key } from "../utils/home/useTweets";
 import useConnectedUser from "../utils/users/useConnectedUser";
 import { authOptions } from "./api/auth/[...nextauth]";
 
@@ -33,21 +33,7 @@ const Home = ({}: Props) => {
 
   // fetch whan current user following change
   useEffect(() => {
-    console.log(user, "user change ");
-    mutate(
-      user?._id
-        ? [
-            `/api/home/getTweets`,
-            {
-              method: "POST",
-              body: JSON.stringify({
-                _id: user._id,
-                following: user.following,
-              }),
-            },
-          ]
-        : null
-    );
+    mutate(key(user?._id, user?.following));
   }, [user?.following]);
 
   return (

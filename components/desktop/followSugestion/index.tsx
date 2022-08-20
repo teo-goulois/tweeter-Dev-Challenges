@@ -11,19 +11,9 @@ import FollowCard from "./FollowCard";
 const FollowSugestion = () => {
   const { user } = useConnectedUser();
 
-  // const [followSugestions, setFollowSugestions] = useState<User[]>([]);
-
   const { followSugestions, isError, isLoading } = useFollowSugestions(
     user?._id
   );
-  console.log(followSugestions, "followSugestions");
-
-  // console.log(followSugestions, "followSugestions");
-
-  /* const fetchUsers = async (userID: string | undefined) => {
-    const response = await fetchFollowSugestions(userID);
-    setFollowSugestions(response);
-  }; */
 
   return (
     <div className="bg-white rounded-xl shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] min-w-[306px] p-4 mt-2">
