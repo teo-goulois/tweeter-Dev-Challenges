@@ -1,9 +1,10 @@
 import React from "react";
+import Link from "next/link";
 import moment from "moment";
 // Components
 import ProfileImage from "../global/ProfileImage";
+// Types
 import { Tweet } from "../../types/typing";
-import Link from "next/link";
 
 type Props = {
   tweet: Tweet;

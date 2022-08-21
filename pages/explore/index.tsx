@@ -1,20 +1,14 @@
-import { ReactElement, useContext, useEffect, useState } from "react";
-import { GetServerSideProps } from "next";
-import useSWR from "swr";
+import { ReactElement, useState } from "react";
 
 // Components
 import Filter from "../../components/explore/Filter";
 import Searchbar from "../../components/explore/Searchbar";
 import Layout from "../../components/layouts/Layout";
-import Feed from "../../components/explore/Feed";
-// Hooks
-import { fetchTweets } from "../../utils/fetchTweets";
-// Types
-import { Tweet, Tweet as TweetType } from "../../types/typing";
-import { TweetContext } from "../../context/TweetProvider";
-import useTweet from "../../utils/explore/useTweets";
-import PeopleCard from "../../components/explore/PeopleCard";
+import Feed from "../../components/feed/Feed";
 import PeopleFeed from "../../components/explore/PeopleFeed";
+// Hooks
+import useTweet, { key } from "../../utils/explore/useTweets";
+// Types
 
 const Index = () => {
   const [filter, setfilter] = useState<"lastest" | "top" | "people" | "media">(
@@ -35,7 +29,7 @@ const Index = () => {
           filter === "people" ? (
             <PeopleFeed input={input} peoples={tweets} />
           ) : (
-            <Feed tweets={tweets} filter={filter} query={input} />
+            <Feed tweets={tweets} swrKey={key(filter, input)} />
           )
         ) : isError ? (
           <p>Error {isError} </p>

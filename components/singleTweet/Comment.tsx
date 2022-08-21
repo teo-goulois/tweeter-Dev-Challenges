@@ -2,7 +2,7 @@ import React from "react";
 import moment from "moment";
 import { mutate } from "swr";
 import toast from "react-hot-toast";
-// Hooks
+// data relative
 import useConnectedUser from "../../utils/users/useConnectedUser";
 import { key } from "../../utils/comments/useComments";
 // Icons
@@ -12,11 +12,9 @@ import { Comment } from "../../types/typing";
 
 type Props = {
   comment: Comment;
-  comments: Comment[];
-  setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
 };
 
-const Comment = ({ comment, comments, setComments }: Props) => {
+const Comment = ({ comment }: Props) => {
   const { user } = useConnectedUser();
 
   const handleCommentLike = async () => {
@@ -29,7 +27,6 @@ const Comment = ({ comment, comments, setComments }: Props) => {
       const data = await response.json();
       if (response.status === 200) {
         mutate(key(comment.tweet), async (comments: Comment[]) => {
-          console.log(comments, "mutate comment remove like");
           let newComments = comments.find((item) => item._id === comment._id);
           if (!newComments) return toast.error("comment not found");
           newComments.likes = newComments.likes.filter(

@@ -1,21 +1,18 @@
-import React, { ReactElement, useState } from "react";
+import React, { useState } from "react";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-
 import { Provider } from "next-auth/providers";
+import { unstable_getServerSession } from "next-auth";
 import {
   getProviders,
   signIn,
-  signOut,
   useSession,
   getCsrfToken,
 } from "next-auth/react";
-import { unstable_getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]";
 
 // Type
-import type { NextPageWithLayout } from "../_app";
+import { authOptions } from "../api/auth/[...nextauth]";
 
 type Props = {
   providers: Provider;

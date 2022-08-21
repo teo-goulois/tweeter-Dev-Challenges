@@ -15,7 +15,6 @@ export default async function updateTweetInfos(
       key(tweetID),
       async (data: { tweet: Tweet; message: string }) => {
         const { tweet } = data;
-        console.log(tweet, "TWEETS");
         // fetch add like
         const response = await fetch(url);
         // if success

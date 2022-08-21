@@ -18,14 +18,12 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const { userID } = req.query;
-  //console.log("API FOLLOW SUGESTION");
 
   await dbConnect();
   const followSugestions = await User.find({
     follower: { $nin: userID },
     _id: { $ne: userID },
   }).limit(3);
-  //console.log("API follow sugestions", followSugestions);
 
   res
     .status(200)

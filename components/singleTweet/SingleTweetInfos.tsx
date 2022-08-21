@@ -9,7 +9,7 @@ import {
 } from "../../icons/Icons";
 // Types
 import { Tweet } from "../../types/typing";
-// Hooks
+// data relative
 import useFollow from "../../utils/useFollow";
 import useCommentsLength from "../../utils/comments/useCommentsLength";
 import useConnectedUser from "../../utils/users/useConnectedUser";

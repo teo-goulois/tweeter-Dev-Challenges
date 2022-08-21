@@ -1,12 +1,11 @@
-import React, { Dispatch, SetStateAction, useContext, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
+import toast from "react-hot-toast";
 // Icons
 import { ArrowForwardIcon, RoundArrowDropDownIcon } from "../../icons/Icons";
 // Type
 import { User } from "../../types/typing";
 // Hooks
 import useAutoIncreaseHeight from "../../hooks/useAutoIncreaseHeight";
-import toast from "react-hot-toast";
-import { AuthContext } from "../../context/AuthProvider";
 
 export interface FormValues {
   image: string;
@@ -22,7 +21,7 @@ type Props = {
 };
 
 const EditModal = ({ setEditIsOpen, user }: Props) => {
-  const { setUser } = useContext(AuthContext);
+
   const [formValues, setFormValues] = useState<FormValues>({
     image: user.image,
     banner: user.banner,
@@ -81,7 +80,7 @@ const EditModal = ({ setEditIsOpen, user }: Props) => {
     });
     const data = await response.json();
     if (response.status === 200) {
-      setUser((prev) => {
+      /* setUser((prev) => {
         if (!prev) return;
         return {
           ...prev,
@@ -91,7 +90,7 @@ const EditModal = ({ setEditIsOpen, user }: Props) => {
           bio: formValues.bio,
           email: formValues.email,
         };
-      });
+      }); */
       toast(data.message);
       setEditIsOpen((prev) => !prev);
     } else {

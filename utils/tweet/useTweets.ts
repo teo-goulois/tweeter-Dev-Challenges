@@ -3,7 +3,6 @@ import useSWR from "swr";
 function useTweet(tweetID: string | undefined) {
   // get all user following tweet and his tweet
   const { data, error } = useSWR(key(tweetID));
-  console.log(error, "API ERRRO");
 
   return {
     tweet: data?.tweet,

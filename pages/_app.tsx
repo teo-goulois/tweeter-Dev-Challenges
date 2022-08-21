@@ -8,13 +8,9 @@ import Layout from "../components/layouts/Layout";
 // Providers
 import { Toaster } from "react-hot-toast";
 import { SessionProvider } from "next-auth/react";
-import { TweetProvider } from "../context/TweetProvider";
-import { AuthProvider } from "../context/AuthProvider";
 import AuthLayout from "../components/layouts/AuthLayout";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 
-import useSWR, { SWRConfig } from "swr";
+import { SWRConfig } from "swr";
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -29,7 +25,6 @@ export default function MyApp({
   pageProps: { session, ...pageProps },
 }: AppPropsWithLayout) {
   const router = useRouter();
-  const [queryClient] = useState(() => new QueryClient());
 
   return (
     <SessionProvider session={session}>
@@ -39,20 +34,16 @@ export default function MyApp({
             fetch(resource, init).then((res) => res.json()),
         }}
       >
-        <AuthProvider>
-          <TweetProvider>
-            <Toaster />
-            {router.route.search("auth") === 1 ? (
-              <AuthLayout>
-                <Component {...pageProps} />
-              </AuthLayout>
-            ) : (
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            )}
-          </TweetProvider>
-        </AuthProvider>
+        <Toaster />
+        {router.route.search("auth") === 1 ? (
+          <AuthLayout>
+            <Component {...pageProps} />
+          </AuthLayout>
+        ) : (
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        )}
       </SWRConfig>
     </SessionProvider>
   );

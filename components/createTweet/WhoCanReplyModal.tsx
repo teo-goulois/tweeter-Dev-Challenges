@@ -1,10 +1,5 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { Dispatch, SetStateAction } from "react";
+// Icons
 import { EarthIconerre, PeopleIcon } from "../../icons/Icons";
 
 type Props = {

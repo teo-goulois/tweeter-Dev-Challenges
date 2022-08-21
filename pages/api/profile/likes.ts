@@ -1,26 +1,27 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
+import { Tweet as TweetType, TweetBody, User } from "../../../types/typing";
 import dbConnect from "../../../libs/dbConnect";
 import Tweet from "../../../models/Tweet";
 
 type Data = {
-  message: string;
+  tweets: TweetType[];
 };
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse
 ) {
-  const { tweetID, userID } = req.query;
-
   await dbConnect();
   try {
-    await Tweet.findOneAndUpdate(
-      { _id: tweetID },
-      { $pull: { bookmarks: userID } }
-    );
-    res.status(200).json({ message: "remove from bookmarks" });
+    const { userID } = req.query;
+
+    const tweets = await Tweet.find({ likes: userID })
+      .populate("author")
+      .sort("-createdAt")
+      .limit(10);
+    res.status(200).send(tweets);
   } catch (err) {
-    res.status(500).json({ message: "an error occured please try later" });
+    res.status(500).send(err);
   }
 }

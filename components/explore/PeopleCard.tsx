@@ -1,9 +1,12 @@
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
 import toast from "react-hot-toast";
 import { mutate } from "swr";
+// Icons
 import { FollowIcon } from "../../icons/Icons";
+// Types
 import { User } from "../../types/typing";
+// Hooks
 import { key } from "../../utils/explore/useTweets";
 import useConnectedUser from "../../utils/users/useConnectedUser";
 

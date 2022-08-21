@@ -1,13 +1,11 @@
 import React, { Dispatch, SetStateAction } from "react";
 
 type Props = {
-  filter: "lastest" | "top" | "people" | "media",
+  filter: "lastest" | "top" | "people" | "media";
   setFilter: Dispatch<SetStateAction<"lastest" | "top" | "people" | "media">>;
-  
 };
 
 const Filter = ({ filter, setFilter }: Props) => {
-
   return (
     <div className="min-w-[304px] bg-white rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] font-[Poppins] font-semibold text-sm flex  lg:flex-col mb-2">
       {(

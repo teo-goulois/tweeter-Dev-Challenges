@@ -1,10 +1,10 @@
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 // images
 import TweeterImage from "../../public/images/tweeter.svg";
 import TwitterSmallImage from "../../public/images/tweeter-small.svg";
-import { useRouter } from "next/router";
 
 const Logo = () => {
     const router = useRouter()

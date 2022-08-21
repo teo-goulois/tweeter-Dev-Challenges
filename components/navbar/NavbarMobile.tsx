@@ -1,17 +1,15 @@
-import { useRouter } from "next/router";
-import React, { Dispatch, SetStateAction, useContext } from "react";
-import { AuthContext } from "../../context/AuthProvider";
+import React from "react";
+// Icons
 import { BookmarkIcon, CompassIcon, HomeIcon } from "../../icons/Icons";
+// Components
 import MobileNavbarButton from "./buttons/MobileNavbarButton";
+// data relative
+import useConnectedUser from "../../utils/users/useConnectedUser";
 
-type Props = {
-  openTab: string;
-  setOpenTab: Dispatch<SetStateAction<string>>;
-};
+type Props = {};
 
-const NavbarMobile = ({ openTab, setOpenTab }: Props) => {
-  const router = useRouter();
-  const { user } = useContext(AuthContext);
+const NavbarMobile = ({}: Props) => {
+  const { user } = useConnectedUser();
 
   return (
     <div className="text-secondary flex px-1 bg-white">

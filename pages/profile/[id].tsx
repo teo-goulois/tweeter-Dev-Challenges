@@ -4,8 +4,10 @@ import React, { useState } from "react";
 import Filter from "../../components/bookmarks/Filter";
 import Feed from "../../components/feed/Feed";
 import ProfileInfos from "../../components/profile/ProfileInfos";
+// Hooks
 import useUser from "../../utils/users/useUser";
 import useTweet from "../../utils/profile/useTweets";
+import { key } from "../../utils/profile/useTweets";
 
 const Profile = () => {
   const router = useRouter();
@@ -13,7 +15,8 @@ const Profile = () => {
   const [filter, setFilter] = useState<
     "tweets" | "replies" | "media" | "likes"
   >("tweets");
-  const { tweets } = useTweet(user?._id);
+  const { tweets } = useTweet(user?._id, filter);
+
 
   if (isLoading) return <p>loading...</p>;
   return (
@@ -23,9 +26,9 @@ const Profile = () => {
         <div className="max-w-[1450px] w-full">
           <div className="w-full flex flex-col lg:flex-row ">
             <Filter filter={filter} setFilter={setFilter} />
-          </div>
-          <div className="">
-            <Feed tweets={tweets} textIfNoTweets={"No Tweets found"} />
+            <div className="w-full ml-4">
+              <Feed swrKey={key(user?._id, filter)} tweets={tweets} textIfNoTweets={"No Tweets found"} />
+            </div>
           </div>
         </div>
       </div>

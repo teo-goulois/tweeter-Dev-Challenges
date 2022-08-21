@@ -1,32 +1,29 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 // Context
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 // images
-import TweeterImage from "../../public/images/tweeter.svg";
-import TwitterSmallImage from "../../public/images/tweeter-small.svg";
 // Components
 import LoginButton from "./buttons/Login";
 import SignupButton from "./buttons/Signup";
 import Logo from "./Logo";
 import OptionsModal from "./OptionsModal";
-import { RoundArrowDropDownIcon } from "../../icons/Icons";
 import LinkButton from "./buttons/LinkButton";
+// Icons
+import { RoundArrowDropDownIcon } from "../../icons/Icons";
 
 type Props = {
-  openTab: string;
   setOpenTab: Dispatch<SetStateAction<string>>;
 };
 
-const Navbar = ({ openTab, setOpenTab }: Props) => {
+const Navbar = ({ setOpenTab }: Props) => {
   const [optionModalIsOpen, setOptionModaleIsOpen] = useState<boolean>(false);
   const router = useRouter();
   const { data: session } = useSession();
 
   const handleClick = (url: string) => {
     setOpenTab(url);
+    router.push(url);
   };
 
   return (

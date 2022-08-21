@@ -1,8 +1,8 @@
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import React from "react";
+// Icons
 import {
-  FollowIcon,
   PeopleIcon,
   SettingsIcon,
   SignoutIcon,

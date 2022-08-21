@@ -10,14 +10,19 @@ type Data = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse
 ) {
-  const data: User = JSON.parse(req.body);
-  
   await dbConnect();
-  const tweets = await Tweet.find({/* author: {$in: [...data.following, data._id]} */})
-    .populate("author")
-    .sort("-createdAt"); 
+  const { userID } = req.query;
   
-  res.status(200).json({ tweets: tweets as TweetType[] });
+  try {
+    const tweets = await Tweet.find({ author: userID  })
+      .populate("author")
+      .sort("-createdAt")
+      .limit(10);
+    
+    res.status(200).send(tweets);
+  } catch (err) {
+    res.status(500).send(err);
+  }
 }

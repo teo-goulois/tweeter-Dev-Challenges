@@ -17,7 +17,6 @@ export default async function handler(
   const { id } = req.query;
   try {
     const tweet = await Tweet.findOne({ _id: id }).populate("author");
-    console.log(tweet, "API TWEET");
 
     res
       .status(200)

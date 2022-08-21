@@ -1,25 +1,15 @@
-import { ReactElement, useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { GetServerSideProps, NextPage } from "next";
-
+import { unstable_getServerSession } from "next-auth";
 // Components
 import Filter from "../../components/bookmarks/Filter";
-import Searchbar from "../../components/explore/Searchbar";
-import Layout from "../../components/layouts/Layout";
 import Feed from "../../components/feed/Feed";
 // Hooks
-import { fetchTweets } from "../../utils/fetchTweets";
 // Types
-import { Tweet as TweetType } from "../../types/typing";
-import { TweetContext } from "../../context/TweetProvider";
-import { fetchSavedTweets } from "../../utils/bookmarks/fetchSavedTweets";
-import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
-import useSWR from "swr";
-import { AuthContext } from "../../context/AuthProvider";
-import withAuth from "../../libs/withAuth";
-import toast from "react-hot-toast";
+// Hooks
 import useConnectedUser from "../../utils/users/useConnectedUser";
-import useTweet from "../../utils/bookmarks/useTweet";
+import useTweet, { key } from "../../utils/bookmarks/useTweet";
 
 const Index: NextPage = () => {
   const { user } = useConnectedUser();
@@ -28,7 +18,6 @@ const Index: NextPage = () => {
   >("tweets");
 
   const { tweets, isLoading, isError } = useTweet(filter, user?._id);
-  
 
   return (
     <div className="p-4 w-full flex flex-col lg:flex-row lg:items-start lg:justify-center ">
@@ -46,6 +35,7 @@ const Index: NextPage = () => {
           <p>Error </p>
         ) : (
           <Feed
+            swrKey={key(filter, user?._id)}
             tweets={tweets}
             textIfNoTweets="no tweets saved, save one to start see them"
           />

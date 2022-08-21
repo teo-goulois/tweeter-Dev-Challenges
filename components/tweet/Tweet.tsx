@@ -3,10 +3,9 @@ import FsLightbox from "fslightbox-react";
 import { useRouter } from "next/router";
 // Types
 import { Comment as CommentType, Tweet } from "../../types/typing";
-// Hooks
+// data relative
 import useConnectedUser from "../../utils/users/useConnectedUser";
 // Components
-import Reply from "../singleTweet/Reply";
 import TweetInfos from "./TweetInfos";
 import OptionModal from "./OptionModal";
 import UserInfos from "./UserInfos";
@@ -15,9 +14,10 @@ import { OptionsVerticalIcons } from "../../icons/Icons";
 
 type Props = {
   tweet: Tweet;
+  swrKey: string | (string | { method: string; body: string; })[] | null
 };
 
-const Tweet = ({ tweet }: Props) => {
+const Tweet = ({ tweet, swrKey }: Props) => {
   const router = useRouter();
   const { user } = useConnectedUser();
   const [toggler, setToggler] = useState(false);
@@ -100,7 +100,7 @@ const Tweet = ({ tweet }: Props) => {
           )}
         </div>
         {/* tweet infos */}
-        <TweetInfos tweet={tweet} comments={comments.length} />
+        <TweetInfos swrKey={swrKey} tweet={tweet} comments={comments.length} />
       </div>
     </>
   );

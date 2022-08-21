@@ -1,21 +1,22 @@
-import React, { useContext, useState } from "react";
-import Image from "next/image";
+import React, { useState } from "react";
+import { useRouter } from "next/router";
+import { mutate } from "swr";
+// Images
 import banner from "../../public/images/banner.svg";
 // Icons
-import { CompassIcon, EditIcon, FollowIcon } from "../../icons/Icons";
+import { EditIcon, FollowIcon } from "../../icons/Icons";
+// Types
 import { User } from "../../types/typing";
-import { useRouter } from "next/router";
-import { AuthContext } from "../../context/AuthProvider";
+// Components
 import EditModal from "./EditModal";
+// data relative
 import useConnectedUser from "../../utils/users/useConnectedUser";
-import { mutate } from "swr";
 
 type Props = {
   user: User | undefined;
 };
 
 const ProfileInfos = ({ user }: Props) => {
-  //const { user: currentUser } = useContext(AuthContext);
   const router = useRouter();
   const { user: currentUser } = useConnectedUser();
 

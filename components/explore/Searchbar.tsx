@@ -10,7 +10,7 @@ type Props = {
 const Searchbar = ({ input, setInput }: Props) => {
   const ref = useRef<HTMLInputElement>(null);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     ref.current && setInput(ref.current?.value);
   };
   return (

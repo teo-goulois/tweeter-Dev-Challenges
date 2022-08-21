@@ -1,20 +1,19 @@
-import { useSession } from "next-auth/react";
+import React from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { useContext } from "react";
 import toast from "react-hot-toast";
 import { useSWRConfig } from "swr";
-import { AuthContext } from "../../../context/AuthProvider";
 // Icons
 import { FollowIcon } from "../../../icons/Icons";
+// Types
 import { User } from "../../../types/typing";
+// Hooks
 import useConnectedUser from "../../../utils/users/useConnectedUser";
 
 type Props = {
   user: User;
 };
 
-const FollowCard = ({ user  }: Props) => {
+const FollowCard = ({ user }: Props) => {
   const { mutate } = useSWRConfig();
   const { user: currentUser } = useConnectedUser();
 
@@ -26,7 +25,7 @@ const FollowCard = ({ user  }: Props) => {
       const response = await fetch(
         `/api/users/follow?userID=${user._id}&myID=${currentUser?._id}`
       );
-      
+
       mutate(
         currentUser ? `/api/user/${currentUser._id}` : null,
         async (user: User) => {
@@ -47,7 +46,7 @@ const FollowCard = ({ user  }: Props) => {
         }
       );
     } catch (err) {
-      toast.error(err as string)
+      toast.error(err as string);
     }
   };
 

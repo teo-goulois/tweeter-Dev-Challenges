@@ -1,18 +1,26 @@
 import toast from "react-hot-toast";
 import { mutate } from "swr";
 import { Tweet } from "../../types/typing";
-import { key } from "./useTweets";
+type Props = {
+  key: string | (string | { method: string; body: string })[] | null;
+  userID: string;
+  following: string[];
+  tweetID: string;
+  title: "bookmarks" | "likes" | "retweets";
+  url: string;
+  isAdding: boolean;
+};
 
-export default async function updateTweetInfos(
-  userID: string,
-  following: string[],
-  tweetID: string,
-  title: "bookmarks" | "likes" | "retweets",
-  url: string,
-  isAdding: boolean
-) {
+export default async function updateTweetInfos({
+  key,
+  isAdding,
+  url,
+  tweetID,
+  userID,
+  title,
+}: Props) {
   if (isAdding) {
-    return mutate(key(userID, following), async (tweets: Tweet[]) => {
+    return mutate(key, async (tweets: Tweet[]) => {
       // fetch add like
       const response = await fetch(url);
       // if success
@@ -25,8 +33,8 @@ export default async function updateTweetInfos(
       toast.error("an error occured please try again later.");
     });
   } else {
-    return mutate(key(userID, following), async (tweets: Tweet[]) => {
-      // fetch remove 
+    return mutate(key, async (tweets: Tweet[]) => {
+      // fetch remove
       const response = await fetch(url);
       // if success
       if (response.status === 200) {

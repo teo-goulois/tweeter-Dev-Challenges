@@ -1,26 +1,17 @@
 import type {
   GetServerSideProps,
-  GetServerSidePropsContext,
-  NextPage,
 } from "next";
 import { unstable_getServerSession } from "next-auth";
-import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { useContext, useEffect } from "react";
-import useSWR, { mutate } from "swr";
+import {  useEffect } from "react";
+import { mutate } from "swr";
 // Components
 import CreateTweet from "../components/createTweet/CreateTweet";
 import FollowSugestion from "../components/desktop/followSugestion";
 import Trend from "../components/desktop/Trend";
 import Feed from "../components/feed/Feed";
-import { AuthContext } from "../context/AuthProvider";
-// Context
-import { TweetContext } from "../context/TweetProvider";
 // types
-import { Tweet, User } from "../types/typing";
-import { fetchHomeTweets } from "../utils/fetchHomeTweets";
 // Hooks
-import { fetchTweets } from "../utils/fetchTweets";
 import useTweet, { key } from "../utils/home/useTweets";
 import useConnectedUser from "../utils/users/useConnectedUser";
 import { authOptions } from "./api/auth/[...nextauth]";
@@ -30,6 +21,7 @@ type Props = {};
 const Home = ({}: Props) => {
   const { user } = useConnectedUser();
   const { tweets, isLoading, isError } = useTweet(user?._id, user?.following);
+
 
   // fetch whan current user following change
   useEffect(() => {
@@ -44,7 +36,7 @@ const Home = ({}: Props) => {
       <div className=" w-full lg:max-w-4xl  mb-14 md:mb-0">
         <CreateTweet />
         {!isLoading ? (
-          <Feed tweets={tweets} />
+          <Feed swrKey={key(user?._id, user?.following)} tweets={tweets} />
         ) : isError ? (
           <p>Error {isError} </p>
         ) : (

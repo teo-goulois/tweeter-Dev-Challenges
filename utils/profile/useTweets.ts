@@ -1,10 +1,11 @@
 import useSWR from "swr";
 
-function useTweet(_id: string | undefined) {
+function useTweet(
+  userID: string | undefined,
+  title: "tweets" | "replies" | "media" | "likes"
+) {
   // get all user following tweet and his tweet
-  const { data, error } = useSWR(
-    _id ? `/api/profile/getTweets?userID=${_id}` : null
-  );
+  const { data, error } = useSWR(key(userID, title));
   return {
     tweets: data,
     isLoading: !error && !data,
@@ -13,3 +14,10 @@ function useTweet(_id: string | undefined) {
 }
 
 export default useTweet;
+
+export const key = (
+  userID: string | undefined,
+  title: "tweets" | "replies" | "media" | "likes"
+) => {
+  return userID ? `/api/profile/${title}?userID=${userID}` : null;
+};

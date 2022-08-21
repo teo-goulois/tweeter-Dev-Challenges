@@ -32,7 +32,6 @@ export default async function handler(
       .sort({ follower: -1 })
       .limit(10);
 
-      console.log(peoples, 'API poeple');
       
     res.status(200).json(peoples);
   } catch (err) {

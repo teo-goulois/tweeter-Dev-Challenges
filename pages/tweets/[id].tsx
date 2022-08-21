@@ -1,24 +1,17 @@
-import { GetServerSideProps } from "next";
+import React from "react";
 import { useRouter } from "next/router";
-import React, { useContext, useEffect, useState } from "react";
-import { Comment } from "../../types/typing";
-import { fetchComments } from "../../utils/fetchComments";
-import useSWR from "swr";
-
+// Types
 // Component
 import TweetComponent from "../../components/singleTweet/index";
-import { TweetContext } from "../../context/TweetProvider";
-import { fetchTweet } from "../../utils/fetchTweet";
+// Hooks
 import useTweet from "../../utils/tweet/useTweets";
-type Props = {
-  comments: Comment[];
-};
 
-const Tweet = ({ comments }: Props) => {
+type Props = {};
+
+const Tweet = ({}: Props) => {
   const router = useRouter();
 
   const { tweet, isLoading, isError } = useTweet(router.query.id as string);
-
 
   return (
     <div className="p-2 flex justify-center">
@@ -32,4 +25,3 @@ const Tweet = ({ comments }: Props) => {
 };
 
 export default Tweet;
-

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 const Trend = () => {
-  const router = useRouter();
+  // TODO: add trend
   return (
     <div className="bg-white rounded-xl shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] min-w-[306px] p-4 ">
       <h1 className="font-[Poppins] font-semibold text-xs">Trends for you</h1>
@@ -19,10 +19,7 @@ const Trend = () => {
           ["#learntocode", "1"],
           ["#100DaysOfCode", "34"],
         ].map(([title, tweets]) => (
-          <div
-            key={title}
-            className="cursor-pointer my-2"
-          >
+          <div key={title} className="cursor-pointer my-2">
             <Link href={title}>
               <a className={`font-semibold text-primary`}>{title}</a>
             </Link>

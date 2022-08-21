@@ -1,7 +1,6 @@
-import Router, { useRouter } from "next/router";
+import  { useRouter } from "next/router";
 import React, { Dispatch, SetStateAction } from "react";
 import toast from "react-hot-toast";
-import useSWR from "swr";
 
 type Props = {
   setOptionModalIsOpen: Dispatch<SetStateAction<boolean>>;

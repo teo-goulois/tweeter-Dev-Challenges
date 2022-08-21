@@ -7,7 +7,7 @@ import { mutate } from "swr";
 import AddImageModal from "../createTweet/AddImageModal";
 // types
 
-// Hooks
+// data relative
 import { key } from "../../utils/comments/useComments";
 import useConnectedUser from "../../utils/users/useConnectedUser";
 
@@ -46,7 +46,6 @@ const Reply = ({ tweetID }: Props) => {
     });
     if (response.status === 200) {
       const data = await response.json();
-      console.log(data, "data add commment");
       mutate(key(tweetID), async (comments: Comment[]) => {
         return [{ ...data.comment, author: user }, ...comments];
       }, {revalidate: false});

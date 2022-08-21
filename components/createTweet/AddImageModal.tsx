@@ -16,11 +16,15 @@ const AddImageModal = ({ isOpen, addImageToTweet, setIsOpen }: Props) => {
     return (
       <div
         onClick={(e) => {
-          e.stopPropagation()
-          setIsOpen((prev) => !prev)}}
+          e.stopPropagation();
+          setIsOpen((prev) => !prev);
+        }}
         className="fixed w-screen h-screen top-0 left-0 bg-black/10 z-10 flex items-center justify-center"
       >
-        <form onClick={(e) => e.stopPropagation()} className="bg-white md:max-w-[50%] w-[70%] rounded-xl p-4 font-[Noto Sans] relative flex justify-between ">
+        <form
+          onClick={(e) => e.stopPropagation()}
+          className="bg-white md:max-w-[50%] w-[70%] rounded-xl p-4 font-[Noto Sans] relative flex justify-between "
+        >
           <button
             type="button"
             className="absolute right-0 -top-12 bg-white px-4 py-2 rounded-lg text-primary font-semibold "

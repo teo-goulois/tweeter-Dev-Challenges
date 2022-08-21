@@ -1,18 +1,16 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { useSession } from "next-auth/react";
-
+import React, { useState } from "react";
+import { useSWRConfig } from "swr";
+// Icons
 import { EarthIconerre, ImageIcon, PeopleIcon } from "../../icons/Icons";
-import { fetchTweets } from "../../utils/fetchTweets";
-import { TweetContext } from "../../context/TweetProvider";
-
+// Components
 import ReplyModal from "./WhoCanReplyModal";
 import AddImageModal from "./AddImageModal";
 import ProfileImage from "../global/ProfileImage";
-import { AuthContext } from "../../context/AuthProvider";
+// Hooks
 import useAutoIncreaseHeight from "../../hooks/useAutoIncreaseHeight";
-import { useSWRConfig } from "swr";
-import { Tweet } from "../../types/typing";
 import useConnectedUser from "../../utils/users/useConnectedUser";
+// Types
+import { Tweet } from "../../types/typing";
 
 type OpenModal = {
   isOpen: boolean;
@@ -23,18 +21,18 @@ const CreateTweet = () => {
   const { mutate } = useSWRConfig();
   // Context
   const { user } = useConnectedUser();
-    // state
+  // state
   const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<OpenModal>({
     isOpen: false,
     value: "everyone",
   });
-  
+
   const [input, setInput] = useState<string>("");
   const [images, setImages] = useState<string[]>([]);
-  
+
   const textareaRef = useAutoIncreaseHeight(input);
-  
+
   const addImageToTweet = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     value: string
@@ -43,7 +41,6 @@ const CreateTweet = () => {
     setImages((prev) => [value, ...prev]);
     setImageUrlBoxIsOpen(false);
   };
-
 
   const handleSubmitTweet = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

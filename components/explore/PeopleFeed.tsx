@@ -1,14 +1,14 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 // Components
-import Tweet from "../tweet/Tweet";
-// Type
-import { Tweet as TweetType, User } from "../../types/typing";
 import PeopleCard from "./PeopleCard";
+// Type
+import { User } from "../../types/typing";
+// data relative
 import useConnectedUser from "../../utils/users/useConnectedUser";
 
 type Props = {
   peoples: User[];
-  input: string
+  input: string;
 };
 
 const PeopleFeed = ({ peoples, input }: Props) => {

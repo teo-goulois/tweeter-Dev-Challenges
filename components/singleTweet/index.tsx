@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import FsLightbox from "fslightbox-react";
 // Icons
 import { OptionsVerticalIcons } from "../../icons/Icons";
@@ -11,7 +11,7 @@ import UserInfos from "../tweet/UserInfos";
 import ImagesViewer from "../tweet/ImagesViewer";
 // Types
 import { Tweet } from "../../types/typing";
-// Hooks
+// data relative
 import useComments from "../../utils/comments/useComments";
 import useConnectedUser from "../../utils/users/useConnectedUser";
 
@@ -95,8 +95,6 @@ const SingleTweet = ({ tweet }: Props) => {
             <Comment
               key={comment._id}
               comment={comment}
-              comments={comments}
-              setComments={() => {}}
             />
           ))
         )}

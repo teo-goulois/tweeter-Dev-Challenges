@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 // Components
 import Tweet from "../tweet/Tweet";
 // Type
@@ -7,14 +7,15 @@ import { Tweet as TweetType } from "../../types/typing";
 type Props = {
   tweets: TweetType[];
   textIfNoTweets?: string;
+  swrKey: string | (string | { method: string; body: string; })[] | null
 };
 
-const Feed = ({ tweets, textIfNoTweets }: Props) => {
+const Feed = ({ tweets, textIfNoTweets, swrKey }: Props) => {
   return (
     <div className="h-full w-5xl relative">
       {tweets?.length > 0 ? (
         tweets.map((tweet, index) => {
-          return <Tweet key={tweet._id} tweet={tweet} />;
+          return <Tweet swrKey={swrKey} key={tweet._id} tweet={tweet} />;
         })
       ) : (
         <div className="bg-white py-2 rounded-lg shadow-sm">
