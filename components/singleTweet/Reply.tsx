@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { mutate } from "swr";
 // Icons
-
+import { ImageIcon } from "../../icons/Icons";
 // components
 import AddImageModal from "../createTweet/AddImageModal";
 // types
 
 // data relative
 import { key } from "../../utils/comments/useComments";
+import { key as keyCommentsLength } from "../../utils/comments/useCommentsLength";
 import useConnectedUser from "../../utils/users/useConnectedUser";
 
 type Props = {
@@ -17,7 +18,7 @@ type Props = {
 
 const Reply = ({ tweetID }: Props) => {
   const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false);
-  const [image, setImage] = useState<string | null>(null);
+  const [images, setImages] = useState<string[]>([]);
   const [input, setInput] = useState<string>("");
   const { user } = useConnectedUser();
 
@@ -26,8 +27,7 @@ const Reply = ({ tweetID }: Props) => {
     value: string
   ) => {
     e.preventDefault();
-    // set Imatge
-    setImage(value);
+    setImages((prev) => [value, ...prev]);
     setImageUrlBoxIsOpen(false);
   };
 
@@ -35,10 +35,10 @@ const Reply = ({ tweetID }: Props) => {
     e.preventDefault();
 
     const body = {
-      tweet: { _id: tweetID },
+      tweet: tweetID,
       text: input,
       author: user?._id,
-      image: image,
+      images: images,
     };
     const response = await fetch(`/api/tweets/postComment`, {
       body: JSON.stringify(body),
@@ -46,12 +46,18 @@ const Reply = ({ tweetID }: Props) => {
     });
     if (response.status === 200) {
       const data = await response.json();
-      mutate(key(tweetID), async (comments: Comment[]) => {
-        return [{ ...data.comment, author: user }, ...comments];
-      }, {revalidate: false});
+      mutate(
+        key(tweetID),
+        async (comments: Comment[]) => {
+          return [{ ...data.comment, author: user }, ...comments];
+        },
+        { revalidate: false }
+      );
+      // mutate numbers of comments
+      mutate(keyCommentsLength(tweetID));
 
       setInput("");
-      setImage("");
+      setImages([]);
     } else {
       toast.error("an error occured plase try again later");
     }
@@ -83,16 +89,37 @@ const Reply = ({ tweetID }: Props) => {
               placeholder="Tweet your reply"
               type="text"
             />
-            {/* <button
+
+            <button
               type="button"
               onClick={() => setImageUrlBoxIsOpen((prev) => !prev)}
               aria-label="add image"
               className="h-4 cursor-pointer pr-2"
             >
               <ImageIcon />
-            </button> */}
+            </button>
           </div>
         </div>
+        {/* image in tweets */}
+        {images.length > 0 && (
+          <div
+            id="my-container"
+            className="aspect-[4/2] rounded-2xl flex flex-col h-[300px] flex-wrap gap-2 overflow-hidden w-full mb-2"
+          >
+            {images.map((image, index) => {
+              return (
+                <div className="relative  min-h-[20px] flex-1 basis-2/5 ">
+                  <img
+                    key={index}
+                    className="h-full object-cover absolute w-full"
+                    src={image}
+                    alt="tweet image"
+                  />
+                </div>
+              );
+            })}
+          </div>
+        )}
         {input.length > 0 && (
           <button
             type="submit"

@@ -3,10 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import {
   Comment as CommentType,
   CommentBody,
-  Tweet as TweetType,
-  TweetBody,
 } from "../../../types/typing";
-import Tweet from "../../../models/Tweet";
 import dbConnect from "../../../libs/dbConnect";
 import Comment from "../../../models/Comment";
 
@@ -24,10 +21,10 @@ export default async function handler(
 
   try {
     var newComment = new Comment({
-      tweet: data.tweet._id,
+      tweet: data.tweet,
       text: data.text,
       isDeleted: false,
-      image: data.image,
+      images: data.images,
       author: data.author,
       parent: data?.parent,
     });
@@ -37,7 +34,7 @@ export default async function handler(
       .status(200)
       .json({
         message: "comment added",
-        comment: commentCreated as CommentType,
+        comment: commentCreated as unknown as CommentType,
       });
   } catch (err) {
     res.status(500).json({ message: "an error occured please try later" });

@@ -6,7 +6,7 @@ const CommentSchema = new Schema(
     tweet: { type: Schema.Types.ObjectId, ref: "Tweet" },
     isDeleted: Boolean,
     text: String,
-    image: String,
+    images: [String],
     author: { type: Schema.Types.ObjectId, ref: "User" },
     likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
     parent: { type: Schema.Types.ObjectId, ref: "Comment" },

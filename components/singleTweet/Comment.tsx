@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import { mutate } from "swr";
 import toast from "react-hot-toast";
@@ -9,6 +9,8 @@ import { key } from "../../utils/comments/useComments";
 import { OutlineHeartIcon } from "../../icons/Icons";
 // Types
 import { Comment } from "../../types/typing";
+import ImagesViewer from "../tweet/ImagesViewer";
+import FsLightbox from "fslightbox-react";
 
 type Props = {
   comment: Comment;
@@ -16,6 +18,9 @@ type Props = {
 
 const Comment = ({ comment }: Props) => {
   const { user } = useConnectedUser();
+  const [toggler, setToggler] = useState(false);
+
+  console.log(comment);
 
   const handleCommentLike = async () => {
     if (!user)
@@ -60,6 +65,10 @@ const Comment = ({ comment }: Props) => {
       onClick={(e) => e.stopPropagation()}
       className="flex items-start my-2 "
     >
+      {/* manage images preview */}
+      {comment.images.length > 0 && (
+        <FsLightbox toggler={toggler} sources={comment.images} />
+      )}
       <div className="w-10 h-10 bg-[#C4C4C4] rounded-lg overflow-hidden mt-2">
         <img
           className="h-full w-full  object-center "
@@ -78,7 +87,10 @@ const Comment = ({ comment }: Props) => {
               {moment(comment.createdAt).format("DD MMMM [at] h:mm")}
             </p>
           </div>
-          <p className="text-gray mt-1">{comment.text}</p>
+          <p className="text-gray mt-1 mb-2">{comment.text}</p>
+          {comment.images.length > 0 && (
+            <ImagesViewer images={comment.images} setToggler={setToggler} />
+          )}
         </div>
         {/* comment infos */}
         <div className="text-xs text-gray4 font-semibold flex items-center">

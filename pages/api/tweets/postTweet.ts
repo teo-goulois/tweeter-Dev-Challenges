@@ -27,5 +27,5 @@ export default async function handler(
   // Create new user
   var tweetCreated = await newTweet.save();
 
-  res.status(200).json({ tweet: tweetCreated as TweetType });
+  res.status(200).json({ tweet: tweetCreated as unknown as TweetType });
 }

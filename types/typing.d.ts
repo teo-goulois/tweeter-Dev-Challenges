@@ -48,7 +48,7 @@ export interface Comment extends CommentBody {
 export type CommentBody = {
   tweet: string;
   text: string;
-  image: string;
+  images: string[];
   author: undefined | ResUser;
   likes: string[];
   parent?: string;
