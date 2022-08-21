@@ -24,7 +24,11 @@ const FollowSugestion = () => {
         <p>Error</p>
       ) : followSugestions && followSugestions.length > 0 ? (
         followSugestions.map((user, index) => {
-          return <FollowCard key={index} user={user} />;
+          return (
+            <div className="mb-2">
+              <FollowCard key={index} user={user} />
+            </div>
+          );
         })
       ) : (
         <p className="text-sm font-medium text-primary">

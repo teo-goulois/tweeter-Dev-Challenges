@@ -63,16 +63,12 @@ const ProfileInfos = ({ user }: Props) => {
     );
   };
 
-
   const [editIsOpen, setEditIsOpen] = useState<boolean>(false);
   if (!user) return <p>Loading...</p>;
   return (
     <div>
       {followModalIsOpen && (
-        <FollowModal
-          action={action}
-          setIsOpen={setFollowModalIsOpen}
-        />
+        <FollowModal action={action} setIsOpen={setFollowModalIsOpen} />
       )}
       {editIsOpen && <EditModal user={user} setEditIsOpen={setEditIsOpen} />}
       {/* background */}
@@ -108,25 +104,29 @@ const ProfileInfos = ({ user }: Props) => {
                 <div className="flex items-center font-[Poppins] ">
                   <p className="font-medium text-xs text-secondary whitespace-nowrap flex">
                     <span
+                      className="cursor-pointer"
                       onClick={() => {
                         setFollowModalIsOpen((prev) => !prev);
                         SetAction("getFollowings");
                       }}
-                      className="font-semibold text-primary pr-2"
                     >
-                      {user.following.length}
-                    </span>{" "}
-                    Following &nbsp;&nbsp;&nbsp;&nbsp;{" "}
+                      <span className="font-semibold text-primary pr-2">
+                        {user.following.length}
+                      </span>{" "}
+                      Following &nbsp;&nbsp;&nbsp;&nbsp;{" "}
+                    </span>
                     <span
+                      className="cursor-pointer"
                       onClick={() => {
                         setFollowModalIsOpen((prev) => !prev);
                         SetAction("getFollowers");
                       }}
-                      className="font-semibold text-primary pr-2"
                     >
-                      {user.follower.length}
-                    </span>{" "}
-                    Followers
+                      <span className="font-semibold text-primary pr-2">
+                        {user.follower.length}
+                      </span>{" "}
+                      Followers
+                    </span>
                   </p>
                 </div>
               </div>

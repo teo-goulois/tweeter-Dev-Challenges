@@ -9,6 +9,7 @@ import useFollow from "../../utils/profile/useFollow";
 import useUser from "../../utils/users/useUser";
 // Components
 import PeopleCard from "../explore/PeopleCard";
+import useConnectedUser from "../../utils/users/useConnectedUser";
 
 type Props = {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -17,10 +18,11 @@ type Props = {
 
 const FollowModal = ({ setIsOpen, action }: Props) => {
   const router = useRouter();
+  const { user: currentUser } = useConnectedUser();
   const { user, isError } = useUser(router.query.id as string);
-    // TODO: useinfite
+  // TODO: useinfite
   const { followings, isLoading } = useFollow(
-    router.query.id as string,
+    router.query.id ? (router.query.id as string) : currentUser?._id,
     action
   );
 
@@ -31,7 +33,7 @@ const FollowModal = ({ setIsOpen, action }: Props) => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-lg shadow-sm my-auto p-4 w-[50%] h-[500px] flex flex-col mx-auto translate-y-1/2 "
+        className=" bg-white rounded-lg shadow-sm my-auto p-4 w-[90%] md:w-[65%] lg:w-[50%] h-[500px] flex flex-col mx-auto translate-y-1/2 "
       >
         <div className="flex justify-between">
           <p className="font-['Poppins'] font-semibold text-xs text-primary">
@@ -55,12 +57,17 @@ const FollowModal = ({ setIsOpen, action }: Props) => {
             <div id="divider" className="border border-gray3 my-2"></div>
             <p>no {action === "getFollowers" ? "follower" : "following"} </p>
           </>
+        ) : followings.length == 0 ? (
+          <>
+            <div id="divider" className="border border-gray3 my-2"></div>
+            <p>no {action === "getFollowers" ? "follower" : "following"} </p>
+          </>
         ) : (
           followings.map((people) => {
             return (
               <div key={people._id}>
                 <div id="divider" className="border border-gray3 my-2"></div>
-                <PeopleCard input="" people={people} />;
+                <PeopleCard input="" people={people} />
               </div>
             );
           })

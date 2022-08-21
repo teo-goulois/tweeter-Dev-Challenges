@@ -70,7 +70,7 @@ const PeopleCard = ({ people, input }: Props) => {
 
   return (
     <>
-      <div className="mb-4 p-4 w-full  border bg-white border-white rounded-lg ">
+      <div className="p-4 w-full  border bg-white border-white rounded-lg ">
         <div className="flex items-center justify-between  ">
           <div className="flex items-center justify-start">
             {/* image */}
