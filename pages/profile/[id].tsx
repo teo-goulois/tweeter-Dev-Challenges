@@ -26,7 +26,7 @@ const Profile = () => {
         <div className="max-w-[1450px] w-full">
           <div className="w-full flex flex-col lg:flex-row ">
             <Filter filter={filter} setFilter={setFilter} />
-            <div className="w-full ml-4">
+            <div className="w-full lg:ml-4">
               <Feed swrKey={key(user?._id, filter)} tweets={tweets} textIfNoTweets={"No Tweets found"} />
             </div>
           </div>

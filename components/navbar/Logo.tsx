@@ -10,7 +10,7 @@ const Logo = () => {
     const router = useRouter()
   return (
     <>
-      <div onClick={() => router.push('/')} className="hidden md:flex">
+      <div onClick={() => router.push('/explore')} className="hidden md:flex">
         <div className="cursor-pointer">
           <Image src={TweeterImage} />
         </div>

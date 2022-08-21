@@ -11,6 +11,7 @@ import { User } from "../../types/typing";
 import EditModal from "./EditModal";
 // data relative
 import useConnectedUser from "../../utils/users/useConnectedUser";
+import FollowModal from "./FollowModal";
 
 type Props = {
   user: User | undefined;
@@ -19,6 +20,9 @@ type Props = {
 const ProfileInfos = ({ user }: Props) => {
   const router = useRouter();
   const { user: currentUser } = useConnectedUser();
+
+  const [followModalIsOpen, setFollowModalIsOpen] = useState<boolean>(false);
+  const [action, SetAction] = useState<string | null>(null);
 
   const handleFollow = async () => {
     const response = await fetch(
@@ -58,10 +62,18 @@ const ProfileInfos = ({ user }: Props) => {
       }
     );
   };
+
+
   const [editIsOpen, setEditIsOpen] = useState<boolean>(false);
   if (!user) return <p>Loading...</p>;
   return (
     <div>
+      {followModalIsOpen && (
+        <FollowModal
+          action={action}
+          setIsOpen={setFollowModalIsOpen}
+        />
+      )}
       {editIsOpen && <EditModal user={user} setEditIsOpen={setEditIsOpen} />}
       {/* background */}
       <div className="bg-[#C4C4C4] w-full min-h-[168.06px] md:min-h-[297.51px] md:max-h-[300px] relative">
@@ -95,11 +107,23 @@ const ProfileInfos = ({ user }: Props) => {
                 {/* followers following */}
                 <div className="flex items-center font-[Poppins] ">
                   <p className="font-medium text-xs text-secondary whitespace-nowrap flex">
-                    <span className="font-semibold text-primary pr-2">
+                    <span
+                      onClick={() => {
+                        setFollowModalIsOpen((prev) => !prev);
+                        SetAction("getFollowings");
+                      }}
+                      className="font-semibold text-primary pr-2"
+                    >
                       {user.following.length}
                     </span>{" "}
                     Following &nbsp;&nbsp;&nbsp;&nbsp;{" "}
-                    <span className="font-semibold text-primary pr-2">
+                    <span
+                      onClick={() => {
+                        setFollowModalIsOpen((prev) => !prev);
+                        SetAction("getFollowers");
+                      }}
+                      className="font-semibold text-primary pr-2"
+                    >
                       {user.follower.length}
                     </span>{" "}
                     Followers
