@@ -1,4 +1,5 @@
 import React, { Dispatch, SetStateAction, useRef } from "react";
+import { useRouter } from "next/router";
 // Icons
 import { SearchIcon } from "../../icons/Icons";
 
@@ -8,10 +9,11 @@ type Props = {
 };
 
 const Searchbar = ({ input, setInput }: Props) => {
+  const router = useRouter()
   const ref = useRef<HTMLInputElement>(null);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    ref.current && setInput(ref.current?.value);
+    ref.current && router.push({query: {query: ref.current?.value}})
   };
   return (
     <form

@@ -1,4 +1,4 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 
 // Components
 import Filter from "../../components/explore/Filter";
@@ -8,13 +8,23 @@ import Feed from "../../components/feed/Feed";
 import PeopleFeed from "../../components/explore/PeopleFeed";
 // Hooks
 import useTweet, { key } from "../../utils/explore/useTweets";
+import { useRouter } from "next/router";
 // Types
 
 const Index = () => {
+  const router = useRouter();
+
   const [filter, setfilter] = useState<"lastest" | "top" | "people" | "media">(
     "lastest"
   );
   const [input, setInput] = useState<string>("");
+  console.log(input, "inout");
+
+  useEffect(() => {
+    console.log(router.query.query);
+    setInput(router.query.query as string);
+  }, [router.query.query]);
+
   const { tweets, isError, isLoading } = useTweet(filter, input);
 
   return (

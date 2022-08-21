@@ -20,8 +20,6 @@ const Comment = ({ comment }: Props) => {
   const { user } = useConnectedUser();
   const [toggler, setToggler] = useState(false);
 
-  console.log(comment);
-
   const handleCommentLike = async () => {
     if (!user)
       return toast.error(`you should be connected to like this comment`);

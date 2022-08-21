@@ -53,3 +53,10 @@ export type CommentBody = {
   likes: string[];
   parent?: string;
 };
+
+export interface Tag {
+  _id: string;
+  tag: string;
+  tag_count: number;
+  tweets: string[];
+}

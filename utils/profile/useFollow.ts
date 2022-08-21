@@ -4,7 +4,6 @@ import { User } from "../../types/typing";
 function useFollow(userID: string | undefined, action: string | null) {
   // get all user following tweet and his tweet
   const { data, error } = useSWR(key(userID, action));
-  console.log(data, "DATA");
 
   return {
     followings: data as User[],

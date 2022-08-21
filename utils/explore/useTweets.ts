@@ -17,10 +17,11 @@ export default useTweet;
 
 export const key = (
   title: "lastest" | "top" | "people" | "media",
-  query: string
+  q: string
 ) => {
-  if (query.length > 0) {    
-    return `/api/explore/${title}?query=${query}`;
+  if (q.length > 0) {
+    return `/api/explore/${title}?q=${encodeURIComponent(q)}`;
   }
+
   return `/api/explore/${title}`;
 };

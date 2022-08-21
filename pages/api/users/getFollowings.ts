@@ -25,7 +25,6 @@ export default async function handler(
     const peoples = await User.find({ _id: userID })
       .populate("following")
       .select("following");
-    console.log(peoples[0], 'API people');
 
     res.status(200).send(peoples[0].following);
   } catch (err) {

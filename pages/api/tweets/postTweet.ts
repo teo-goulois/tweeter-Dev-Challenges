@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { Tweet as TweetType, TweetBody } from "../../../types/typing";
 import Tweet from "../../../models/Tweet";
 import dbConnect from "../../../libs/dbConnect";
+import Tag from "../../../models/Tag";
 
 type Data = {
   tweet: TweetType;
@@ -14,6 +15,8 @@ export default async function handler(
 ) {
   await dbConnect();
   const data: TweetBody = JSON.parse(req.body);
+  const tags = data.text?.match(/#[a-zA-Z0-9]+/g);
+
   var newTweet = new Tweet({
     text: data.text,
     image: data.image,
@@ -23,9 +26,41 @@ export default async function handler(
     },
     everyoneCanReply: data.everyoneCanReply,
     author: data.author,
+    tags: tags,
   });
   // Create new user
   var tweetCreated = await newTweet.save();
+
+  tags &&
+    (await Promise.all(
+      tags.map(async (tag) => {
+        // check if tag already exist
+        const res = await Tag.count({ tag: tag });
+        console.log(res, "check if tag existe");
+        if (res > 0) {
+          // update it
+          console.log("update it");
+
+          const updatedTag = await Tag.findOneAndUpdate(
+            { tag },
+            { $push: { tweets: tweetCreated._id }, $inc: { tag_count: 1 } }
+          );
+          console.log("update it", updatedTag);
+        } else {
+          // if not create it
+          console.log("create it");
+
+          const newTag = new Tag({
+            tag,
+            tag_count: 1,
+            tweets: [tweetCreated._id],
+          });
+
+          const t = await newTag.save();
+          console.log("create it", t);
+        }
+      })
+    ));
 
   res.status(200).json({ tweet: tweetCreated as unknown as TweetType });
 }

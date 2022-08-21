@@ -12,8 +12,17 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const { query } = req.query;
+
   await dbConnect();
   try {
+    if (query) {
+      const tweets = await Tweet.find({ text: { $regex: query } })
+        .sort('-createdAt')
+        .limit(10);
+
+      return res.status(200).json(tweets);
+    }
     const tweets = await Tweet.find({ "media.isMedia": true })
       .populate("author")
       .sort("-createdAt")
