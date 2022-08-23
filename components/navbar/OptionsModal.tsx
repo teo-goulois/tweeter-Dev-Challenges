@@ -36,7 +36,7 @@ const OptionsModal = ({ setOptionModaleIsOpen }: Props) => {
       >
         {[
           ["My Profile", "/profile"],
-          ["Group Chat", "/groupchat"],
+          ["Group Chat", "/chats"],
           ["Settings", "/settings"],
         ].map(([title, url]) => {
           return (

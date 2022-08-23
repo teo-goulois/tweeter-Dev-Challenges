@@ -3,5 +3,15 @@
 @tailwind utilities;
 
 .rotate {
-    transform: rotate(-35deg) scale(1, -1) ;
+  transform: rotate(-35deg) scale(1, -1);
+}
+
+.test {
+  height: calc(100vh - 8.75rem);
+}
+
+@media (min-width: 768px) {
+  .test {
+    height: calc(100vh - 4.291875rem);
+  }
 }

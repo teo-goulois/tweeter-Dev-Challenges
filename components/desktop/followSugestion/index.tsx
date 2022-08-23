@@ -25,8 +25,8 @@ const FollowSugestion = () => {
       ) : followSugestions && followSugestions.length > 0 ? (
         followSugestions.map((user, index) => {
           return (
-            <div className="mb-2">
-              <FollowCard key={index} user={user} />
+            <div key={index} className="mb-2">
+              <FollowCard  user={user} />
             </div>
           );
         })

@@ -346,3 +346,44 @@ export function CloseIcon(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function MenuIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="100%" height="100%" viewBox="0 0 24 24" {...props}>
+      <path
+        fill="currentColor"
+        d="M4 18h16c.55 0 1-.45 1-1s-.45-1-1-1H4c-.55 0-1 .45-1 1s.45 1 1 1zm0-5h16c.55 0 1-.45 1-1s-.45-1-1-1H4c-.55 0-1 .45-1 1s.45 1 1 1zM3 7c0 .55.45 1 1 1h16c.55 0 1-.45 1-1s-.45-1-1-1H4c-.55 0-1 .45-1 1z"
+      ></path>
+    </svg>
+  );
+}
+
+export function AddIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="100%" height="100%" viewBox="0 0 24 24" {...props}>
+      <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+    </svg>
+  );
+}
+
+export function NavigationIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="100%" height="100%" viewBox="0 0 24 24" {...props}>
+      <path
+        fill="currentColor"
+        d="m12.93 4.26l6.15 14.99c.34.83-.51 1.66-1.33 1.29l-5.34-2.36c-.26-.11-.55-.11-.81 0l-5.34 2.36c-.82.36-1.67-.46-1.33-1.29l6.15-14.99c.33-.83 1.51-.83 1.85 0z"
+      ></path>
+    </svg>
+  );
+}
+
+export function MinusIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="100%" height="100%" viewBox="0 0 24 24" {...props}>
+      <path
+        fill="currentColor"
+        d="M18 12.998H6a1 1 0 0 1 0-2h12a1 1 0 0 1 0 2z"
+      ></path>
+    </svg>
+  );
+}

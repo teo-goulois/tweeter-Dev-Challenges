@@ -19,7 +19,7 @@ export const key = (
   title: "lastest" | "top" | "people" | "media",
   q: string
 ) => {
-  if (q.length > 0) {
+  if (q?.length > 0) {
     return `/api/explore/${title}?q=${encodeURIComponent(q)}`;
   }
 

@@ -60,3 +60,25 @@ export interface Tag {
   tag_count: number;
   tweets: string[];
 }
+
+export interface Conversation {
+  _id?: string;
+  name: string;
+  desc: String;
+  author: User;
+  members: User[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface Chat {
+  _id?: string;
+  text: string;
+  images: string[];
+  conversationID: string;
+  author: User;
+  createdAt?: string;
+  updatedAt?: string;
+  userID?: string;
+  isLoading?: boolean;
+}

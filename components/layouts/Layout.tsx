@@ -11,10 +11,10 @@ const Layout = ({ children }: Props) => {
     const setOpenTab = () => {}
   return (
     <div className="bg-gray3 min-h-screen ">
-      <Navbar openTab={openTab} setOpenTab={setOpenTab} />
+      <Navbar  setOpenTab={setOpenTab} />
         {children}
       <div className="block md:hidden fixed w-full bottom-0">
-        <NavbarMobile openTab={openTab} setOpenTab={setOpenTab} />
+        <NavbarMobile   />
       </div>
     </div>
   );

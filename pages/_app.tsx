@@ -11,6 +11,7 @@ import { SessionProvider } from "next-auth/react";
 import AuthLayout from "../components/layouts/AuthLayout";
 
 import { SWRConfig } from "swr";
+import ChatLayout from "../components/layouts/ChatLayout";
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -41,7 +42,13 @@ export default function MyApp({
           </AuthLayout>
         ) : (
           <Layout>
-            <Component {...pageProps} />
+            {router.route.search("chat") === 1 ? (
+              <ChatLayout>
+                <Component {...pageProps} />
+              </ChatLayout>
+            ) : (
+              <Component {...pageProps} />
+            )}
           </Layout>
         )}
       </SWRConfig>
