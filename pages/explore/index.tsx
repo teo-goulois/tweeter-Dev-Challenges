@@ -18,10 +18,8 @@ const Index = () => {
     "lastest"
   );
   const [input, setInput] = useState<string>("");
-  console.log(input, "inout");
 
   useEffect(() => {
-    console.log(router.query.query);
     setInput(router.query.query as string);
   }, [router.query.query]);
 

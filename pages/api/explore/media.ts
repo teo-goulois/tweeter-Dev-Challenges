@@ -12,12 +12,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { query } = req.query;
+  const { q } = req.query;
 
   await dbConnect();
   try {
-    if (query) {
-      const tweets = await Tweet.find({ text: { $regex: query } })
+    if (q) {
+      const tweets = await Tweet.find({ text: { $regex: q } })
         .sort('-createdAt')
         .limit(10);
 

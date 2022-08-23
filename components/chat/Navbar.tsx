@@ -8,7 +8,7 @@ type Props = {
 
 const Navbar = ({ setSidebarIsOpen, title }: Props) => {
   return (
-    <div className="flex items-center justify-start px-4 py-2 shadow text-primary">
+    <div className="relative  flex items-center justify-start p-4 shadow text-primary">
       <button
         onClick={() => setSidebarIsOpen && setSidebarIsOpen((prev) => !prev)}
         type="button"

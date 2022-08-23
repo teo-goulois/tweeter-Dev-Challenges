@@ -31,8 +31,7 @@ const Index: NextPageWithLayout = () => {
         <div className="max-w-[1450px] w-full">
           <div className="w-full flex flex-col lg:flex-row mb-2 ">
             <Filter filter={filter} setFilter={setFilter} />
-            {/* TODO: create tweet */}
-            <CreateTweet />
+            <CreateTweet fromProfile={true} filter={filter} />
           </div>
           <div className="">
             <Feed

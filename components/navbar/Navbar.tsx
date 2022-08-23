@@ -28,7 +28,7 @@ const Navbar = ({ setOpenTab }: Props) => {
 
   return (
     <>
-      <div className="relative bg-white flex justify-between shadow-[0_2px_2px_rgba(0, 0, 0, 0.05)] md:grid md:grid-cols-3 font-['Poppins'] md:px-4">
+      <div className="relative z-10 bg-white flex justify-between shadow-[0_2px_2px_rgba(0, 0, 0, 0.05)] md:grid md:grid-cols-3 font-['Poppins'] md:px-4">
         {/* Logo */}
         <div className="m-4 flex items-center">
           <Logo />
@@ -72,7 +72,7 @@ const Navbar = ({ setOpenTab }: Props) => {
                     ? session.user.image
                     : "https://lh3.googleusercontent.com/a/AItbvmm325lr8zSnqbAsJgMAkOOiA0ptP4JqVzzTVpOT=s96-c"
                 }
-                className="w-8 h-8 bg-blue rounded-lg float-right"
+                className="w-8 h-8 rounded-lg float-right"
               ></img>
               <p className="font-bold text-xs text-primary pl-2">
                 {" "}
@@ -83,9 +83,9 @@ const Navbar = ({ setOpenTab }: Props) => {
               </div>
             </button>
           ) : (
-            <div className="float-right grid grid-cols-2 gap-6 ">
+            <div className="float-right grid grid-cols-1 gap-6 ">
               <LoginButton />
-              <SignupButton />
+             {/*  <SignupButton /> */}
             </div>
           )}
         </div>

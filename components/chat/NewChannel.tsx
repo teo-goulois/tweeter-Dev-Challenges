@@ -1,14 +1,20 @@
+import { motion } from "framer-motion";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import toast from "react-hot-toast";
+import { mutate } from "swr";
 // Hooks
 import useAutoIncreaseHeight from "../../hooks/useAutoIncreaseHeight";
 // Icons
 import { CloseIcon } from "../../icons/Icons";
 import { Conversation } from "../../types/typing";
+import { key } from "../../utils/chat/useChannels";
+// data relative
 import useConnectedUser from "../../utils/users/useConnectedUser";
 
 type Props = {
   setNewChannelIsOpen: Dispatch<SetStateAction<boolean>>;
+  query: string;
+  isOpen: boolean;
 };
 
 type FormValues = {
@@ -16,7 +22,16 @@ type FormValues = {
   desc: string;
 };
 
-const NewChannel = ({ setNewChannelIsOpen }: Props) => {
+const overlayVariants = {
+  open: { opacity: 1, visibility: "visible" as "visible" },
+  closed: { opacity: 0.5, visibility: "hidden" as "hidden" },
+};
+const variants = {
+  open: { opacity: 1 },
+  closed: { opacity: 0.5 },
+};
+
+const NewChannel = ({ setNewChannelIsOpen, query, isOpen }: Props) => {
   const { user } = useConnectedUser();
   const [formValues, setFormValues] = useState<FormValues>({
     name: "",
@@ -39,46 +54,59 @@ const NewChannel = ({ setNewChannelIsOpen }: Props) => {
     e.preventDefault();
     if (!user)
       return toast.error("You should be connected to create a Channel");
-    const body: Conversation = {
+    const body: {
+      author: string;
+      desc: string;
+      name: string;
+      members: string[];
+    } = {
       author: user._id,
       desc: formValues.desc,
       name: formValues.name,
       members: [user._id],
     };
 
-    const response = await fetch(`/api/conversation/postConversation`, {
-      method: "POST",
-      body: JSON.stringify(body),
-    });
-    const data = await response.json();
-    if (response.status === 200) {
-      console.log(data, "createed Conversation client");
-      // TODO: mutation*
-      toast(data.message);
-      setNewChannelIsOpen((prev) => !prev);
-      setFormValues({
-        name: "",
-        desc: "",
+    mutate(key(user._id, query), async (channels: Conversation[]) => {
+      const response = await fetch(`/api/conversation/postConversation`, {
+        method: "POST",
+        body: JSON.stringify(body),
       });
-    } else {
-      toast.error(
-        "An error occured during the creation of the new channel please try again later"
-      );
-    }
+      const data = await response.json();
+      if (response.status === 200) {
+        toast(data.message);
+        setNewChannelIsOpen((prev) => !prev);
+        setFormValues({
+          name: "",
+          desc: "",
+        });
+        return [
+          { ...data.conversation, author: user, members: [user] },
+          ...channels,
+        ];
+      } else {
+        return toast.error(
+          "An error occured during the creation of the new channel please try again later"
+        );
+      }
+    });
   };
 
   return (
-    <div
+    <motion.div
+      variants={overlayVariants}
+      animate={isOpen ? "opened" : "closed"}
       onClick={(e) => {
         e.stopPropagation();
-        setNewChannelIsOpen((prev) => !prev);
+        setNewChannelIsOpen(false);
       }}
-      className="fixed w-screen h-screen top-0 left-0 bg-secondary/30 z-[1] flex items-center justify-center"
+      className="fixed w-screen h-screen top-0 left-0 bg-black/20 z-[1] flex items-center justify-center"
     >
-      <form
+      <motion.form
+        variants={variants}
+        animate={isOpen ? "opened" : "closed"}
         onSubmit={handleSubmit}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white md:max-w-[50%] w-[70%] rounded-xl p-4 font-[Noto Sans] relative flex flex-col "
+        className="bg-white md:max-w-[50%] w-[70%] lg:max-w-[700px] rounded-xl p-4 font-[Noto Sans] relative flex flex-col "
       >
         {/* title */}
         <div className="flex justify-between items-center text-primary w-full">
@@ -114,7 +142,7 @@ const NewChannel = ({ setNewChannelIsOpen }: Props) => {
           maxLength={30}
           type="text"
           placeholder="Your Channel Name"
-          className="p-2 rounded-lg bg-gray3 border border-secondary outline-none"
+          className="p-2 rounded-lg bg-gray2 border border-gray3 outline-none"
         />
         {/* channel description */}
         <label
@@ -135,18 +163,18 @@ const NewChannel = ({ setNewChannelIsOpen }: Props) => {
           ref={(element) => {
             textareaRef.current = element;
           }}
-          className="bg-gray3  p-2 outline-none w-full resize-none overflow-hidden border border-secondary rounded-lg"
+          className="p-2 outline-none w-full resize-none overflow-hidden bg-gray2 border border-gray3 rounded-lg"
         ></textarea>
 
         <button
           disabled={formValues.desc.length < 1 || formValues.name.length < 1}
-          className="capitalize px-4 py-2 disabled:bg-secondary disabled:text-primary bg-blue rounded-lg w-fit text-white ml-auto mt-2"
+          className="capitalize px-4 py-2 disabled:bg-gray2 disabled:border disabled:border-gray3 disabled:text-primary bg-blue rounded-lg w-fit text-white ml-auto mt-2"
           type="submit"
         >
           Save
         </button>
-      </form>
-    </div>
+      </motion.form>
+    </motion.div>
   );
 };
 

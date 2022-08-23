@@ -20,7 +20,7 @@ const Searchbar = ({ input, setInput }: Props) => {
       onSubmit={handleSubmit}
       className="w-full bg-white flex items-center justify-between rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] p-2 text-gray4 font-medium mb-2"
     >
-      <div className="flex justify-start items-center">
+      <div className="flex justify-start items-center w-full">
         <div className="h-6">
           <SearchIcon />
         </div>
@@ -28,7 +28,7 @@ const Searchbar = ({ input, setInput }: Props) => {
           ref={ref}
           //onChange={(e) => setInput(e.target.value)}
           //value={input}
-          className="outline-none p-2 text-gray4"
+          className="outline-none p-2 text-gray4 w-full"
           type="text"
           placeholder="Search"
         />

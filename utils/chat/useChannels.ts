@@ -16,7 +16,6 @@ export default useChannels;
 
 export const key = (userID: string | undefined, q: string) => {
   if (q.length > 0) {
-    console.log("q");
 
     return userID
       ? `/api/conversation/getConversations?userID=${userID}&q=${encodeURIComponent(
@@ -24,7 +23,6 @@ export const key = (userID: string | undefined, q: string) => {
         )}`
       : null;
   }
-  console.log("not q");
 
   return userID
     ? `/api/conversation/getUserConversations?userID=${userID}`

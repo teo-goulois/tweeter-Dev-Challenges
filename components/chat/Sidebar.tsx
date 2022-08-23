@@ -1,11 +1,5 @@
 import { useRouter } from "next/router";
-import React, {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { Dispatch, SetStateAction, useRef, useState } from "react";
 import { mutate } from "swr";
 // Icons
 import {
@@ -14,7 +8,7 @@ import {
   CloseIcon,
   SearchIcon,
 } from "../../icons/Icons";
-import { Chat, Conversation, User } from "../../types/typing";
+import { Conversation, User } from "../../types/typing";
 // data relative
 import useChannels from "../../utils/chat/useChannels";
 import useConnectedUser from "../../utils/users/useConnectedUser";
@@ -24,12 +18,24 @@ import { key } from "../../utils/chat/useChannels";
 import ChannelCard from "./ChannelCard";
 import NewChannel from "./NewChannel";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 type Props = {
   setSidebarIsOpen: Dispatch<SetStateAction<boolean>>;
+  sidebarIsOpen: boolean;
+  setChannelName: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const Sidebar = ({ setSidebarIsOpen }: Props) => {
+const variants = {
+  open: { opacity: 1, x: 0 },
+  closed: { opacity: 0, x: "-100%" },
+};
+
+const Sidebar = ({
+  setSidebarIsOpen,
+  sidebarIsOpen,
+  setChannelName,
+}: Props) => {
   const router = useRouter();
   const { user } = useConnectedUser();
 
@@ -51,6 +57,7 @@ const Sidebar = ({ setSidebarIsOpen }: Props) => {
     if (channels && channelId) {
       const activeChannel = channels.filter((item) => item._id === channelId);
       setChannel(activeChannel[0]);
+      setChannelName(activeChannel[0].name);
     }
   };
 
@@ -66,13 +73,13 @@ const Sidebar = ({ setSidebarIsOpen }: Props) => {
   };
 
   return (
-    <div
-      onClick={() => setSidebarIsOpen((prev) => !prev)}
-      style={{ height: "inherit" }}
-      className="fixed lg:relative w-screen lg:w-[35%] lg:max-w-[500px]  lg:bg-black/0 bg-secondary/30 z-[1]"
-    >
-      {newChannelIsOpen && (
-        <NewChannel setNewChannelIsOpen={setNewChannelIsOpen} />
+    <>
+      {(
+        <NewChannel
+          isOpen={newChannelIsOpen}
+          setNewChannelIsOpen={setNewChannelIsOpen}
+          query={input}
+        />
       )}
 
       {/* when active */}
@@ -83,7 +90,9 @@ const Sidebar = ({ setSidebarIsOpen }: Props) => {
         } z-10`}
       >
         <div
-          onClick={() => setChannel(null)}
+          onClick={() => {
+            setChannel(null);
+          }}
           className="flex items-center mb-6 cursor-pointer"
         >
           <div className="h-6 rotate-180">
@@ -100,8 +109,9 @@ const Sidebar = ({ setSidebarIsOpen }: Props) => {
           {channel?.members.map((member) => {
             return (
               <div
+                key={member._id}
                 onClick={() => router.push(`/profile/${member._id}`)}
-                className="flex items-center my-2 hover:bg-gray2 p-2 rounded-lg cursor-pointer"
+                className="flex items-center my-2 hover:bg-[#e3e3e3] p-2 rounded-lg cursor-pointer"
               >
                 <div className="h-12 w-12 rounded-lg overflow-hidden mr-2 ">
                   <img src={member.image} alt="" />
@@ -145,9 +155,13 @@ const Sidebar = ({ setSidebarIsOpen }: Props) => {
       </div>
 
       {/* channels */}
-      <div
+      <motion.div
+        initial={{ opacity: 0, x: "-100%" }}
+        animate={sidebarIsOpen ? "open" : "closed"}
+        transition={{ ease: "easeOut", duration: 0.25 }}
+        variants={variants}
         onClick={(e) => e.stopPropagation()}
-        className="bg-gray3 px-4 py-2 w-[50%] lg:w-full  max-w-[500px] h-full flex flex-col relative"
+        className="bg-gray3 px-4 py-2 w-[50%] lg:w-full  max-w-[500px]  h-full flex flex-col relative border-r border-gray4/10"
       >
         {/* title */}
         <div className="flex justify-between items-center ">
@@ -158,7 +172,7 @@ const Sidebar = ({ setSidebarIsOpen }: Props) => {
             onClick={() => setNewChannelIsOpen((prev) => !prev)}
             type="button"
             aria-label="create a channel"
-            className="text-gray3 p-2 bg-gray rounded-lg"
+            className="text-primary border border-[#C4C4C4] p-2 bg-gray2 rounded-lg"
           >
             <div className="h-6">
               <AddIcon />
@@ -219,14 +233,14 @@ const Sidebar = ({ setSidebarIsOpen }: Props) => {
           }}
           type="button"
           aria-label="close sidebar"
-          className="text-gray3 absolute -right-12 bg-black/50 p-2 rounded-full lg:hidden"
+          className="text-gray3 absolute -right-12 bg-black/20 p-2 rounded-full lg:hidden"
         >
           <div className="h-6">
             <CloseIcon />
           </div>
         </button>
-      </div>
-    </div>
+      </motion.div>
+    </>
   );
 };
 

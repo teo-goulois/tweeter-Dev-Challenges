@@ -20,7 +20,6 @@ export default async function handler(
     const conversations = await Conversation.find({
       members: { $in: userID },
     }).populate("author", "name").populate("members", 'image name');
-    console.log(conversations, 'API get user conv');
     
     res.status(200).json(conversations);
   } catch (err) {

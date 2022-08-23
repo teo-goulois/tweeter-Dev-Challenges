@@ -15,7 +15,6 @@ export default async function handler(
 ) {
   await dbConnect();
   const data: ChatType = JSON.parse(req.body);
-  console.log("POST chat ", data);
 
   try {
     var newChat = new Chat({

@@ -36,19 +36,14 @@ export default async function handler(
       tags.map(async (tag) => {
         // check if tag already exist
         const res = await Tag.count({ tag: tag });
-        console.log(res, "check if tag existe");
         if (res > 0) {
           // update it
-          console.log("update it");
-
           const updatedTag = await Tag.findOneAndUpdate(
             { tag },
             { $push: { tweets: tweetCreated._id }, $inc: { tag_count: 1 } }
           );
-          console.log("update it", updatedTag);
         } else {
           // if not create it
-          console.log("create it");
 
           const newTag = new Tag({
             tag,
@@ -57,7 +52,6 @@ export default async function handler(
           });
 
           const t = await newTag.save();
-          console.log("create it", t);
         }
       })
     ));

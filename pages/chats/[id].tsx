@@ -11,6 +11,7 @@ import { Chat as ChatType } from "../../types/typing";
 // data relative
 import useChats, { key } from "../../utils/chat/useChats";
 import useConnectedUser from "../../utils/users/useConnectedUser";
+import postChat from "../../utils/chat/postChat";
 
 const index = () => {
   const router = useRouter();
@@ -25,14 +26,15 @@ const index = () => {
   const [sendingChat, setSendingChat] = useState<ChatType | null>();
 
   useEffect(() => {
-    console.log(fetchedChats, 'fetched chats');
-    
+
     if (!chatsIsError || !chatsIsLoading || fetchedChats) {
       setChats(fetchedChats);
     }
   }, [fetchedChats]);
 
   const ref = useRef<HTMLInputElement>(null);
+
+  
   // manage websocket
   useEffect(() => {
     const pusher = new Pusher(process.env.PUSHER_APP_KEY as string, {
@@ -68,22 +70,9 @@ const index = () => {
       };
 
       setSendingChat({ ...body, isLoading: true });
+      postChat(body);
+      ref.current.value = ""
 
-      const response = await fetch(`/api/chat/postChat`, {
-        method: "POST",
-        body: JSON.stringify(body),
-      });
-      const data = await response.json();
-
-      if (response.status === 200) {
-        await fetch(`/api/chat`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
-      } else {
-        toast.error(data.message);
-      }
     }
   };
 
@@ -110,18 +99,18 @@ const index = () => {
       {/* input */}
       <form
         onSubmit={handleSubmit}
-        className="bg-gray3 px-2 py-1 mb-2 flex items-center rounded-lg overflow-hidden w-[90%] mx-auto "
+        className="bg-gray2 border border-gray3 px-2 py-1 mb-2 flex items-center rounded-lg overflow-hidden w-[90%] mx-auto "
       >
         <input
           ref={ref}
           type="text"
           placeholder="Chat away"
-          className="bg-gray3 w-full p-4 text-base outline-none"
+          className="bg-gray2 w-full p-4 text-base outline-none"
         />
         <button
           type="submit"
           aria-label="sumbit chat"
-          className=" text-gray3 p-2 bg-secondary rounded-lg"
+          className=" text-gray p-2 bg-gray2 border border-gray3 rounded-lg"
         >
           <div className="h-8 rotate-45">
             <NavigationIcon />

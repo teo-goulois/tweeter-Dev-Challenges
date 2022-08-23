@@ -5,7 +5,7 @@ function useCommentsLength(tweetID: string | undefined) {
   const { data, error } = useSWR(key(tweetID));
   
   return {
-    commentsLength: data?.length as Comment[],
+    commentsLength: data?.length as number,
     isLoading: !error && !data,
     isError: error,
   };

@@ -1,9 +1,7 @@
-import type {
-  GetServerSideProps,
-} from "next";
+import type { GetServerSideProps } from "next";
 import { unstable_getServerSession } from "next-auth";
 import Head from "next/head";
-import {  useEffect } from "react";
+import { useEffect } from "react";
 import { mutate } from "swr";
 // Components
 import CreateTweet from "../components/createTweet/CreateTweet";
@@ -22,7 +20,6 @@ const Home = ({}: Props) => {
   const { user } = useConnectedUser();
   const { tweets, isLoading, isError } = useTweet(user?._id, user?.following);
 
-
   // fetch whan current user following change
   useEffect(() => {
     mutate(key(user?._id, user?.following));
@@ -35,16 +32,16 @@ const Home = ({}: Props) => {
       </Head>
       <div className=" w-full lg:max-w-4xl  mb-14 md:mb-0">
         <CreateTweet />
-        {!isLoading ? (
-          <Feed swrKey={key(user?._id, user?.following)} tweets={tweets} />
-        ) : isError ? (
-          <p>Error {isError} </p>
-        ) : (
+        {isLoading ? (
           <div>
             <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
             <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
             <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
           </div>
+        ) : isError ? (
+          <p>Error {isError} </p>
+        ) : (
+          <Feed swrKey={key(user?._id, user?.following)} tweets={tweets} />
         )}
       </div>
       <div className="hidden md:block ml-2">

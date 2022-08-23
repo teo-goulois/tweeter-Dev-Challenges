@@ -11,13 +11,19 @@ import useAutoIncreaseHeight from "../../hooks/useAutoIncreaseHeight";
 import useConnectedUser from "../../utils/users/useConnectedUser";
 // Types
 import { Tweet } from "../../types/typing";
+import { key } from "../../utils/profile/useTweets";
 
 type OpenModal = {
   isOpen: boolean;
   value: string;
 };
 
-const CreateTweet = () => {
+type Props = {
+  fromProfile?: boolean;
+  filter?: "tweets" | "replies" | "media" | "likes";
+};
+
+const CreateTweet = ({ fromProfile, filter }: Props) => {
   const { mutate } = useSWRConfig();
   // Context
   const { user } = useConnectedUser();
@@ -53,22 +59,8 @@ const CreateTweet = () => {
       },
       everyoneCanReply: openModal.value === "everyone" ? true : false,
     };
-
-    mutate(
-      user?._id
-        ? [
-            `/api/home/getTweets`,
-            {
-              method: "POST",
-              body: JSON.stringify({
-                _id: user._id,
-                following: user.following,
-              }),
-            },
-          ]
-        : null,
-      async (tweets: Tweet[]) => {
-        // await post reponse
+    if (fromProfile && filter) {
+      mutate(key(user?._id, filter), async (tweets: Tweet[]) => {
         const response = await fetch(`/api/tweets/postTweet`, {
           body: JSON.stringify(body),
           method: "POST",
@@ -76,8 +68,33 @@ const CreateTweet = () => {
         const data = await response.json();
 
         return [{ ...data.tweet, author: user }, ...tweets];
-      }
-    );
+      });
+    } else {
+      mutate(
+        user?._id
+          ? [
+              `/api/home/getTweets`,
+              {
+                method: "POST",
+                body: JSON.stringify({
+                  _id: user._id,
+                  following: user.following,
+                }),
+              },
+            ]
+          : null,
+        async (tweets: Tweet[]) => {
+          // await post reponse
+          const response = await fetch(`/api/tweets/postTweet`, {
+            body: JSON.stringify(body),
+            method: "POST",
+          });
+          const data = await response.json();
+
+          return [{ ...data.tweet, author: user }, ...tweets];
+        }
+      );
+    }
     // reinitialize input fomrs
     setInput("");
     setImages([]);

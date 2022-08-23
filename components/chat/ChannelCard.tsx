@@ -76,9 +76,9 @@ const ChannelCard = ({ channel, query,  handleChannel }: Props) => {
         isActive() && router.push(`/chats/${channel._id}`);
         handleChannel(channel._id);
       }}
-      className="flex items-center p-2 hover:bg-gray4 rounded-lg cursor-pointer transition-colors mb-2"
+      className="flex items-center p-2 hover:bg-[#e3e3e3] rounded-lg cursor-pointer transition-colors mb-2"
     >
-      <div className="uppercase text-xl font-bold rounded-lg bg-gray flex items-center justify-center w-[50px] h-[50px]  ">
+      <div className="uppercase text-xl font-bold rounded-lg bg-gray2 border border-[#C4C4C4] flex items-center justify-center w-[50px] h-[50px]  ">
         {channel.name[0]}
       </div>
       <p className="uppercase text-primary font-semibold text-xl ml-3">

@@ -17,12 +17,13 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { query } = req.query;
+  const { q } = req.query;
   await dbConnect();
 
   try {
-    if (query) {
-      const peoples = await User.find({ name: { $regex: query } })
+    if (q) {
+      
+      const peoples = await User.find({ name: { $regex: q } })
         .sort({ follower: -1 })
         .limit(10);
 

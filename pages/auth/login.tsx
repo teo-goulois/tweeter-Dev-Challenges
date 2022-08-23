@@ -13,6 +13,7 @@ import {
 
 // Type
 import { authOptions } from "../api/auth/[...nextauth]";
+import { LogosGoogleIcon, MdiGithub } from "../../icons/Icons";
 
 type Props = {
   providers: Provider;
@@ -34,8 +35,8 @@ const Login = ({ providers, csrfToken }: Props) => {
         world!
       </p>
 
-      <form action="" className="grid grid-rows-3 gap-4 my-2">
-        <div className="mt-auto mb-auto">
+      <form action="" className="grid grid-rows-1 gap-4 my-2">
+        {/*  <div className="mt-auto mb-auto">
           <label className="block font-medium text-sm" htmlFor="Email">
             Email
           </label>
@@ -77,20 +78,34 @@ const Login = ({ providers, csrfToken }: Props) => {
           </p>
         </div>
 
-        <p className="text-center">or signin with</p>
-        <div className="flex items-center justify-center">
+        <p className="text-center">or signin with</p> */}
+        <div className="flex  items-center justify-center">
           <>
-            {Object.values(providers).map((provider) => (
-              <div key={provider.name}>
-                <button
-                  type="button"
-                  className="bg-white rounded-lg px-4 py-2 m-2 shadow-sm"
-                  onClick={() => signIn(provider.id, { callbackUrl: "/" })}
-                >
-                  Sign in with {provider.name}
-                </button>
-              </div>
-            ))}
+            {Object.values(providers).map((provider) => {
+
+              return (
+                <div key={provider.name}>
+                  <button
+                    type="button"
+                    className="bg-white rounded-lg px-4 py-2 m-2 shadow-sm hover:shadow"
+                    onClick={() => signIn(provider.id, { callbackUrl: "/" })}
+                  >
+                    {provider.name === "Google" ? (
+                      <div className="h-12 mb-2">
+                        {" "}
+                        <LogosGoogleIcon />
+                      </div>
+                    ) : (
+                      <div className="h-12 mb-2">
+                        {" "}
+                        <MdiGithub />
+                      </div>
+                    )}{" "}
+                    {provider.name}
+                  </button>
+                </div>
+              );
+            })}
           </>
         </div>
       </form>

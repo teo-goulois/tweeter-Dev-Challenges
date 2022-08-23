@@ -14,10 +14,10 @@ export default async function handler(
 ) {
   await dbConnect();
   try {
-    const { query } = req.query;
-    if (query) {
+    const { q } = req.query;
+    if (q) {
       
-      const tweets = await Tweet.find({ text: {$regex: query} })
+      const tweets = await Tweet.find({ text: {$regex: q} })
         .populate("author")
         .sort({ likes: -1 })
         .limit(10);

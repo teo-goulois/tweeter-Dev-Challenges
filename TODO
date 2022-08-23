@@ -1,5 +1,5 @@
 // User story: I can see my profile or others' profile
-
+// TODO: ADD pagination or infinite loading
 // User story: When I am on a profile, I can see Tweets and Retweets. I can also filter by Tweets, Tweets and replies, Media and Likes
 // 
 // User story:  When I am on a profile, I can see followers and following
@@ -8,7 +8,7 @@
 // 
 // User story: I can navigate between Home, Explore and Bookmarks
 // 
-//  User story: I can navigate to My Profile, TODO: Group Chat (optional), TODO: Setting/Authentication App.
+//  User story: I can navigate to My Profile, Group Chat (optional), TODO: Setting/Authentication App.
 
 // TODO: uploading images
 // 
@@ -31,6 +31,7 @@
 // User story: When I am on Bookmarks, I can see the Saved Tweet
 // 
 // User story(optional): I can search for a group
+
 
 
   "server": "nodemon server.js",

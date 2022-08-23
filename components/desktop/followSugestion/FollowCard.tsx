@@ -73,7 +73,7 @@ const FollowCard = ({ user }: Props) => {
         <button
           type="button"
           onClick={handleFollow}
-          className="bg-blue flex items-center text-white px-4 py-2 rounded-[4px] relative z-10 "
+          className="bg-blue flex items-center text-white px-4 py-2 rounded-[4px] relative   "
         >
           <div className="h-6 mr-2">
             <FollowIcon />

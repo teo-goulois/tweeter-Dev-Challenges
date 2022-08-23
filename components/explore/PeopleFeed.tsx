@@ -15,7 +15,7 @@ const PeopleFeed = ({ peoples, input }: Props) => {
   const { user } = useConnectedUser();
   return (
     <div className="h-full w-full ">
-      {peoples?.length > 0 ? (
+      {peoples?.length > 1 ? (
         peoples.map((people, index) => {
           if (user?._id === people._id) return;
           return <PeopleCard input={input} key={people._id} people={people} />;

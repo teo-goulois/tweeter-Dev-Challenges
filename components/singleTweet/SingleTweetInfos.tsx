@@ -14,10 +14,13 @@ import useFollow from "../../utils/useFollow";
 import useCommentsLength from "../../utils/comments/useCommentsLength";
 import useConnectedUser from "../../utils/users/useConnectedUser";
 import updateTweetInfos from "../../utils/tweet/updateTweetInfos";
+import { motion } from "framer-motion";
 
 const variants = {
-  open: { opacity: 1, x: 0 },
-  closed: { opacity: 0, x: "-100%" },
+  hover: { y: -20, opacity: 0, height: 0 },
+};
+const variants2 = {
+  hover: { y: -10, opacity: 1, height: "fit" },
 };
 
 type Props = {
@@ -148,7 +151,8 @@ const TweetInfos = ({ tweet, setCommentIsOpen }: Props) => {
           ],
         ].map(([title, component, array, color]) => {
           return (
-            <button
+            <motion.button
+              whileHover="hover"
               type="button"
               key={title as string}
               onClick={(e) => handleActivities(e, title as string)}
@@ -158,8 +162,26 @@ const TweetInfos = ({ tweet, setCommentIsOpen }: Props) => {
               } text-sm font-medium text-gray text-center hover:bg-gray3 rounded-lg py-2 flex-1 cursor-pointer flex justify-center items-center`}
             >
               <div className="h-4 mr-2">{component as ReactNode}</div>
-              <p className="hidden md:block capitalize">{title as string}</p>
-            </button>
+              <div>
+                <motion.p
+                  variants={variants}
+                  transition={{ ease: "easeOut", duration: 0.2 }}
+                  className="hidden md:block capitalize"
+                >
+                  {title as string}
+                </motion.p>
+                <motion.p
+                  initial={{ opacity: 0, y: -10, height: 0 }}
+                  variants={variants2}
+                  transition={{ ease: "easeOut", duration: 0.2 }}
+                  className="hidden md:block capitalize"
+                >
+                  {title !== "comment"
+                    ? array.length
+                    : commentsLength?.toString()}
+                </motion.p>
+              </div>
+            </motion.button>
           );
         })}
       </div>

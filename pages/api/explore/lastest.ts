@@ -13,17 +13,13 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { q } = req.query;
-  console.log(req.query, 'req');
   
-  console.log(q, 'queyr');
-
   await dbConnect();
   try {
     if (q) {
       const tweets = await Tweet.find({ text: { $regex: q } })
         .sort("-createdAt")
         .limit(10);
-      console.log("query");
 
       return res.status(200).json(tweets);
     }
