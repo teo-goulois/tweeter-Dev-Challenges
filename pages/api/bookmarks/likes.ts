@@ -14,12 +14,13 @@ export default async function handler(
 ) {
   await dbConnect();
   try {
-    const { userID } = req.query;
+    const { userID, page } = req.query;
 
     const tweets = await Tweet.find({bookmarks: userID, likes: userID})
       .populate("author")
+      .skip(typeof page === "string" ? parseInt(page as string) : 0)
+      .limit(10)
       .sort({ likes: -1 })
-      .limit(10);
     res.status(200).send(tweets);
   } catch (err) {
     res.status(500).send(err);

@@ -13,13 +13,14 @@ export default async function handler(
   res: NextApiResponse
 ) {
   await dbConnect();
-  const { userID } = req.query;
-  
+  const { userID, page } = req.query;
+
   try {
-    const tweets = await Tweet.find({ author: userID  })
+    const tweets = await Tweet.find({ author: userID })
       .populate("author")
-      .sort("-createdAt")
-      .limit(10);
+      .skip(typeof page === "string" ? parseInt(page as string) : 0)
+      .limit(10)
+      .sort("-createdAt");
     
     res.status(200).send(tweets);
   } catch (err) {

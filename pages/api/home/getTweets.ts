@@ -11,14 +11,18 @@ type Data = {
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
-) {
+) {  
   const data = JSON.parse(req.body);
-
+  
+  const { page } = req.query;
+  
   await dbConnect();
   const tweets = await Tweet.find({
     author: { $in: [...data.following, data._id] },
   })
     .populate("author")
+    .skip(typeof page === "string" ? parseInt(page as string) : 0)
+    .limit(10)
     .sort("-createdAt");
 
   res.status(200).send(tweets);

@@ -15,8 +15,7 @@ const Profile = () => {
   const [filter, setFilter] = useState<
     "tweets" | "replies" | "media" | "likes"
   >("tweets");
-  const { tweets } = useTweet(user?._id, filter);
-
+  const { tweets, tweetsIsError, tweetsIsLoading } = useTweet(user?._id, filter);
 
   if (isLoading) return <p>loading...</p>;
   return (
@@ -27,7 +26,22 @@ const Profile = () => {
           <div className="w-full flex flex-col lg:flex-row ">
             <Filter filter={filter} setFilter={setFilter} />
             <div className="w-full lg:ml-4">
-              <Feed swrKey={key(user?._id, filter)} tweets={tweets} textIfNoTweets={"No Tweets found"} />
+              {tweetsIsLoading ? (
+                <div>
+                  <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
+                  <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
+                  <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
+                </div>
+              ) : tweetsIsError ? (
+                <p>Error {isError} </p>
+              ) : (
+                <Feed
+                  swrKey={key(user?._id, filter)}
+                  tweets={tweets}
+                  textIfNoTweets={"No Tweets found"}
+                  url={`/api/profile/${filter}?userID=${user?._id}&`}
+                />
+              )}
             </div>
           </div>
         </div>

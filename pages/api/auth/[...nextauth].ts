@@ -17,18 +17,19 @@ import {
   ReqUser,
   ResUser,
 } from "../../../libs/users/users";
+import getEnvVar from "../../../utils/getEnvVar";
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     GithubProvider({
-      clientId: "80aef32a35771e6d48eb",
-      clientSecret: "53b391cb63cacb08e66bcb62142e960abda23b97",
+      clientId: getEnvVar("GITHUB_CLIENT_ID"),
+      clientSecret: getEnvVar("GITHUB_CLIENT_SECRET"),
     }),
     GoogleProvider({
       clientId:
-        "626850324834-ma6a0qhs51bisg0hice2609ssc6cp4q5.apps.googleusercontent.com",
-      clientSecret: "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",
+      getEnvVar("GOOGLE_CLIENT_ID"),
+      clientSecret: getEnvVar("GOOGLE_CLIENT_SECRET"),
     }),
   ],
   pages: {

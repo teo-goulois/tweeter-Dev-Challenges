@@ -1,13 +1,14 @@
 import type { GetServerSideProps } from "next";
 import { unstable_getServerSession } from "next-auth";
 import Head from "next/head";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { mutate } from "swr";
 // Components
 import CreateTweet from "../components/createTweet/CreateTweet";
 import FollowSugestion from "../components/desktop/followSugestion";
 import Trend from "../components/desktop/Trend";
 import Feed from "../components/feed/Feed";
+import { Tweet } from "../types/typing";
 // types
 // Hooks
 import useTweet, { key } from "../utils/home/useTweets";
@@ -18,11 +19,18 @@ type Props = {};
 
 const Home = ({}: Props) => {
   const { user } = useConnectedUser();
-  const { tweets, isLoading, isError } = useTweet(user?._id, user?.following);
+
+  const { tweets, isLoading, isError } = useTweet(
+    user?._id,
+    user?.following
+  );
+
+
+  
 
   // fetch whan current user following change
   useEffect(() => {
-    mutate(key(user?._id, user?.following));
+    mutate((...args) => key(...args, user?._id, user?.following));
   }, [user?.following]);
 
   return (
@@ -41,7 +49,11 @@ const Home = ({}: Props) => {
         ) : isError ? (
           <p>Error {isError} </p>
         ) : (
-          <Feed swrKey={key(user?._id, user?.following)} tweets={tweets} />
+          <Feed
+            swrKey={key(user?._id, user?.following)}
+            tweets={tweets}
+            url="/api/home/getTweets?"
+          />
         )}
       </div>
       <div className="hidden md:block ml-2">

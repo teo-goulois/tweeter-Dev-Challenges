@@ -8,8 +8,8 @@ function useTweet(
   const { data, error } = useSWR(key(userID, title));
   return {
     tweets: data,
-    isLoading: !error && !data,
-    isError: error,
+    tweetsIsLoading: !error && !data,
+    tweetsIsError: error,
   };
 }
 

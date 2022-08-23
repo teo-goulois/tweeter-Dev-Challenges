@@ -12,21 +12,23 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { q } = req.query;
-  
+  const { q, page } = req.query;
+
   await dbConnect();
   try {
     if (q) {
       const tweets = await Tweet.find({ text: { $regex: q } })
-        .sort("-createdAt")
-        .limit(10);
+      .skip(typeof page === "string" ? parseInt(page as string) : 0)
+      .limit(10)
+      .sort("-createdAt")
 
       return res.status(200).json(tweets);
     }
     const tweets = await Tweet.find({})
       .populate("author")
-      .sort("-createdAt")
-      .limit(10);
+      .skip(typeof page === "string" ? parseInt(page as string) : 0)
+      .limit(10)
+      .sort("-createdAt");
 
     res.status(200).send(tweets);
   } catch (err) {

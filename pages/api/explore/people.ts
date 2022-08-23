@@ -17,15 +17,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { q } = req.query;
+  const { q, page } = req.query;
   await dbConnect();
 
   try {
     if (q) {
       
       const peoples = await User.find({ name: { $regex: q } })
-        .sort({ follower: -1 })
-        .limit(10);
+      .skip(typeof page === "string" ? parseInt(page as string) : 0)
+      .limit(10)
+      .sort({ follower: -1 })
 
       return res.status(200).json(peoples);
     }

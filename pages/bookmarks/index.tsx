@@ -38,6 +38,7 @@ const Index: NextPage = () => {
             swrKey={key(filter, user?._id)}
             tweets={tweets}
             textIfNoTweets="no tweets saved, save one to start see them"
+            url={`/api/bookmarks/${filter}?userID=${user?._id}?`}
           />
         )}
       </div>

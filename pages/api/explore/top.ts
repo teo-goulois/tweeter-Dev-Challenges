@@ -14,20 +14,21 @@ export default async function handler(
 ) {
   await dbConnect();
   try {
-    const { q } = req.query;
+    const { q, page } = req.query;
     if (q) {
-      
-      const tweets = await Tweet.find({ text: {$regex: q} })
+      const tweets = await Tweet.find({ text: { $regex: q } })
         .populate("author")
-        .sort({ likes: -1 })
-        .limit(10);
-      
+        .skip(typeof page === "string" ? parseInt(page as string) : 0)
+        .limit(10)
+        .sort({ likes: -1 });
+
       return res.status(200).send(tweets);
     }
     const tweets = await Tweet.find({})
       .populate("author")
-      .sort({ likes: -1 })
-      .limit(10);
+      .skip(typeof page === "string" ? parseInt(page as string) : 0)
+      .limit(10)
+      .sort({ likes: -1 });
     res.status(200).send(tweets);
   } catch (err) {
     res.status(500).send(err);

@@ -17,7 +17,10 @@ const Index: NextPageWithLayout = () => {
   const [filter, setFilter] = useState<
     "tweets" | "replies" | "media" | "likes"
   >("tweets");
-  const { tweets } = useTweet(user?._id, filter);
+  const { tweets, tweetsIsError, tweetsIsLoading } = useTweet(
+    user?._id,
+    filter
+  );
 
   if (!user) return <div></div>;
   return (
@@ -34,11 +37,22 @@ const Index: NextPageWithLayout = () => {
             <CreateTweet fromProfile={true} filter={filter} />
           </div>
           <div className="">
-            <Feed
-              swrKey={key(user._id, filter)}
-              tweets={tweets}
-              textIfNoTweets={"No Tweets found"}
-            />
+            {tweetsIsLoading ? (
+              <div>
+                <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
+                <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
+                <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
+              </div>
+            ) : tweetsIsError ? (
+              <p>Error {tweetsIsError} </p>
+            ) : (
+              <Feed
+                swrKey={key(user._id, filter)}
+                tweets={tweets}
+                textIfNoTweets={"No Tweets found"}
+                url={`/api/profile/${filter}?userID=${user._id}&`}
+              />
+            )}
           </div>
         </div>
       </div>

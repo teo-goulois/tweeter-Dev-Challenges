@@ -14,7 +14,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   await dbConnect();
-  const { userID } = req.query;
+  const { userID, page } = req.query;
 
   try {
     const CommentedTweetID = await Comment.find({ author: userID }).select(
@@ -25,8 +25,9 @@ export default async function handler(
       bookmarks: { $in: userID },
     })
       .populate("author")
+      .skip(typeof page === "string" ? parseInt(page as string) : 0)
+      .limit(10)
       .sort("-createdAt")
-      .limit(10);
 
     res.status(200).send(tweets);
   } catch (err) {

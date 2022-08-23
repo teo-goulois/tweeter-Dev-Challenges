@@ -1,6 +1,10 @@
 import useSWR from "swr";
 
-function useTweet(_id: string | undefined, following: string[] | undefined) {
+function useTweet(
+  _id: string | undefined,
+  following: string[] | undefined,
+) {
+  
   // get all user following tweet and his tweet
   const { data, error } = useSWR(key(_id, following));
   return {
@@ -14,7 +18,7 @@ export default useTweet;
 
 export const key = (
   _id: string | undefined,
-  following: string[] | undefined
+  following: string[] | undefined,
 ) => {
   return _id
     ? [

@@ -35,9 +35,26 @@ const Index = () => {
 
         {!isLoading ? (
           filter === "people" ? (
-            <PeopleFeed input={input} peoples={tweets} />
+            <PeopleFeed
+              input={input}
+              peoples={tweets}
+              swrKey={key(filter, input)}
+              url={
+                input?.length > 0
+                  ? `/api/explore/${filter}?q=${encodeURIComponent(input)}&`
+                  : `/api/explore/${filter}?`
+              }
+            />
           ) : (
-            <Feed tweets={tweets} swrKey={key(filter, input)} />
+            <Feed
+              tweets={tweets}
+              swrKey={key(filter, input)}
+              url={
+                input?.length > 0
+                  ? `/api/explore/${filter}?q=${encodeURIComponent(input)}&`
+                  : `/api/explore/${filter}?`
+              }
+            />
           )
         ) : isError ? (
           <p>Error {isError} </p>
