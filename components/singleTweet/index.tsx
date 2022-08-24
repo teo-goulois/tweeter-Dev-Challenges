@@ -122,15 +122,17 @@ const SingleTweet = ({ tweet }: Props) => {
             {comments.map((comment) => (
               <Comment key={comment._id} comment={comment} />
             ))}
-           {!hasEnded && <div className="w-full flex justify-center">
-              <button
-                className="px-6 py-4 border border-gray3 mx-auto"
-                type="button"
-                onClick={handleFetch}
-              >
-                load more
-              </button>
-            </div>}
+            {(!hasEnded && comments?.length > 0) && (
+              <div className="w-full flex justify-center">
+                <button
+                  className="px-6 py-4 border border-gray3 mx-auto"
+                  type="button"
+                  onClick={handleFetch}
+                >
+                  load more
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -30,7 +30,7 @@ const Home = ({}: Props) => {
 
   // fetch whan current user following change
   useEffect(() => {
-    mutate((...args) => key(...args, user?._id, user?.following));
+    mutate(key(user?._id, user?.following));
   }, [user?.following]);
 
   return (

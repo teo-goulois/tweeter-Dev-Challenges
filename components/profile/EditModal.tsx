@@ -128,7 +128,7 @@ const EditModal = ({ setEditIsOpen, user, isOpen }: Props) => {
               Upload a Profile picture
             </h2>
             <input
-              value={formValues.image}
+              defaultValue={formValues.image}
               placeholder="add image link"
               className="bg-gray2 border border-gray3 p-2 rounded-lg outline-gray4 outline-1 my-1"
               type="text"
@@ -155,7 +155,7 @@ const EditModal = ({ setEditIsOpen, user, isOpen }: Props) => {
           </h2>
           <form onSubmit={(e) => handleBannerSubmit(e)} className="flex w-full">
             <input
-              value={formValues.banner}
+              defaultValue={formValues.banner}
               placeholder="add banner link"
               className="bg-gray2 border border-gray3 p-2 rounded-lg outline-gray4 outline-1 grow"
               type="text"

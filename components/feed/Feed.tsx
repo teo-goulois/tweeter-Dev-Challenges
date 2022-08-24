@@ -24,6 +24,8 @@ type Props = {
 };
 
 const Feed = ({ tweets, textIfNoTweets, swrKey, url }: Props) => {
+  console.log(tweets, "TWEETS");
+
   const { user } = useConnectedUser();
   const [hasEnded, setHasEnded] = useState<boolean>(false);
   const [page, setPage] = useState<number>(0);
@@ -32,21 +34,38 @@ const Feed = ({ tweets, textIfNoTweets, swrKey, url }: Props) => {
     mutate(
       swrKey,
       async (temptweets: TweetType[]) => {
-        const response = await fetch(`${url}page=${(page + 1) * 10}`, {
-          method: "POST",
-          body: JSON.stringify({
-            _id: user?._id,
-            following: user?.following,
-          }),
-        });
-        const data = await response.json();
-        if (data.length === 0) {
-          setHasEnded(true);
-        }
-        const temp = [...temptweets, ...data];
+        if ((url === "/api/home/getTweets?")) {
+          console.log(url, "home uerl");
 
-        if (response.status === 200) {
-          return temp;
+          const response = await fetch(`${url}page=${(page + 1) * 10}`, {
+            method: "POST",
+            body: JSON.stringify({
+              _id: user?._id,
+              following: user?.following,
+            }),
+          });
+          const data = await response.json();
+          if (data.length === 0) {
+            setHasEnded(true);
+          }
+          const temp = [...temptweets, ...data];
+
+          if (response.status === 200) {
+            return temp;
+          }
+        } else {
+          console.log(url, "url");
+
+          const response = await fetch(`${url}page=${(page + 1) * 10}`);
+          const data = await response.json();
+          if (data.length === 0) {
+            setHasEnded(true);
+          }
+          const temp = [...temptweets, ...data];
+
+          if (response.status === 200) {
+            return temp;
+          }
         }
       },
       { revalidate: false }
