@@ -1,6 +1,7 @@
 import dbConnect from "../dbConnect";
 
 import User from "../../models/User";
+import Conversation from "../../models/Conversation";
 
 export type ReqUser = {
   id: string;
@@ -38,6 +39,10 @@ export const createUser = async (user: ReqUser) => {
   });
   // Create new user
   var usercreated = await newUser.save();
+  await Conversation.findOneAndUpdate(
+    { _id: "6305028b375f5554b5e8250c" },
+    { $push: { members: usercreated._id } }
+  );
 
   return usercreated;
 };

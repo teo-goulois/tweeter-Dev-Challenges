@@ -7,7 +7,7 @@ type Props = {
 
 const Filter = ({ filter, setFilter }: Props) => {
   return (
-    <div className="min-w-[304px] bg-white rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] font-[Poppins] font-semibold text-sm flex  lg:flex-col mb-2">
+    <div className="min-w-[304px] h-fit bg-white rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] font-[Poppins] font-semibold text-sm flex  lg:flex-col mb-2">
       {(
         ["tweets", "replies", "media", "likes"] as Array<
           "tweets" | "replies" | "media" | "likes"

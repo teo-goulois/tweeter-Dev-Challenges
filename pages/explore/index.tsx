@@ -33,37 +33,35 @@ const Index = () => {
       <div className="lg:ml-2 w-full lg:max-w-4xl ">
         <Searchbar input={input} setInput={setInput} />
 
-        {!isLoading ? (
-          filter === "people" ? (
-            <PeopleFeed
-              input={input}
-              peoples={tweets}
-              swrKey={key(filter, input)}
-              url={
-                input?.length > 0
-                  ? `/api/explore/${filter}?q=${encodeURIComponent(input)}&`
-                  : `/api/explore/${filter}?`
-              }
-            />
-          ) : (
-            <Feed
-              tweets={tweets}
-              swrKey={key(filter, input)}
-              url={
-                input?.length > 0
-                  ? `/api/explore/${filter}?q=${encodeURIComponent(input)}&`
-                  : `/api/explore/${filter}?`
-              }
-            />
-          )
-        ) : isError ? (
-          <p>Error {isError} </p>
-        ) : (
+        {isLoading ? (
           <div>
             <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
             <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
             <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
           </div>
+        ) : isError ? (
+          <p>Error {isError} </p>
+        ) : filter === "people" ? (
+          <PeopleFeed
+            input={input}
+            peoples={tweets}
+            swrKey={key(filter, input)}
+            url={
+              input?.length > 0
+                ? `/api/explore/${filter}?q=${encodeURIComponent(input)}&`
+                : `/api/explore/${filter}?`
+            }
+          />
+        ) : (
+          <Feed
+            tweets={tweets}
+            swrKey={key(filter, input)}
+            url={
+              input?.length > 0
+                ? `/api/explore/${filter}?q=${encodeURIComponent(input)}&`
+                : `/api/explore/${filter}?`
+            }
+          />
         )}
       </div>
     </div>

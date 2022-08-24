@@ -57,7 +57,7 @@ const Feed = ({ tweets, textIfNoTweets, swrKey, url }: Props) => {
   return (
     <div className="h-full w-5xl relative">
       <InfiniteScroll
-        dataLength={tweets.length}
+        dataLength={tweets ? tweets.length : 0}
         next={handleFetch}
         hasMore={tweets.length === 0 ? false : !hasEnded}
         loader={
@@ -69,7 +69,7 @@ const Feed = ({ tweets, textIfNoTweets, swrKey, url }: Props) => {
               ariaLabel="tail-spin-loading"
               radius="1"
               wrapperStyle={{}}
-              wrapperClass="" 
+              wrapperClass=""
               visible={true}
             />
           </div>
