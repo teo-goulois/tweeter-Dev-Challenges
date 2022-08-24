@@ -1,16 +1,16 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { useRouter } from "next/router";
 // Context
-import { useSession } from "next-auth/react";
 // images
 // Components
 import LoginButton from "./buttons/Login";
-import SignupButton from "./buttons/Signup";
 import Logo from "./Logo";
 import OptionsModal from "./OptionsModal";
 import LinkButton from "./buttons/LinkButton";
 // Icons
 import { RoundArrowDropDownIcon } from "../../icons/Icons";
+// data relative
+import useConnectedUser from "../../utils/users/useConnectedUser";
 
 type Props = {
   setOpenTab: Dispatch<SetStateAction<string>>;
@@ -19,7 +19,7 @@ type Props = {
 const Navbar = ({ setOpenTab }: Props) => {
   const [optionModalIsOpen, setOptionModaleIsOpen] = useState<boolean>(false);
   const router = useRouter();
-  const { data: session } = useSession();
+  const {user} = useConnectedUser()
 
   const handleClick = (url: string) => {
     setOpenTab(url);
@@ -41,7 +41,7 @@ const Navbar = ({ setOpenTab }: Props) => {
             ["explore", "/explore"],
             ["bookmarks", "/bookmarks"],
           ].map(([title, url]) => {
-            if (!session?.user && (title === "home" || title === "bookmarks")) {
+            if (!user && (title === "home" || title === "bookmarks")) {
               // manage Auth
               return;
             }
@@ -59,7 +59,7 @@ const Navbar = ({ setOpenTab }: Props) => {
         {/* profile */}
         <div className="relative m-4">
           {/* if loggin show profil pic otherwise show auth buttons */}
-          {session ? (
+          {user ? (
             <button
               type="button"
               onClick={() => setOptionModaleIsOpen((prev) => !prev)}
@@ -68,15 +68,15 @@ const Navbar = ({ setOpenTab }: Props) => {
               <img
                 alt="user image"
                 src={
-                  session.user.image.length > 0
-                    ? session.user.image
+                  user.image.length > 0
+                    ? user.image
                     : "https://lh3.googleusercontent.com/a/AItbvmm325lr8zSnqbAsJgMAkOOiA0ptP4JqVzzTVpOT=s96-c"
                 }
                 className="w-8 h-8 rounded-lg float-right"
               ></img>
               <p className="font-bold text-xs text-primary pl-2">
                 {" "}
-                {session.user?.name}{" "}
+                {user?.name}{" "}
               </p>
               <div className={`h-6 ${!optionModalIsOpen && "-rotate-90"}`}>
                 <RoundArrowDropDownIcon />

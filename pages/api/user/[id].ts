@@ -13,12 +13,35 @@ export default async function handler(
   res: NextApiResponse
 ) {
   await dbConnect();
-  const { id } = req.query;
 
-  try {
-    const user = await User.findOne({ _id: id });
-    res.status(200).send(user);
-  } catch (err) {
-    res.status(500).send(err);
+  if (req.method === "GET") {
+    const { id } = req.query;
+
+    try {
+      const user = await User.findOne({ _id: id });
+      res.status(200).send(user);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  }
+  if (req.method === "PATCH") {
+    const { id } = req.query;
+    const data = JSON.parse(req.body);
+
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: id },
+        {
+          name: data.username,
+          email: data.email,
+          bio: data.bio,
+          banner: data.banner,
+          image: data.image,
+        }
+      );
+      res.status(200).send(user);
+    } catch (err) {
+      res.status(500).send(err);
+    }
   }
 }

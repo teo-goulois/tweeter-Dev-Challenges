@@ -1,4 +1,3 @@
-import { useSession } from "next-auth/react";
 import useSWR from "swr";
 // Types
 import { User } from "../../types/typing";

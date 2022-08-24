@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, Fragment, SetStateAction, useState } from "react";
 import toast from "react-hot-toast";
 // Icons
 import { ArrowForwardIcon, RoundArrowDropDownIcon } from "../../icons/Icons";
@@ -6,6 +6,8 @@ import { ArrowForwardIcon, RoundArrowDropDownIcon } from "../../icons/Icons";
 import { User } from "../../types/typing";
 // Hooks
 import useAutoIncreaseHeight from "../../hooks/useAutoIncreaseHeight";
+import { motion } from "framer-motion";
+import { mutate } from "swr";
 
 export interface FormValues {
   image: string;
@@ -18,10 +20,20 @@ export interface FormValues {
 type Props = {
   setEditIsOpen: Dispatch<SetStateAction<boolean>>;
   user: User;
+  isOpen: boolean;
 };
 
-const EditModal = ({ setEditIsOpen, user }: Props) => {
+const variantsOverlay = {
+  open: { opacity: 1, zIndex: 1 },
+  closed: { opacity: 0, zIndex: -1 },
+};
 
+const variants = {
+  open: { opacity: 1, x: 0 },
+  closed: { opacity: 0, x: "+100%" },
+};
+
+const EditModal = ({ setEditIsOpen, user, isOpen }: Props) => {
   const [formValues, setFormValues] = useState<FormValues>({
     image: user.image,
     banner: user.banner,
@@ -73,37 +85,29 @@ const EditModal = ({ setEditIsOpen, user }: Props) => {
   };
 
   const handleSave = async () => {
-    // TODO: save DATA
-    const response = await fetch(`/api/users/updateUser`, {
-      body: JSON.stringify(formValues),
-      method: "POST",
+    mutate(user?._id ? `/api/user/${user._id}` : null, async (user: User) => {
+      const response = await fetch(`/api/user/${user._id}`, {
+        body: JSON.stringify(formValues),
+        method: "PATCH",
+      });
+      const data = await response.json();
+      if (response.status === 200) {
+        toast("user infos correctly updated");
+        setEditIsOpen((prev) => !prev);
+        return { ...user, ...formValues };
+      } else {
+        toast.error("an error occured please try again later");
+      }
     });
-    const data = await response.json();
-    if (response.status === 200) {
-      /* setUser((prev) => {
-        if (!prev) return;
-        return {
-          ...prev,
-          image: formValues.image,
-          banner: formValues.banner,
-          name: formValues.username,
-          bio: formValues.bio,
-          email: formValues.email,
-        };
-      }); */
-      toast(data.message);
-      setEditIsOpen((prev) => !prev);
-    } else {
-      toast.error(data.message);
-    }
   };
 
   return (
-    <div
-      onClick={() => setEditIsOpen((prev) => !prev)}
-      className="fixed w-screen h-screen top-0 left-0 bg-secondary/30 z-[1]"
-    >
-      <div
+    <Fragment>
+      <motion.form
+        onSubmit={handleSave}
+        variants={variants}
+        animate={isOpen ? "open" : "closed"}
+        transition={{ ease: "easeIn" }}
         onClick={(e) => e.stopPropagation()}
         className="bg-gray3 float-right p-4 w-[50%] h-full flex flex-col"
       >
@@ -124,8 +128,9 @@ const EditModal = ({ setEditIsOpen, user }: Props) => {
               Upload a Profile picture
             </h2>
             <input
+              value={formValues.image}
               placeholder="add image link"
-              className="bg-gray3 p-2 rounded-lg outline-gray4 outline-1 my-1"
+              className="bg-gray2 border border-gray3 p-2 rounded-lg outline-gray4 outline-1 my-1"
               type="text"
             />
             <button
@@ -150,8 +155,9 @@ const EditModal = ({ setEditIsOpen, user }: Props) => {
           </h2>
           <form onSubmit={(e) => handleBannerSubmit(e)} className="flex w-full">
             <input
+              value={formValues.banner}
               placeholder="add banner link"
-              className="bg-gray3 p-2 rounded-lg outline-gray4 outline-1 grow"
+              className="bg-gray2 border border-gray3 p-2 rounded-lg outline-gray4 outline-1 grow"
               type="text"
             />
             <button
@@ -173,7 +179,7 @@ const EditModal = ({ setEditIsOpen, user }: Props) => {
             onChange={(e) => handleUsernameChange(e)}
             value={formValues.username}
             type="text"
-            className="bg-gray3 p-2 rounded-lg outline-gray border border-gray4 outline-1 w-full"
+            className="bg-gray2 border border-gray3 p-2 rounded-lg outline-gray4  outline-1 w-full"
           />
         </div>
         {/* bio */}
@@ -185,11 +191,12 @@ const EditModal = ({ setEditIsOpen, user }: Props) => {
           <textarea
             maxLength={250}
             aria-label="Write your tweet"
+            value={formValues.bio}
             onChange={(e) => handleBioChange(e)}
             ref={(element) => {
               textareaRef.current = element;
             }}
-            className="bg-gray3 font-medium text-secondary p-2 outline-none w-full resize-none overflow-hidden border border-gray4 rounded-lg"
+            className="bg-gray2 border border-gray3 font-base text-primary outline-gray4 p-2 w-full resize-none overflow-hidden rounded-lg"
           ></textarea>
         </div>
         {/* email */}
@@ -200,29 +207,29 @@ const EditModal = ({ setEditIsOpen, user }: Props) => {
             onChange={(e) => handleEmailChange(e)}
             value={formValues.email}
             type="email"
-            className="bg-gray3 p-2 rounded-lg outline-gray border border-gray4 outline-1 w-full"
+            className="bg-gray2 border border-gray3 p-2 rounded-lg outline-gray4 outline-1 w-full"
           />
         </div>
         <button
-          type="button"
-          onClick={handleSave}
+          type="submit"
           className="bg-blue px-4 py-2 text-white rounded-lg w-full text-lg font-medium"
         >
           Save
         </button>
-      </div>
+      </motion.form>
 
       <button
         onClick={(e) => {
-          e.stopPropagation()
-          setEditIsOpen((prev) => !prev)}}
+          e.stopPropagation();
+          setEditIsOpen((prev) => !prev);
+        }}
         type="button"
         aria-label="close adit panel"
         className="h-9 bg-white rounded-full p-2 float-right m-4"
       >
         <ArrowForwardIcon />
       </button>
-    </div>
+    </Fragment>
   );
 };
 

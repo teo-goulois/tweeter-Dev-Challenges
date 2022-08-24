@@ -12,9 +12,15 @@ import EditModal from "./EditModal";
 // data relative
 import useConnectedUser from "../../utils/users/useConnectedUser";
 import FollowModal from "./FollowModal";
+import { motion } from "framer-motion";
 
 type Props = {
   user: User | undefined;
+};
+
+const variantsOverlay = {
+  open: { opacity: 1, zIndex: 10 },
+  closed: { opacity: 0, zIndex: -1 },
 };
 
 const ProfileInfos = ({ user }: Props) => {
@@ -70,7 +76,19 @@ const ProfileInfos = ({ user }: Props) => {
       {followModalIsOpen && (
         <FollowModal action={action} setIsOpen={setFollowModalIsOpen} />
       )}
-      {editIsOpen && <EditModal user={user} setEditIsOpen={setEditIsOpen} />}
+      <motion.div
+        variants={variantsOverlay}
+        animate={editIsOpen ? "open" : "closed"}
+
+        onClick={() => setEditIsOpen((prev) => !prev)}
+        className="fixed w-screen h-screen top-0 left-0 bg-secondary/30 "
+      >
+        <EditModal
+          user={user}
+          setEditIsOpen={setEditIsOpen}
+          isOpen={editIsOpen}
+        />
+      </motion.div>
       {/* background */}
       <div className="bg-[#C4C4C4] w-full min-h-[168.06px] md:min-h-[297.51px] md:max-h-[300px] relative">
         <img

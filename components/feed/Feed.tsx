@@ -69,7 +69,7 @@ const Feed = ({ tweets, textIfNoTweets, swrKey, url }: Props) => {
               ariaLabel="tail-spin-loading"
               radius="1"
               wrapperStyle={{}}
-              wrapperClass=""
+              wrapperClass="" 
               visible={true}
             />
           </div>
@@ -81,6 +81,7 @@ const Feed = ({ tweets, textIfNoTweets, swrKey, url }: Props) => {
             </div>
           )
         }
+        className="scrollbar-none"
       >
         {tweets?.length > 0 ? (
           tweets.map((tweet, index) => {
