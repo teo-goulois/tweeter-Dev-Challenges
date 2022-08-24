@@ -6,6 +6,8 @@ function useTweet(
 ) {
   // get all user following tweet and his tweet
   const { data, error } = useSWR(key(title, query));
+  console.log('azeaz', data, title, query);
+  
   return {
     tweets: data,
     isLoading: !error && !data,
@@ -21,7 +23,8 @@ export const key = (
 ) => {
 
   if (q?.length > 0) {
-
+    console.log("e");
+    
     return `/api/explore/${title}?q=${encodeURIComponent(q)}`;
   }
 
