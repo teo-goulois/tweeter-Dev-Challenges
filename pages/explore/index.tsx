@@ -54,7 +54,7 @@ const Index = () => {
           />
         ) : (
           <Feed
-            tweets={tweets}
+            tweets={tweets.length > 0 ? tweets : []}
             swrKey={key(filter, input)}
             url={
               input?.length > 0

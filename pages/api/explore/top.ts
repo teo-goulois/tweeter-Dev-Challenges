@@ -15,6 +15,8 @@ export default async function handler(
   await dbConnect();
   try {
     const { q, page } = req.query;
+    console.log("api q page", q, page);
+
     if (q) {
       const tweets = await Tweet.find({ text: { $regex: q } })
         .populate("author")

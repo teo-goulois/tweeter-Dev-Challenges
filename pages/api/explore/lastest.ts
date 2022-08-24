@@ -31,9 +31,7 @@ export default async function handler(
       .skip(typeof page === "string" ? parseInt(page as string) : 0)
       .limit(10)
       .sort("-createdAt");
-    console.log("api tweets", tweets);
 
-    res.status(200).send(tweets);
   } catch (err) {
     res.status(500).send(err);
   }
