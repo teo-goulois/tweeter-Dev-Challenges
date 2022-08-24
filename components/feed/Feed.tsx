@@ -36,6 +36,8 @@ const Feed = ({ tweets, textIfNoTweets, swrKey, url }: Props) => {
       async (temptweets: TweetType[]) => {
         if (url === "/api/home/getTweets?") {
           console.log(url, "home uerl");
+          const newUrl = `${url}page=${(page + 1) * 10}`;
+          console.log(newUrl, "NEWurl");
 
           const response = await fetch(`${url}page=${(page + 1) * 10}`, {
             method: "POST",
@@ -55,7 +57,8 @@ const Feed = ({ tweets, textIfNoTweets, swrKey, url }: Props) => {
           }
         } else {
           console.log(url, "url");
-
+          const newUrl = `${url}page=${(page + 1) * 10}`;
+          console.log(newUrl, "NEWurl");
           const response = await fetch(`${url}page=${(page + 1) * 10}`);
           const data = await response.json();
           console.log(data, "data");
