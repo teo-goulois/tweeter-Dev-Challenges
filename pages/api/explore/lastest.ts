@@ -16,11 +16,13 @@ export default async function handler(
 
   await dbConnect();
   try {
+    console.log("api q page", q, page);
+
     if (q) {
       const tweets = await Tweet.find({ text: { $regex: q } })
-      .skip(typeof page === "string" ? parseInt(page as string) : 0)
-      .limit(10)
-      .sort("-createdAt")
+        .skip(typeof page === "string" ? parseInt(page as string) : 0)
+        .limit(10)
+        .sort("-createdAt");
 
       return res.status(200).json(tweets);
     }
@@ -29,6 +31,7 @@ export default async function handler(
       .skip(typeof page === "string" ? parseInt(page as string) : 0)
       .limit(10)
       .sort("-createdAt");
+    console.log("api tweets", tweets);
 
     res.status(200).send(tweets);
   } catch (err) {

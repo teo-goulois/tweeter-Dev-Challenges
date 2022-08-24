@@ -34,7 +34,7 @@ const Feed = ({ tweets, textIfNoTweets, swrKey, url }: Props) => {
     mutate(
       swrKey,
       async (temptweets: TweetType[]) => {
-        if ((url === "/api/home/getTweets?")) {
+        if (url === "/api/home/getTweets?") {
           console.log(url, "home uerl");
 
           const response = await fetch(`${url}page=${(page + 1) * 10}`, {
@@ -58,6 +58,8 @@ const Feed = ({ tweets, textIfNoTweets, swrKey, url }: Props) => {
 
           const response = await fetch(`${url}page=${(page + 1) * 10}`);
           const data = await response.json();
+          console.log(data, "data");
+
           if (data.length === 0) {
             setHasEnded(true);
           }
