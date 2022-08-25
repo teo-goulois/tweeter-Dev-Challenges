@@ -52,6 +52,9 @@ const Feed = ({
     setSize((prev) => prev + 1);
   };
 
+    console.log(isReachingEnd, 'isReachingEnd');
+    
+
   return (
     <div className="h-full w-5xl relative">
       <InfiniteScroll

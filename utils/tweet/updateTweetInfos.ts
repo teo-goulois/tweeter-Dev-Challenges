@@ -7,7 +7,6 @@ export default async function updateTweetInfos(
   userID: string,
   tweetID: string,
   title: "bookmarks" | "likes" | "retweets",
-  url: string,
   isAdding: boolean
 ) {
   if (isAdding) {
@@ -16,7 +15,10 @@ export default async function updateTweetInfos(
       async (data: { tweet: Tweet; message: string }) => {
         const { tweet } = data;
         // fetch add like
-        const response = await fetch(url);
+        const response = await fetch(
+          `/api/tweets/${title}?tweetID=${tweetID}&userID=${userID}`,
+          { method: "PUT" }
+        );
         // if success
         if (response.status === 200) {
           tweet[title] = [...tweet[title], userID];
@@ -34,7 +36,10 @@ export default async function updateTweetInfos(
       async (data: { tweet: Tweet; message: string }) => {
         const { tweet } = data;
         // fetch remove
-        const response = await fetch(url);
+        const response = await fetch(
+          `/api/tweets/${title}?tweetID=${tweetID}&userID=${userID}`,
+          { method: "PATCH" }
+        );
         // if success
         if (response.status === 200) {
           tweet[title] = tweet[title].filter((id: string) => id !== userID);

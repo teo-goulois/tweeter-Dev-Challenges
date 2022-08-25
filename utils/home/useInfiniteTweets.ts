@@ -3,13 +3,13 @@ import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
 
 function useInfiniteTweet(
-  filter: "lastest" | "top" | "people" | "media",
-  query: string,
+  userID: string | undefined,
+  following: string[] | undefined,
   pageSize: number
 ) {
   // get all user following tweet and his tweet
   const { data, error, mutate, size, setSize, isValidating } = useSWRInfinite(
-    (index) => getKey(index, filter, query)
+    (index) => getKey(index, userID, following)
   );
 
   const issues: any[] = data ? [].concat(...data) : [];
@@ -18,8 +18,7 @@ function useInfiniteTweet(
     isLoadingInitialData ||
     (size > 0 && data && typeof data[size - 1] === "undefined");
   const isEmpty = data?.[0]?.length === 0;
-
-  let isReachingEnd =
+  const isReachingEnd =
     isEmpty || (data && data[data.length - 1]?.length < pageSize);
   const isRefreshing = isValidating && data && data.length === size;
 
@@ -96,13 +95,19 @@ export default useInfiniteTweet;
 
 export const getKey = (
   pageIndex: number,
-  filter: "lastest" | "top" | "people" | "media",
-  q: string
+  userID: string | undefined,
+  following: string[] | undefined
 ) => {
-  if (q?.length > 0) {
-    return `/api/explore/${filter}?q=${encodeURIComponent(q)}&page=${
-      pageIndex * 10
-    }`;
-  }
-  return `/api/explore/${filter}?page=${pageIndex * 10}`;
+  return userID
+    ? [
+        `/api/home/getTweets?page=${pageIndex * 10}`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            userID,
+            following,
+          }),
+        },
+      ]
+    : null;
 };

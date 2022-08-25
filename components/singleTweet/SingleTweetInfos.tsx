@@ -57,15 +57,13 @@ const TweetInfos = ({ tweet, setCommentIsOpen }: Props) => {
             user._id,
             tweet._id,
             "retweets",
-            `/api/tweets/removeRetweet?tweetID=${tweet._id}&userID=${user._id}`,
-            true
+            false
           );
         } else {
           updateTweetInfos(
             user._id,
             tweet._id,
             "retweets",
-            `/api/tweets/addRetweet?tweetID=${tweet._id}&userID=${user._id}`,
             true
           );
         }
@@ -77,7 +75,6 @@ const TweetInfos = ({ tweet, setCommentIsOpen }: Props) => {
             user._id,
             tweet._id,
             "likes",
-            `/api/tweets/removeLike?tweetID=${tweet._id}&userID=${user._id}`,
             false
           );
         } else {
@@ -85,7 +82,6 @@ const TweetInfos = ({ tweet, setCommentIsOpen }: Props) => {
             user._id,
             tweet._id,
             "likes",
-            `/api/tweets/addLike?tweetID=${tweet._id}&userID=${user._id}`,
             true
           );
         }
@@ -97,15 +93,13 @@ const TweetInfos = ({ tweet, setCommentIsOpen }: Props) => {
             user._id,
             tweet._id,
             "bookmarks",
-            `/api/tweets/removeBookmark?tweetID=${tweet._id}&userID=${user._id}`,
-            true
+            false
           );
         } else {
           updateTweetInfos(
             user._id,
             tweet._id,
             "bookmarks",
-            `/api/tweets/addBookmark?tweetID=${tweet._id}&userID=${user._id}`,
             true
           );
         }

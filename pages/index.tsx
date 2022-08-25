@@ -9,6 +9,7 @@ import FollowSugestion from "../components/desktop/followSugestion";
 import Trend from "../components/desktop/Trend";
 import Feed from "../components/feed/Feed";
 import { Tweet } from "../types/typing";
+import useInfiniteTweet from "../utils/home/useInfiniteTweets";
 // types
 // Hooks
 import useTweet, { key } from "../utils/home/useTweets";
@@ -20,17 +21,20 @@ type Props = {};
 const Home = ({}: Props) => {
   const { user } = useConnectedUser();
 
-  const { tweets, isLoading, isError } = useTweet(
-    user?._id,
-    user?.following
-  );
-
-
-  
+  const {
+    tweets,
+    tweetsIsError,
+    tweetsIsLoading,
+    setSize,
+    tweetsIsReachingEnd,
+    tweetsIsEmpty,
+    handleUpdateInfos,
+  } = useInfiniteTweet(user?._id, user?.following, 10);
 
   // fetch whan current user following change
   useEffect(() => {
-    mutate(key(user?._id, user?.following));
+    // TODO:
+    //mutate(key(user?._id, user?.following));
   }, [user?.following]);
 
   return (
@@ -40,19 +44,21 @@ const Home = ({}: Props) => {
       </Head>
       <div className=" w-full lg:max-w-4xl  mb-14 md:mb-0">
         <CreateTweet />
-        {isLoading ? (
+        {tweetsIsLoading ? (
           <div>
             <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
             <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
             <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
           </div>
-        ) : isError ? (
-          <p>Error {isError} </p>
+        ) : tweetsIsError ? (
+          <p>Error {tweetsIsError} </p>
         ) : (
           <Feed
-            swrKey={key(user?._id, user?.following)}
             tweets={tweets}
-            url="/api/home/getTweets?"
+            handleUpdateInfos={handleUpdateInfos}
+            isEmpty={tweetsIsEmpty}
+            isReachingEnd={tweetsIsReachingEnd}
+            setSize={setSize}
           />
         )}
       </div>

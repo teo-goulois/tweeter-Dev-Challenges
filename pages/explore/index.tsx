@@ -40,7 +40,7 @@ const Index = () => {
       <div className="lg:mr-2">
         <Filter filter={filter} setFilter={setfilter} />
       </div>
-      <div className="lg:ml-2 w-full lg:max-w-4xl ">
+      <div className="lg:ml-2 w-full lg:max-w-4xl mb-14 md:mb-0 ">
         <Searchbar input={input} setInput={setInput} />
 
         {tweetsIsLoading ? (

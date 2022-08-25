@@ -9,7 +9,7 @@ import Feed from "../../components/feed/Feed";
 import { authOptions } from "../api/auth/[...nextauth]";
 // Hooks
 import useConnectedUser from "../../utils/users/useConnectedUser";
-import useTweet, { key } from "../../utils/bookmarks/useTweet";
+import useInfiniteTweet from "../../utils/bookmarks/useInfiniteTweets";
 
 const Index: NextPage = () => {
   const { user } = useConnectedUser();
@@ -17,7 +17,15 @@ const Index: NextPage = () => {
     "tweets" | "replies" | "media" | "likes"
   >("tweets");
 
-  const { tweets, isLoading, isError } = useTweet(filter, user?._id);
+  const {
+    tweets,
+    tweetsIsError,
+    tweetsIsLoading,
+    setSize,
+    tweetsIsReachingEnd,
+    tweetsIsEmpty,
+    handleUpdateInfos,
+  } = useInfiniteTweet(filter, user?._id, 10);
 
   return (
     <div className="p-4 w-full flex flex-col lg:flex-row lg:items-start lg:justify-center ">
@@ -25,20 +33,22 @@ const Index: NextPage = () => {
         <Filter filter={filter} setFilter={setFilter} />
       </div>
       <div className="lg:ml-2 md:min-w-[60%] lg:min-w-[40%] ">
-        {isLoading ? (
+        {tweetsIsLoading ? (
           <div>
             <div className="w-full h-[200px] bg-gray4 animate-pulse rounded-xl mb-4"></div>
             <div className="w-full h-[200px] bg-gray4 animate-pulse rounded-xl mb-4"></div>
             <div className="w-full h-[200px] bg-gray4 animate-pulse rounded-xl mb-4"></div>
           </div>
-        ) : isError ? (
+        ) : tweetsIsError ? (
           <p>Error </p>
         ) : (
           <Feed
-            swrKey={key(filter, user?._id)}
-            tweets={tweets}
+            handleUpdateInfos={handleUpdateInfos}
+            isEmpty={tweetsIsEmpty}
+            isReachingEnd={tweetsIsReachingEnd}
+            setSize={setSize}
+            tweets={tweets.length > 0 ? tweets : []}
             textIfNoTweets="no tweets saved, save one to start see them"
-            url={`/api/bookmarks/${filter}?userID=${user?._id}?`}
           />
         )}
       </div>
