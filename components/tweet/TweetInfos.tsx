@@ -15,6 +15,8 @@ import updateTweetInfos from "../../utils/global/updateTweetInfos";
 import useConnectedUser from "../../utils/users/useConnectedUser";
 import useCommentsLength from "../../utils/comments/useCommentsLength";
 import { motion } from "framer-motion";
+import { KeyedMutator } from "swr";
+import useInfiniteTweet from "../../utils/explore/useInfiniteTweets";
 // Context
 
 const variants = {
@@ -26,13 +28,22 @@ const variants2 = {
 
 type Props = {
   tweet: Tweet;
-  swrKey: string | (string | { method: string; body: string })[] | null;
+  handleUpdateInfos: ({
+    tweetID,
+    userID,
+    title,
+    isAdding,
+  }: {
+    tweetID: string;
+    userID: string;
+    title: "bookmarks" | "likes" | "retweets";
+    isAdding: boolean;
+  }) => Promise<string | any[] | undefined>;
 };
 
-const TweetInfos = ({ tweet, swrKey }: Props) => {
+const TweetInfos = ({ tweet, handleUpdateInfos }: Props) => {
   const router = useRouter();
   const { user } = useConnectedUser();
-
   const { commentsLength } = useCommentsLength(tweet._id);
 
   const handleActivities = async (
@@ -48,104 +59,52 @@ const TweetInfos = ({ tweet, swrKey }: Props) => {
         break;
       case "retweet":
         if (tweet.retweets.includes(user._id)) {
-          updateTweetInfos({
-            key: swrKey,
-            isAdding: false,
+          handleUpdateInfos({
             tweetID: tweet._id,
-            userID: user._id,
+            isAdding: false,
             title: "retweets",
-            url: `/api/tweets/removeRetweet?tweetID=${tweet._id}&userID=${user._id}`,
-            following: user.following,
+            userID: user._id,
           });
         } else {
-          updateTweetInfos({
-            key: swrKey,
-            isAdding: false,
+          handleUpdateInfos({
             tweetID: tweet._id,
-            userID: user._id,
+            isAdding: true,
             title: "retweets",
-            url: `/api/tweets/addRetweet?tweetID=${tweet._id}&userID=${user._id}`,
-            following: user.following,
+            userID: user._id,
           });
         }
         break;
       case "like":
         if (tweet.likes.includes(user._id)) {
-          // remove like
-          /*  updateTweetInfos(
-            user._id,
-            user.following,
-            tweet._id,
-            "likes",
-            `/api/tweets/removeLike?tweetID=${tweet._id}&userID=${user._id}`,
-            false
-          ); */
-          updateTweetInfos({
-            key: swrKey,
-            isAdding: false,
+          handleUpdateInfos({
             tweetID: tweet._id,
-            userID: user._id,
+            isAdding: false,
             title: "likes",
-            url: `/api/tweets/removeLike?tweetID=${tweet._id}&userID=${user._id}`,
-            following: user.following,
+            userID: user._id,
           });
         } else {
-          /*  updateTweetInfos(
-            user._id,
-            user.following,
-            tweet._id,
-            "likes",
-            `/api/tweets/addLike?tweetID=${tweet._id}&userID=${user._id}`,
-            true
-          ); */
-          updateTweetInfos({
-            key: swrKey,
-            isAdding: false,
+          handleUpdateInfos({
             tweetID: tweet._id,
-            userID: user._id,
+            isAdding: true,
             title: "likes",
-            url: `/api/tweets/addLike?tweetID=${tweet._id}&userID=${user._id}`,
-            following: user.following,
+            userID: user._id,
           });
         }
         break;
       case "save":
         if (tweet.bookmarks.includes(user._id)) {
-          // remove bookmark
-          /* updateTweetInfos(
-            user._id,
-            user.following,
-            tweet._id,
-            "bookmarks",
-            `/api/tweets/removeBookmark?tweetID=${tweet._id}&userID=${user._id}`,
-            true
-          ); */
-          updateTweetInfos({
-            key: swrKey,
-            isAdding: false,
+          handleUpdateInfos({
             tweetID: tweet._id,
-            userID: user._id,
+            isAdding: false,
             title: "bookmarks",
-            url: `/api/tweets/removeBookmark?tweetID=${tweet._id}&userID=${user._id}`,
-            following: user.following,
+            userID: user._id,
           });
         } else {
-          /* updateTweetInfos(
-            user._id,
-            user.following,
-            tweet._id,
-            "bookmarks",
-            `/api/tweets/addBookmark?tweetID=${tweet._id}&userID=${user._id}`,
-            true
-          ); */
-          updateTweetInfos({
-            key: swrKey,
-            isAdding: false,
+          handleUpdateInfos({
             tweetID: tweet._id,
-            userID: user._id,
+            isAdding: true,
             title: "bookmarks",
-            url: `/api/tweets/addBookmark?tweetID=${tweet._id}&userID=${user._id}`,
-            following: user.following,
+            userID: user._id,
           });
         }
         break;

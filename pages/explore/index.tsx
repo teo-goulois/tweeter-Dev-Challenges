@@ -1,4 +1,5 @@
 import { ReactElement, useEffect, useState } from "react";
+import useSWRInfinite from "swr/infinite";
 
 // Components
 import Filter from "../../components/explore/Filter";
@@ -9,11 +10,11 @@ import PeopleFeed from "../../components/explore/PeopleFeed";
 // Hooks
 import useTweet, { key } from "../../utils/explore/useTweets";
 import { useRouter } from "next/router";
+import useInfiniteTweet from "../../utils/explore/useInfiniteTweets";
 // Types
 
 const Index = () => {
   const router = useRouter();
-
   const [filter, setfilter] = useState<"lastest" | "top" | "people" | "media">(
     "lastest"
   );
@@ -23,7 +24,16 @@ const Index = () => {
     setInput(router.query.query as string);
   }, [router.query.query]);
 
-  const { tweets, isError, isLoading } = useTweet(filter, input);
+  const {
+    tweets,
+    tweetsIsError,
+    tweetsIsLoading,
+    setSize,
+    tweetsIsReachingEnd,
+    tweetsIsEmpty,
+    handleUpdateInfos,
+  } = useInfiniteTweet(filter, input, 10);
+
 
   return (
     <div className="p-4 w-full flex flex-col lg:flex-row lg:items-start lg:justify-center ">
@@ -33,34 +43,29 @@ const Index = () => {
       <div className="lg:ml-2 w-full lg:max-w-4xl ">
         <Searchbar input={input} setInput={setInput} />
 
-        {isLoading ? (
+        {tweetsIsLoading ? (
           <div>
             <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
             <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
             <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
           </div>
-        ) : isError ? (
-          <p>Error {isError} </p>
+        ) : tweetsIsError ? (
+          <p>Error {tweetsIsError} </p>
         ) : filter === "people" ? (
           <PeopleFeed
+            isEmpty={tweetsIsEmpty}
+            isReachingEnd={tweetsIsReachingEnd}
+            setSize={setSize}
             input={input}
             peoples={tweets}
-            swrKey={key(filter, input)}
-            url={
-              input?.length > 0
-                ? `/api/explore/${filter}?q=${encodeURIComponent(input)}&`
-                : `/api/explore/${filter}?`
-            }
           />
         ) : (
           <Feed
+            handleUpdateInfos={handleUpdateInfos}
+            isEmpty={tweetsIsEmpty}
+            isReachingEnd={tweetsIsReachingEnd}
+            setSize={setSize}
             tweets={tweets.length > 0 ? tweets : []}
-            swrKey={key(filter, input)}
-            url={
-              input?.length > 0
-                ? `/api/explore/${filter}?q=${encodeURIComponent(input)}&`
-                : `/api/explore/${filter}?`
-            }
           />
         )}
       </div>

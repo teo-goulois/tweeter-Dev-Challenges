@@ -1,5 +1,7 @@
+import user from "pusher-js/types/src/core/user";
 import toast from "react-hot-toast";
-import { mutate } from "swr";
+import { KeyedMutator, mutate, MutatorCallback, MutatorOptions } from "swr";
+import tweets from "../../pages/api/bookmarks/tweets";
 import { Tweet } from "../../types/typing";
 type Props = {
   key: string | (string | { method: string; body: string })[] | null;
@@ -47,3 +49,19 @@ export default async function updateTweetInfos({
     });
   }
 }
+
+export const handleClickTest = (
+  tweetID: string,
+  mutate: KeyedMutator<any[]>,
+  tweets: any[]
+
+) => {
+  mutate((t) => {
+    return tweets
+ /*    let newIssue = tweets.find((item) => item._id === tweetID);
+    if (!newIssue) return;
+    newIssue.likes = [...newIssue.likes, user?._id];
+    console.log(newIssue.likes, "newIssues");
+    return tweets; */
+  }, false);
+};

@@ -12,70 +12,44 @@ import { TailSpin } from "react-loader-spinner";
 import Tweet from "../tweet/Tweet";
 // Type
 import { Tweet as TweetType } from "../../types/typing";
-import { mutate } from "swr";
+import { KeyedMutator, mutate } from "swr";
 import { key } from "../../utils/home/useTweets";
 import useConnectedUser from "../../utils/users/useConnectedUser";
+import { handleClickTest } from "../../utils/global/updateTweetInfos";
+import useInfiniteTweet from "../../utils/explore/useInfiniteTweets";
 
 type Props = {
   tweets: TweetType[];
   textIfNoTweets?: string;
-  swrKey: string | (string | { method: string; body: string })[] | null;
-  url: string;
+  setSize: (
+    size: number | ((_size: number) => number)
+  ) => Promise<any[] | undefined>;
+  isEmpty: boolean;
+  isReachingEnd: boolean | undefined;
+  handleUpdateInfos: ({
+    tweetID,
+    userID,
+    title,
+    isAdding,
+  }: {
+    tweetID: string;
+    userID: string;
+    title: "bookmarks" | "likes" | "retweets";
+    isAdding: boolean;
+  }) => Promise<string | any[] | undefined>;
 };
 
-const Feed = ({ tweets, textIfNoTweets, swrKey, url }: Props) => {
-  console.log(tweets, "TWEETS");
-
+const Feed = ({
+  tweets,
+  textIfNoTweets,
+  setSize,
+  isReachingEnd,
+  isEmpty,
+  handleUpdateInfos
+}: Props) => {
   const { user } = useConnectedUser();
-  const [hasEnded, setHasEnded] = useState<boolean>(false);
-  const [page, setPage] = useState<number>(0);
-
   const handleFetch = () => {
-    mutate(
-      swrKey,
-      async (temptweets: TweetType[]) => {
-        if (url === "/api/home/getTweets?") {
-          console.log(url, "home uerl");
-          const newUrl = `${url}page=${(page + 1) * 10}`;
-          console.log(newUrl, "NEWurl");
-
-          const response = await fetch(`${url}page=${(page + 1) * 10}`, {
-            method: "POST",
-            body: JSON.stringify({
-              _id: user?._id,
-              following: user?.following,
-            }),
-          });
-          const data = await response.json();
-          if (data.length === 0) {
-            setHasEnded(true);
-          }
-          const temp = [...temptweets, ...data];
-
-          if (response.status === 200) {
-            return temp;
-          }
-        } else {
-          console.log(url, "url");
-          const newUrl = `${url}page=${(page + 1) * 10}`;
-          console.log(newUrl, "NEWurl");
-          const response = await fetch(`${url}page=${(page + 1) * 10}`);
-          const data = await response.json();
-          console.log(data, "data");
-
-          if (data.length === 0) {
-            setHasEnded(true);
-          }
-          const temp = [...temptweets, ...data];
-
-          if (response.status === 200) {
-            return temp;
-          }
-        }
-      },
-      { revalidate: false }
-    );
-    setPage((prev) => prev + 1);
+    setSize((prev) => prev + 1);
   };
 
   return (
@@ -83,7 +57,7 @@ const Feed = ({ tweets, textIfNoTweets, swrKey, url }: Props) => {
       <InfiniteScroll
         dataLength={tweets ? tweets.length : 0}
         next={handleFetch}
-        hasMore={tweets.length === 0 ? false : !hasEnded}
+        hasMore={!isReachingEnd ?? false}
         loader={
           <div className="w-full flex justify-center">
             <TailSpin
@@ -99,7 +73,7 @@ const Feed = ({ tweets, textIfNoTweets, swrKey, url }: Props) => {
           </div>
         }
         endMessage={
-          tweets.length === 0 ? null : (
+          !isEmpty && (
             <div className="w-full flex justify-center">
               <p className="text-secondary">no more tweets</p>
             </div>
@@ -107,9 +81,9 @@ const Feed = ({ tweets, textIfNoTweets, swrKey, url }: Props) => {
         }
         className="scrollbar-none"
       >
-        {tweets?.length > 0 ? (
+        {!isEmpty ? (
           tweets.map((tweet, index) => {
-            return <Tweet swrKey={swrKey} key={tweet._id} tweet={tweet} />;
+            return <Tweet  handleUpdateInfos={handleUpdateInfos} key={tweet._id} tweet={tweet} />;
           })
         ) : (
           <div className="bg-white py-2 rounded-lg shadow-sm">

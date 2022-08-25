@@ -16,10 +16,20 @@ import { OptionsVerticalIcons } from "../../icons/Icons";
 
 type Props = {
   tweet: Tweet;
-  swrKey: string | (string | { method: string; body: string })[] | null;
+  handleUpdateInfos: ({
+    tweetID,
+    userID,
+    title,
+    isAdding,
+  }: {
+    tweetID: string;
+    userID: string;
+    title: "bookmarks" | "likes" | "retweets";
+    isAdding: boolean;
+  }) => Promise<string | any[] | undefined>;
 };
 
-const Tweet = ({ tweet, swrKey }: Props) => {
+const Tweet = ({ tweet, handleUpdateInfos }: Props) => {
   const router = useRouter();
   const { user } = useConnectedUser();
   const [toggler, setToggler] = useState(false);
@@ -108,10 +118,7 @@ const Tweet = ({ tweet, swrKey }: Props) => {
             )}
           </div>
           {/* tweet infos */}
-          <TweetInfos
-            swrKey={swrKey}
-            tweet={tweet}
-          />
+          <TweetInfos tweet={tweet} handleUpdateInfos={handleUpdateInfos} />
         </motion.div>
       </AnimatePresence>
     </Fragment>

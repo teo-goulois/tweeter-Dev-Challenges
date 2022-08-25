@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { TailSpin } from "react-loader-spinner";
 
@@ -8,52 +8,30 @@ import PeopleCard from "./PeopleCard";
 import { User } from "../../types/typing";
 // data relative
 import useConnectedUser from "../../utils/users/useConnectedUser";
-import { mutate } from "swr";
 
 type Props = {
   peoples: User[];
   input: string;
-  swrKey: string | (string | { method: string; body: string })[] | null;
-  url: string;
+  setSize: (
+    size: number | ((_size: number) => number)
+  ) => Promise<any[] | undefined>;
+  isEmpty: boolean;
+  isReachingEnd: boolean | undefined;
 };
 
-const PeopleFeed = ({ peoples, input, swrKey, url }: Props) => {
+const PeopleFeed = ({ peoples, input, setSize, isReachingEnd, isEmpty }: Props) => {
   const { user } = useConnectedUser();
-  const [hasEnded, setHasEnded] = useState<boolean>(false);
-  const [page, setPage] = useState<number>(0);
 
   const handleFetch = () => {
-    mutate(
-      swrKey,
-      async (tempPeoples: User[]) => {
-        const response = await fetch(`${url}page=${(page + 1) * 10}`, {
-          method: "POST",
-          body: JSON.stringify({
-            _id: user?._id,
-            following: user?.following,
-          }),
-        });
-        const data = await response.json();
-        if (data.length === 0) {
-          setHasEnded(true);
-        }
-        const temp = [...tempPeoples, ...data];
-
-        if (response.status === 200) {
-          return temp;
-        }
-      },
-      { revalidate: false }
-    );
-    setPage((prev) => prev + 1);
+    setSize((prev) => prev + 1);
   };
 
   return (
     <div className="h-full w-full ">
       <InfiniteScroll
-        dataLength={peoples.length}
+        dataLength={peoples ? peoples.length : 0}
         next={handleFetch}
-        hasMore={peoples.length === 0 ? false : !hasEnded}
+        hasMore={!isReachingEnd ?? false}
         loader={
           <div className="w-full flex justify-center">
             <TailSpin
@@ -69,14 +47,14 @@ const PeopleFeed = ({ peoples, input, swrKey, url }: Props) => {
           </div>
         }
         endMessage={
-          peoples.length === 0 ? null : (
+          !isEmpty && (
             <div className="w-full flex justify-center">
               <p className="text-secondary">no more peoples</p>
             </div>
           )
         }
       >
-        {peoples?.length > 1 ? (
+        {!isEmpty ? (
           peoples.map((people, index) => {
             if (user?._id === people._id) return;
             return (

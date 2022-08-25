@@ -8,6 +8,7 @@ import { FollowIcon } from "../../icons/Icons";
 import { User } from "../../types/typing";
 // Hooks
 import { key } from "../../utils/explore/useTweets";
+import useInfiniteTweet, { getKey } from "../../utils/explore/useInfiniteTweets";
 import useConnectedUser from "../../utils/users/useConnectedUser";
 
 type Props = {
@@ -17,6 +18,7 @@ type Props = {
 
 const PeopleCard = ({ people, input }: Props) => {
   const { user } = useConnectedUser();
+  const {mutate: refresh} = useInfiniteTweet('people', input, 10);
 
   const handleFollow = async () => {
     if (!user) return toast.error("you should be connected to do this");
@@ -26,12 +28,7 @@ const PeopleCard = ({ people, input }: Props) => {
     const data = await response.json();
     if (response.status === 200) {
       // mutate user
-      mutate(key("people", input), async (peoples: User[]) => {
-        let newPeople = peoples.find((item) => item._id === people._id);
-        if (!newPeople) return toast.error("tweet not found");
-        newPeople.follower = [...newPeople.follower, user._id];
-        return peoples;
-      });
+      refresh(data, false);
 
       // mutate connected User
       mutate(user ? `/api/user/${user._id}` : null, async (user: User) => {
@@ -77,7 +74,7 @@ const PeopleCard = ({ people, input }: Props) => {
             <div className="w-10 h-10 bg-[#C4C4C4] rounded-lg mr-2 overflow-hidden">
               <img src={people.image} alt="" />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col mb-2">
               <div className="flex items-center">
                 <Link href={`/profile/${people._id}`}>
                   <a className="text-black font-medium font-[Poppins] ">
@@ -89,7 +86,7 @@ const PeopleCard = ({ people, input }: Props) => {
                   {people.following.length} following
                 </p>
               </div>
-              <p className="text-sm text-primary font-medium">
+              <p className="font-medium text-sm text-secondary">
                 {people.bio ?? "no bio for this user"}
               </p>
             </div>
@@ -117,7 +114,6 @@ const PeopleCard = ({ people, input }: Props) => {
           )}
         </div>
         {/* desc */}
-        <p className="font-medium text-sm text-secondary my-2">{people.bio}</p>
         {/* image */}
         <div className="bg-[#C4C4C4] h-[78px] rounded-lg overflow-hidden">
           <img src={people.banner} alt="people banner" />
