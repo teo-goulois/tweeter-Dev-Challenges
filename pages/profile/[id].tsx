@@ -8,6 +8,7 @@ import ProfileInfos from "../../components/profile/ProfileInfos";
 import useUser from "../../utils/users/useUser";
 import useTweet from "../../utils/profile/useTweets";
 import { key } from "../../utils/profile/useTweets";
+import useInfiniteTweet from "../../utils/profile/useInfiniteTweets";
 
 const Profile = () => {
   const router = useRouter();
@@ -15,9 +16,16 @@ const Profile = () => {
   const [filter, setFilter] = useState<
     "tweets" | "replies" | "media" | "likes"
   >("tweets");
-  const { tweets, tweetsIsError, tweetsIsLoading } = useTweet(user?._id, filter);
+  const {
+    tweets,
+    tweetsIsError,
+    tweetsIsLoading,
+    handleUpdateInfos,
+    setSize,
+    tweetsIsEmpty,
+    tweetsIsReachingEnd,
+  } = useInfiniteTweet(user?._id, filter, 10);
 
-  if (isLoading) return <p>loading...</p>;
   return (
     <div className="">
       <ProfileInfos user={user} />
@@ -25,7 +33,7 @@ const Profile = () => {
         <div className="max-w-[1450px] w-full">
           <div className="w-full flex flex-col lg:flex-row ">
             <Filter filter={filter} setFilter={setFilter} />
-            <div className="w-full lg:ml-4">
+            <div className="w-full lg:ml-4 mb-14 md:mb-0">
               {tweetsIsLoading ? (
                 <div>
                   <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
@@ -36,10 +44,12 @@ const Profile = () => {
                 <p>Error {isError} </p>
               ) : (
                 <Feed
-                  swrKey={key(user?._id, filter)}
+                  handleUpdateInfos={handleUpdateInfos}
+                  isEmpty={tweetsIsEmpty}
+                  isReachingEnd={tweetsIsReachingEnd}
+                  setSize={setSize}
                   tweets={tweets}
                   textIfNoTweets={"No Tweets found"}
-                  url={`/api/profile/${filter}?userID=${user?._id}&`}
                 />
               )}
             </div>

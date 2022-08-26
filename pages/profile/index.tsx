@@ -11,16 +11,23 @@ import type { NextPageWithLayout } from "../_app";
 // Hooks
 import useConnectedUser from "../../utils/users/useConnectedUser";
 import useTweet, { key } from "../../utils/profile/useTweets";
+import useInfiniteTweet from "../../utils/profile/useInfiniteTweets";
 
 const Index: NextPageWithLayout = () => {
   const { user } = useConnectedUser();
   const [filter, setFilter] = useState<
     "tweets" | "replies" | "media" | "likes"
   >("tweets");
-  const { tweets, tweetsIsError, tweetsIsLoading } = useTweet(
-    user?._id,
-    filter
-  );
+
+  const {
+    tweets,
+    tweetsIsError,
+    tweetsIsLoading,
+    handleUpdateInfos,
+    setSize,
+    tweetsIsEmpty,
+    tweetsIsReachingEnd,
+  } = useInfiniteTweet(user?._id, filter, 10);
 
   if (!user) return <div></div>;
   return (
@@ -36,7 +43,7 @@ const Index: NextPageWithLayout = () => {
             <Filter filter={filter} setFilter={setFilter} />
             <CreateTweet fromProfile={true} filter={filter} />
           </div>
-          <div className="">
+          <div className="mb-14 md:mb-0">
             {tweetsIsLoading ? (
               <div>
                 <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
@@ -47,10 +54,12 @@ const Index: NextPageWithLayout = () => {
               <p>Error {tweetsIsError} </p>
             ) : (
               <Feed
-                swrKey={key(user._id, filter)}
+                handleUpdateInfos={handleUpdateInfos}
+                isEmpty={tweetsIsEmpty}
+                isReachingEnd={tweetsIsReachingEnd}
+                setSize={setSize}
                 tweets={tweets}
                 textIfNoTweets={"No Tweets found"}
-                url={`/api/profile/${filter}?userID=${user._id}&`}
               />
             )}
           </div>
