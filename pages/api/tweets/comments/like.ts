@@ -17,6 +17,8 @@ export default async function handler(
   const { commentID, userID } = req.query;
   await dbConnect();
   if (req.method === "PUT") {
+    console.log("like comment");
+
     try {
       await Comment.findOneAndUpdate(
         { _id: commentID },
@@ -28,6 +30,7 @@ export default async function handler(
     }
   }
   if (req.method === "PATCH") {
+    console.log("unlike comment");
     try {
       await Comment.findOneAndUpdate(
         { _id: commentID },

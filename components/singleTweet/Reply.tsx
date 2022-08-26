@@ -11,12 +11,14 @@ import AddImageModal from "../createTweet/AddImageModal";
 import { key } from "../../utils/comments/useComments";
 import { key as keyCommentsLength } from "../../utils/comments/useCommentsLength";
 import useConnectedUser from "../../utils/users/useConnectedUser";
+import { User } from "../../types/typing";
 
 type Props = {
   tweetID: string;
+  addComment: (body: any, user: User) => Promise<string | any[] | undefined>;
 };
 
-const Reply = ({ tweetID }: Props) => {
+const Reply = ({ tweetID, addComment }: Props) => {
   const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false);
   const [images, setImages] = useState<string[]>([]);
   const [input, setInput] = useState<string>("");
@@ -32,6 +34,7 @@ const Reply = ({ tweetID }: Props) => {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    if (!user) return toast.error("you have to be sign in to comment");
     e.preventDefault();
 
     const body = {
@@ -40,27 +43,11 @@ const Reply = ({ tweetID }: Props) => {
       author: user?._id,
       images: images,
     };
-    const response = await fetch(`/api/tweets/postComment`, {
-      body: JSON.stringify(body),
-      method: "POST",
-    });
-    if (response.status === 200) {
-      const data = await response.json();
-      mutate(
-        key(tweetID),
-        async (comments: Comment[]) => {
-          return [{ ...data.comment, author: user }, ...comments];
-        },
-        { revalidate: false }
-      );
-      // mutate numbers of comments
-      mutate(keyCommentsLength(tweetID));
 
-      setInput("");
-      setImages([]);
-    } else {
-      toast.error("an error occured plase try again later");
-    }
+    addComment(body, user);
+
+    setInput("");
+    setImages([]);
   };
 
   return (

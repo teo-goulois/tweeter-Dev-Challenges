@@ -14,7 +14,7 @@ const Tweet = ({}: Props) => {
   const { tweet, isLoading, isError } = useTweet(router.query.id as string);
 
   return (
-    <div className="p-2 flex justify-center">
+    <div className="p-2 flex justify-center mb-14 ">
       {isLoading && (
         <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>
       )}

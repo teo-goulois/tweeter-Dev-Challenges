@@ -12,11 +12,22 @@ import { Comment } from "../../types/typing";
 import ImagesViewer from "../tweet/ImagesViewer";
 import FsLightbox from "fslightbox-react";
 
-type Props = {
-  comment: Comment;
+type handleLikeProps = {
+  commentID: string;
+  userID: string;
+  isAdding: boolean;
 };
 
-const Comment = ({ comment }: Props) => {
+type Props = {
+  comment: Comment;
+  handleLike: ({
+    commentID,
+    userID,
+    isAdding,
+  }: handleLikeProps) => Promise<string | any[] | undefined>;
+};
+
+const Comment = ({ comment, handleLike }: Props) => {
   const { user } = useConnectedUser();
   const [toggler, setToggler] = useState(false);
 
@@ -24,37 +35,17 @@ const Comment = ({ comment }: Props) => {
     if (!user)
       return toast.error(`you should be connected to like this comment`);
     if (comment.likes.includes(user._id)) {
-      const response = await fetch(
-        `/api/tweets/removeCommentLike?commentID=${comment._id}&userID=${user._id}`
-      );
-      const data = await response.json();
-      if (response.status === 200) {
-        mutate(key(comment.tweet), async (comments: Comment[]) => {
-          let newComments = comments.find((item) => item._id === comment._id);
-          if (!newComments) return toast.error("comment not found");
-          newComments.likes = newComments.likes.filter(
-            (id: string) => id !== user._id
-          );
-          return comments;
-        });
-      } else {
-        return toast.error(data.message);
-      }
+      handleLike({
+        commentID: comment._id,
+        isAdding: false,
+        userID: user._id,
+      });
     } else {
-      const response = await fetch(
-        `/api/tweets/addCommentLike?commentID=${comment._id}&userID=${user._id}`
-      );
-      const data = await response.json();
-      if (response.status === 200) {
-        mutate(key(comment.tweet), async (comments: Comment[]) => {
-          let newComments = comments.find((item) => item._id === comment._id);
-          if (!newComments) return toast.error("tweet not found");
-          newComments.likes = [...newComments.likes, user._id];
-          return comments;
-        });
-      } else {
-        return toast.error(data.message);
-      }
+      handleLike({
+        commentID: comment._id,
+        isAdding: true,
+        userID: user._id,
+      });
     }
   };
 

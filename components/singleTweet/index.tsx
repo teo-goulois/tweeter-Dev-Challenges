@@ -16,6 +16,7 @@ import useComments from "../../utils/comments/useComments";
 import useConnectedUser from "../../utils/users/useConnectedUser";
 import { mutate } from "swr";
 import { key } from "../../utils/comments/useComments";
+import useInfiniteComment from "../../utils/comments/useInfiniteComments";
 
 type Props = {
   tweet: Tweet;
@@ -31,28 +32,22 @@ const SingleTweet = ({ tweet }: Props) => {
   const [page, setPage] = useState<number>(0);
   const [hasEnded, setHasEnded] = useState<boolean>(false);
 
-  const { comments, isLoading } = useComments(tweet._id);
+  //const { comments, isLoading } = useComments(tweet._id);
+  const {
+    comments,
+    commentsIsEmpty,
+    commentsIsError,
+    commentsIsLoading,
+    commentsIsLoadingMore,
+    commentsIsReachingEnd,
+    commentsIsRefreshing,
+    setSize,
+    addComment,
+    handleLike,
+  } = useInfiniteComment(tweet._id, 6);
 
   const handleFetch = () => {
-    mutate(
-      key(tweet._id),
-      async (tempComments: CommentType[]) => {
-        const response = await fetch(
-          `/api/tweets/getComments?tweetID=${tweet._id}&page=${(page + 1) * 10}`
-        );
-        const data = await response.json();
-        if (data.length < 10) {
-          setHasEnded(true);
-        }
-        const temp = [...tempComments, ...data];
-
-        if (response.status === 200) {
-          return temp;
-        }
-      },
-      { revalidate: false }
-    );
-    setPage((prev) => prev + 1);
+    setSize((prev) => prev + 1);
   };
 
   return (
@@ -72,7 +67,7 @@ const SingleTweet = ({ tweet }: Props) => {
 
       {/* Tweet Component */}
 
-      <div className="w-full max-w-5xl hover:shadow-sm bg-white p-4 rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] relative  mb-4 border  border-gray4 ">
+      <div className="mb-14 md:mb-0 w-full max-w-5xl hover:shadow-sm bg-white p-4 rounded-lg shadow-[0_2px_4px_rgba(0, 0, 0, 0.05)] relative  mb-4 border  border-gray4 ">
         {optionModalIsOpen && (
           <OptionModal
             setOptionModalIsOpen={setOptionModalIsOpen}
@@ -109,20 +104,24 @@ const SingleTweet = ({ tweet }: Props) => {
         {/* reply */}
         {commentIsOpen && (
           <>
-            <Reply tweetID={tweet._id} />
+            <Reply addComment={addComment} tweetID={tweet._id} />
             <div className="border border-gray3 w-full mb-2"></div>
           </>
         )}
 
         {/* comments */}
-        {isLoading ? (
+        {commentsIsLoading ? (
           <div>loading...</div>
         ) : (
           <div className="">
             {comments.map((comment) => (
-              <Comment key={comment._id} comment={comment} />
+              <Comment
+                key={comment._id}
+                comment={comment}
+                handleLike={handleLike}
+              />
             ))}
-            {(!hasEnded && comments?.length > 0) && (
+            {!commentsIsReachingEnd && !commentsIsEmpty && (
               <div className="w-full flex justify-center">
                 <button
                   className="px-6 py-4 border border-gray3 mx-auto"

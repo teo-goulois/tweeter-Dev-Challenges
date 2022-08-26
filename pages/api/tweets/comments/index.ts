@@ -15,11 +15,13 @@ export default async function handler(
   const { tweetID, page } = req.query;
   await dbConnect();
   if (req.method === "GET") {
+    console.log('get comments', page);
+    
     try {
       const comments = await Comment.find({ tweet: tweetID })
         .populate("author")
         .skip(typeof page === "string" ? parseInt(page as string) : 0)
-        .limit(10)
+        .limit(6)
         .sort("-createdAt");
 
       res.status(200).json(comments);
