@@ -3,6 +3,7 @@ import dbConnect from "../../../libs/dbConnect";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Tweet as TweetType } from "../../../types/typing";
 import Tweet from "../../../models/Tweet";
+import User from "../../../models/User";
 
 type Data = {
   tweets: TweetType[];
@@ -27,7 +28,7 @@ export default async function handler(
       return res.status(200).json(tweets);
     }
     const tweets = await Tweet.find({})
-      .populate("author")
+      .populate("author", User)
       .skip(typeof page === "string" ? parseInt(page as string) : 0)
       .limit(10)
       .sort("-createdAt");

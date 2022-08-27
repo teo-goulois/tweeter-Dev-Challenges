@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const TweetSchema = new Schema(
   {
     text: String,
-    author: { type: Schema.Types.ObjectId, ref: "user" },
+    author: { type: Schema.Types.ObjectId, ref: "User" },
     blockTweet: { type: Boolean, default: false },
     image: String,
     media: {

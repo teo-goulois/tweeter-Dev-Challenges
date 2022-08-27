@@ -1,8 +1,9 @@
 import dbConnect from "../../../libs/dbConnect";
 import Tweet from "../../../models/Tweet";
+import User from "../../../models/User";
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Tweet as TweetType, TweetBody, User } from "../../../types/typing";
+import { Tweet as TweetType } from "../../../types/typing";
 
 type Data = {
   tweets: TweetType[];
@@ -29,7 +30,7 @@ export default async function handler(
       return res.status(200).send(tweets);
     }
     const tweets = await Tweet.find({})
-      .populate("author")
+      .populate("author", User)
       .skip(typeof page === "string" ? parseInt(page as string) : 0)
       .limit(10)
       .sort({ likes: -1 });
