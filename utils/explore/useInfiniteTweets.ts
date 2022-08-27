@@ -16,7 +16,7 @@ function useInfiniteTweet(
 
   const issues: any[] = data ? [].concat(...data) : [];
   // @ts-ignore
-  const c = cache(getKey(0, filter, query));
+  const c = cache.get(getKey(0, filter, query));
   console.log("cahche =>", c);
 
   console.log("use infinite explore data =>", data);

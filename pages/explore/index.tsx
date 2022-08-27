@@ -33,6 +33,7 @@ const Index = () => {
     tweetsIsEmpty,
     handleUpdateInfos,
   } = useInfiniteTweet(filter, input, 10);
+  
 
   console.log("on render explore log twweets =>", tweets);
 
