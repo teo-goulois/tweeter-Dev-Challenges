@@ -5,9 +5,6 @@ import { Tweet as TweetType } from "../../../types/typing";
 import Tweet from "../../../models/Tweet";
 import User from "../../../models/User";
 
-type Data = {
-  tweets: TweetType[];
-};
 
 export default async function handler(
   req: NextApiRequest,

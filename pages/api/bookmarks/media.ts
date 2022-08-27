@@ -1,12 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Tweet as TweetType, TweetBody, User } from "../../../types/typing";
 import dbConnect from "../../../libs/dbConnect";
 import Tweet from "../../../models/Tweet";
-
-type Data = {
-  tweets: TweetType[];
-};
+import User from "../../../models/User";
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,7 +16,7 @@ export default async function handler(
       bookmarks: userID,
       "media.isMedia": true,
     })
-      .populate("author")
+      .populate({ path: "author", model: User })
       .skip(typeof page === "string" ? parseInt(page as string) : 0)
       .limit(10)
       .sort("-createdAt");

@@ -51,8 +51,6 @@ const Feed = ({
   const handleFetch = () => {
     setSize((prev) => prev + 1);
   };
-
-    console.log(isReachingEnd, 'isReachingEnd');
     
 
   return (

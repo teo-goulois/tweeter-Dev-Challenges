@@ -1,13 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from "next";
-import { Tweet as TweetType, TweetBody, User } from "../../../types/typing";
 import dbConnect from "../../../libs/dbConnect";
+import type { NextApiRequest, NextApiResponse } from "next";
 import Tweet from "../../../models/Tweet";
 import Comment from "../../../models/Comment";
-
-type Data = {
-  tweets: TweetType[];
-};
+import User from "../../../models/User";
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,10 +20,10 @@ export default async function handler(
       _id: { $in: CommentedTweetID.map((item) => item.tweet) },
       bookmarks: { $in: userID },
     })
-      .populate("author")
+      .populate({ path: "author", model: User })
       .skip(typeof page === "string" ? parseInt(page as string) : 0)
       .limit(10)
-      .sort("-createdAt")
+      .sort("-createdAt");
 
     res.status(200).send(tweets);
   } catch (err) {

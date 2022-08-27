@@ -1,14 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Tweet as TweetType, TweetBody } from "../../../types/typing";
 import dbConnect from "../../../libs/dbConnect";
-import Tweet from "../../../models/Tweet";
 import Conversation from "../../../models/Conversation";
-
-type Data = {
-  message: string;
-  tweet?: TweetType[];
-};
+import User from "../../../models/User";
 
 export default async function handler(
   req: NextApiRequest,
@@ -25,8 +19,8 @@ export default async function handler(
             }
           : {}
       )
-        .populate("author", "name")
-        .populate("members", "image name");
+        .populate({ path: "author", model: User, select: "name" })
+        .populate({ path: "members", model: User, select: "name image" });
 
       return res.status(200).json(conversations);
     }

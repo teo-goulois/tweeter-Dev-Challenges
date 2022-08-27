@@ -1,15 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Chat as ChatType } from "../../../types/typing";
 import dbConnect from "../../../libs/dbConnect";
-import Tweet from "../../../models/Tweet";
-import Conversation from "../../../models/Conversation";
 import Chat from "../../../models/Chat";
+import User from "../../../models/User";
 
-type Data = {
-  message: string;
-  chats?: ChatType[];
-};
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,7 +15,7 @@ export default async function handler(
     const conversations = await Chat.find({
       conversationID: conversationID,
     })
-      .populate("author", "name image")
+      .populate({ path: "author", select: "name image", model: User })
       .sort("createdAt")
       .limit(10);
 
