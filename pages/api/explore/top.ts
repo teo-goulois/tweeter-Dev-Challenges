@@ -9,8 +9,8 @@ type Data = {
 };
 
 export default async function handler(
-  res: NextApiResponse,
   req: NextApiRequest,
+  res: NextApiResponse,
 ) {
   await dbConnect();
   try {
