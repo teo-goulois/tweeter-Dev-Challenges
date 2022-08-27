@@ -1,6 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Tweet as TweetType, TweetBody } from "../../../types/typing";
 import dbConnect from "../../../libs/dbConnect";
 import Tweet from "../../../models/Tweet";
 import Tag from "../../../models/Tag";

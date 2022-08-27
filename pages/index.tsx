@@ -1,20 +1,18 @@
 import type { GetServerSideProps } from "next";
 import { unstable_getServerSession } from "next-auth";
 import Head from "next/head";
-import { useEffect, useState } from "react";
-import { mutate } from "swr";
+import { useEffect } from "react";
 // Components
 import CreateTweet from "../components/createTweet/CreateTweet";
 import FollowSugestion from "../components/desktop/followSugestion";
 import Trend from "../components/desktop/Trend";
 import Feed from "../components/feed/Feed";
-import { Tweet } from "../types/typing";
+// data relatives
 import useInfiniteTweet from "../utils/home/useInfiniteTweets";
-// types
-// Hooks
-import useTweet, { key } from "../utils/home/useTweets";
 import useConnectedUser from "../utils/users/useConnectedUser";
+// types
 import { authOptions } from "./api/auth/[...nextauth]";
+// Hooks
 
 type Props = {};
 
@@ -29,12 +27,12 @@ const Home = ({}: Props) => {
     tweetsIsReachingEnd,
     tweetsIsEmpty,
     handleUpdateInfos,
+    mutate,
   } = useInfiniteTweet(user?._id, user?.following, 10);
 
   // fetch whan current user following change
   useEffect(() => {
-    // TODO:
-    //mutate(key(user?._id, user?.following));
+    mutate();
   }, [user?.following]);
 
   return (

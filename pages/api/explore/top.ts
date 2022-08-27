@@ -16,13 +16,9 @@ export default async function handler(
   await dbConnect();
   try {
     const { q, page } = req.query;
-    console.log(`api/exlpore/top?q=${q}&page=${page}`);
-
     if (q) {
-      console.log("query", q);
-
       const tweets = await Tweet.find({ text: { $regex: q } })
-        .populate("author")
+        .populate({ path: "author", model: User })
         .skip(typeof page === "string" ? parseInt(page as string) : 0)
         .limit(10)
         .sort({ likes: -1 });
@@ -30,15 +26,12 @@ export default async function handler(
       return res.status(200).send(tweets);
     }
     const tweets = await Tweet.find({})
-      .populate({ path: 'author', model: User })
+      .populate({ path: "author", model: User })
       .skip(typeof page === "string" ? parseInt(page as string) : 0)
       .limit(10)
       .sort({ likes: -1 });
-    console.log(typeof tweets, "res tweets", tweets[0]);
     res.status(200).send(tweets);
   } catch (err) {
-    console.log("error", err);
-
     res.status(500).send(err);
   }
 }

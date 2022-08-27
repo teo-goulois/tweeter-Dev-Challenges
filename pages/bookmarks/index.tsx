@@ -7,7 +7,7 @@ import Feed from "../../components/feed/Feed";
 // Hooks
 // Types
 import { authOptions } from "../api/auth/[...nextauth]";
-// Hooks
+// data relative
 import useConnectedUser from "../../utils/users/useConnectedUser";
 import useInfiniteTweet from "../../utils/bookmarks/useInfiniteTweets";
 

@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useState } from "react";
-import useSWRInfinite from "swr/infinite";
+import { useRouter } from "next/router";
 
 // Components
 import Filter from "../../components/explore/Filter";
@@ -8,8 +8,7 @@ import Layout from "../../components/layouts/Layout";
 import Feed from "../../components/feed/Feed";
 import PeopleFeed from "../../components/explore/PeopleFeed";
 // Hooks
-import useTweet, { key } from "../../utils/explore/useTweets";
-import { useRouter } from "next/router";
+// data relative
 import useInfiniteTweet from "../../utils/explore/useInfiniteTweets";
 // Types
 
@@ -34,9 +33,6 @@ const Index = () => {
     handleUpdateInfos,
   } = useInfiniteTweet(filter, input, 10);
   
-
-  console.log("on render explore log twweets =>", tweets);
-
   return (
     <div className="p-4 w-full flex flex-col lg:flex-row lg:items-start lg:justify-center ">
       <div className="lg:mr-2">

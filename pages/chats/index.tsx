@@ -1,8 +1,5 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 // COoponents
-import Index from "../../components/chat";
-import Navbar from "../../components/chat/Navbar";
-import Sidebar from "../../components/chat/Sidebar";
 
 type Props = {
   setSidebarIsOpen: Dispatch<SetStateAction<boolean>>;

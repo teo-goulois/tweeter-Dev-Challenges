@@ -3,9 +3,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "../../libs/dbConnect";
 import Tag from "../../models/Tag";
 
-type Data = {
-  name: string;
-};
 
 export default async function handler(
   req: NextApiRequest,

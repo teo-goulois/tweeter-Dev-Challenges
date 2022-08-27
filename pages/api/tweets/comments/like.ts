@@ -2,7 +2,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "../../../../libs/dbConnect";
 import Comment from "../../../../models/Comment";
-import Tweet from "../../../../models/Tweet";
 import { Tweet as TweetType } from "../../../../types/typing";
 
 type Data = {
@@ -17,8 +16,6 @@ export default async function handler(
   const { commentID, userID } = req.query;
   await dbConnect();
   if (req.method === "PUT") {
-    console.log("like comment");
-
     try {
       await Comment.findOneAndUpdate(
         { _id: commentID },
@@ -30,7 +27,6 @@ export default async function handler(
     }
   }
   if (req.method === "PATCH") {
-    console.log("unlike comment");
     try {
       await Comment.findOneAndUpdate(
         { _id: commentID },

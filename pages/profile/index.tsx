@@ -9,8 +9,8 @@ import Feed from "../../components/feed/Feed";
 // Types
 import type { NextPageWithLayout } from "../_app";
 // Hooks
+// data relative
 import useConnectedUser from "../../utils/users/useConnectedUser";
-import useTweet, { key } from "../../utils/profile/useTweets";
 import useInfiniteTweet from "../../utils/profile/useInfiniteTweets";
 
 const Index: NextPageWithLayout = () => {
