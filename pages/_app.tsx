@@ -49,7 +49,6 @@ export default function MyApp({
         value={{
           fetcher: (resource, init) =>
             fetch(resource, init).then((res) => res.json()),
-          provider: localStorageProvider as () => Map<unknown, unknown>,
         }}
       >
         <Toaster />

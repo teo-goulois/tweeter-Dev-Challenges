@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import useSWRInfinite from "swr/infinite";
 
 function useInfiniteTweet(
@@ -7,12 +7,18 @@ function useInfiniteTweet(
   query: string,
   pageSize: number
 ) {
+  const { cache } = useSWRConfig();
+
   // get all user following tweet and his tweet
   const { data, error, mutate, size, setSize, isValidating } = useSWRInfinite(
     (index) => getKey(index, filter, query)
   );
 
   const issues: any[] = data ? [].concat(...data) : [];
+  // @ts-ignore
+  const c = cache(getKey(0, filter, query));
+  console.log("cahche =>", c);
+
   console.log("use infinite explore data =>", data);
   console.log("use infinite explore issues =>", issues);
   console.log("getkey => ", getKey(0, filter, query));
