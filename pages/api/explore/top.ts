@@ -10,7 +10,7 @@ type Data = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
 ) {
   await dbConnect();
   try {
@@ -18,6 +18,8 @@ export default async function handler(
     console.log(`api/exlpore/top?q=${q}&page=${page}`);
 
     if (q) {
+      console.log("query", q);
+
       const tweets = await Tweet.find({ text: { $regex: q } })
         .populate("author")
         .skip(typeof page === "string" ? parseInt(page as string) : 0)
@@ -31,9 +33,11 @@ export default async function handler(
       .skip(typeof page === "string" ? parseInt(page as string) : 0)
       .limit(10)
       .sort({ likes: -1 });
-      console.log('res tweets', tweets[0]);
+    console.log(typeof tweets, "res tweets", tweets[0]);
     res.status(200).send(tweets);
   } catch (err) {
+    console.log("error", err);
+
     res.status(500).send(err);
   }
 }
