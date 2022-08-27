@@ -13,6 +13,10 @@ function useInfiniteTweet(
   );
 
   const issues: any[] = data ? [].concat(...data) : [];
+  console.log("use infinite explore data =>", data);
+  console.log("use infinite explore issues =>", issues);
+  console.log("getkey => ", getKey(0, filter, query));
+
   const isLoadingInitialData = !data && !error;
   const isLoadingMore =
     isLoadingInitialData ||
