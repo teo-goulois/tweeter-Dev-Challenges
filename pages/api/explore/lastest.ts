@@ -31,8 +31,11 @@ export default async function handler(
       .skip(typeof page === "string" ? parseInt(page as string) : 0)
       .limit(10)
       .sort("-createdAt");
+    console.log("lastest", tweets[0]);
+
     res.status(200).json(tweets);
   } catch (err) {
-    res.status(500).send(err);
+    console.log("error", err);
+    res.status(500).end(err);
   }
 }
