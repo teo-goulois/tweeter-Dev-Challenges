@@ -28,7 +28,7 @@ export default async function handler(
       return res.status(200).json(tweets);
     }
     const tweets = await Tweet.find({})
-      .populate("author", User)
+      .populate({ path: 'author', model: User })
       .skip(typeof page === "string" ? parseInt(page as string) : 0)
       .limit(10)
       .sort("-createdAt");
