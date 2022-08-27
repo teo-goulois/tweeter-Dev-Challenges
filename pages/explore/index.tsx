@@ -34,6 +34,7 @@ const Index = () => {
     handleUpdateInfos,
   } = useInfiniteTweet(filter, input, 10);
 
+  console.log("on render explore log twweets =>", tweets);
 
   return (
     <div className="p-4 w-full flex flex-col lg:flex-row lg:items-start lg:justify-center ">
