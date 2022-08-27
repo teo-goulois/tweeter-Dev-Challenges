@@ -1,11 +1,10 @@
 import mongoose from "mongoose";
-import Comment from "./Comment";
 const { Schema } = mongoose;
 
 const TweetSchema = new Schema(
   {
     text: String,
-    author: { type: Schema.Types.ObjectId, ref: "users" },
+    author: { type: Schema.Types.ObjectId, ref: "User" },
     blockTweet: { type: Boolean, default: false },
     image: String,
     media: {
