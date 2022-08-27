@@ -16,6 +16,8 @@ export default async function handler(
 
   await dbConnect();
   try {
+    console.log(`api/exlpore/top?q=${q}&page=${page}`);
+
     if (q) {
       const tweets = await Tweet.find({ text: { $regex: q } })
         .skip(typeof page === "string" ? parseInt(page as string) : 0)

@@ -21,8 +21,11 @@ export default async function handler(
   await dbConnect();
 
   try {
+    console.log(`api/exlpore/top?q=${q}&page=${page}`);
+
     if (q) {
-      
+          console.log(`api/exlpore/top?q=${q}&page=${page}`);
+
       const peoples = await User.find({ name: { $regex: q } })
       .skip(typeof page === "string" ? parseInt(page as string) : 0)
       .limit(10)

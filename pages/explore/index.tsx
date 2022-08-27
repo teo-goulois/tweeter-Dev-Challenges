@@ -65,7 +65,7 @@ const Index = () => {
             isEmpty={tweetsIsEmpty}
             isReachingEnd={tweetsIsReachingEnd}
             setSize={setSize}
-            tweets={tweets.length > 0 ? tweets : []}
+            tweets={tweets?.length > 0 ? tweets : []}
           />
         )}
       </div>
