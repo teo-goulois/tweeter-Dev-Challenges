@@ -158,7 +158,7 @@ const TweetInfos = ({ tweet, handleUpdateInfos }: Props) => {
               onClick={(e) => handleActivities(e, title as string)}
               className={`${
                 // @ts-ignore
-                user && title !== "comment" && array.includes(user._id) && color
+                user && title !== "comment" && array?.includes(user._id) && color
               } text-sm font-medium text-gray text-center hover:bg-gray3 rounded-lg py-2 flex-1 cursor-pointer flex justify-center items-center`}
             >
               <div className="h-4 mr-2">{component as ReactNode}</div>
@@ -177,7 +177,7 @@ const TweetInfos = ({ tweet, handleUpdateInfos }: Props) => {
                   className="hidden md:block capitalize"
                 >
                   {title !== "comment"
-                    ? array.length
+                    ? array?.length
                     : commentsLength?.toString()}
                 </motion.p>
               </div>

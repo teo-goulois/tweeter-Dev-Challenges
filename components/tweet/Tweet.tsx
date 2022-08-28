@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import FsLightbox from "fslightbox-react";
 import { useRouter } from "next/router";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,6 +11,7 @@ import useConnectedUser from "../../utils/users/useConnectedUser";
 import TweetInfos from "./TweetInfos";
 import OptionModal from "./OptionModal";
 import UserInfos from "./UserInfos";
+import ShowRetweet from "./Retweet";
 // Icons
 import { OptionsVerticalIcons } from "../../icons/Icons";
 
@@ -42,13 +43,7 @@ const Tweet = ({ tweet, handleUpdateInfos }: Props) => {
     <Fragment>
       {/* Retweet */}
 
-      {/* TODO: Retweet
-       <div className="flex items-center text-sm text-secondary my-2">
-        <div className="h-4 mr-2 rotate rotate-2 ">
-          <RetweetIcon />
-        </div>
-        <p> Daniel Jensen Retweeted</p>
-      </div> */}
+      <ShowRetweet retweets={tweet.retweets} userFollowings={user?.following}  />
       {optionModalIsOpen && (
         <div
           onClick={() => setOptionModalIsOpen((prev) => !prev)}

@@ -15,7 +15,10 @@ export default async function handler(
     const data = JSON.parse(req.body);
     try {
       const tweets = await Tweet.find({
-        author: { $in: [...data.following, data.userID] },
+        $or: [
+          { retweets: { $in: data.following } },
+          { author: { $in: [...data.following, data.userID] } },
+        ],
       })
         .populate({ path: "author", model: User })
         .skip(typeof page === "string" ? parseInt(page as string) : 0)
