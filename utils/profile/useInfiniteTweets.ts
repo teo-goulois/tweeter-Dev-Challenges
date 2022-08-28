@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
+import { User } from "../../types/typing";
 
 function useInfiniteTweet(
   userID: string | undefined,
@@ -21,6 +22,50 @@ function useInfiniteTweet(
   const isReachingEnd =
     isEmpty || (data && data[data.length - 1]?.length < pageSize);
   const isRefreshing = isValidating && data && data.length === size;
+
+  type UploadTweetProps = {
+    fromProfile: boolean | undefined;
+    filter: string | undefined;
+    body: {
+      text: string;
+      author: string | undefined;
+      media: {
+        images: string[];
+      };
+      everyoneCanReply: boolean;
+    };
+    user: User;
+  };
+
+  const uploadTweet = async ({
+    fromProfile,
+    filter,
+    body,
+    user,
+  }: UploadTweetProps) => {
+    if (fromProfile && filter) {
+      mutate(async (t) => {
+        const response = await fetch(`/api/tweets/postTweet`, {
+          body: JSON.stringify(body),
+          method: "POST",
+        });
+        const data = await response.json();
+        if (!t) return;
+        return [{ ...data.tweet, author: user }, ...t];
+      });
+    } else {
+      mutate(async (t) => {
+        // await post reponse
+        const response = await fetch(`/api/tweets/postTweet`, {
+          body: JSON.stringify(body),
+          method: "POST",
+        });
+        const data = await response.json();
+        if (!t) return;
+        return [{ ...data.tweet, author: user }, ...t];
+      });
+    }
+  };
 
   type Props = {
     tweetID: string;
@@ -88,6 +133,7 @@ function useInfiniteTweet(
     tweetsIsReachingEnd: isReachingEnd,
     tweetsIsRefreshing: isRefreshing,
     handleUpdateInfos,
+    uploadTweet,
   };
 }
 

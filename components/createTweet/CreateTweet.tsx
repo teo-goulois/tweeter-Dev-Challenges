@@ -10,8 +10,9 @@ import ProfileImage from "../global/ProfileImage";
 import useAutoIncreaseHeight from "../../hooks/useAutoIncreaseHeight";
 import useConnectedUser from "../../utils/users/useConnectedUser";
 // Types
-import { Tweet } from "../../types/typing";
+import { Tweet, User } from "../../types/typing";
 import { key } from "../../utils/profile/useTweets";
+import toast from "react-hot-toast";
 
 type OpenModal = {
   isOpen: boolean;
@@ -21,9 +22,27 @@ type OpenModal = {
 type Props = {
   fromProfile?: boolean;
   filter?: "tweets" | "replies" | "media" | "likes";
+  uploadTweet: ({
+    fromProfile,
+    filter,
+    body,
+    user,
+  }: {
+    fromProfile: boolean | undefined;
+    filter: string | undefined;
+    body: {
+      text: string;
+      author: string | undefined;
+      media: {
+        images: string[];
+      };
+      everyoneCanReply: boolean;
+    };
+    user: User;
+  }) => Promise<void>;
 };
 
-const CreateTweet = ({ fromProfile, filter }: Props) => {
+const CreateTweet = ({ fromProfile, filter, uploadTweet }: Props) => {
   const { mutate } = useSWRConfig();
   // Context
   const { user } = useConnectedUser();
@@ -49,6 +68,7 @@ const CreateTweet = ({ fromProfile, filter }: Props) => {
   };
 
   const handleSubmitTweet = async (e: React.FormEvent<HTMLFormElement>) => {
+    if (!user) return toast.error("you sould be connected to post a Tweet");
     e.preventDefault();
 
     const body = {
@@ -59,42 +79,13 @@ const CreateTweet = ({ fromProfile, filter }: Props) => {
       },
       everyoneCanReply: openModal.value === "everyone" ? true : false,
     };
-    if (fromProfile && filter) {
-      mutate(key(user?._id, filter), async (tweets: Tweet[]) => {
-        const response = await fetch(`/api/tweets/postTweet`, {
-          body: JSON.stringify(body),
-          method: "POST",
-        });
-        const data = await response.json();
-
-        return [{ ...data.tweet, author: user }, ...tweets];
-      });
-    } else {
-      mutate(
-        user?._id
-          ? [
-              `/api/home/getTweets`,
-              {
-                method: "POST",
-                body: JSON.stringify({
-                  _id: user._id,
-                  following: user.following,
-                }),
-              },
-            ]
-          : null,
-        async (tweets: Tweet[]) => {
-          // await post reponse
-          const response = await fetch(`/api/tweets/postTweet`, {
-            body: JSON.stringify(body),
-            method: "POST",
-          });
-          const data = await response.json();
-
-          return [{ ...data.tweet, author: user }, ...tweets];
-        }
-      );
-    }
+    uploadTweet({
+      body,
+      filter,
+      fromProfile,
+      user,
+    });
+    
     // reinitialize input fomrs
     setInput("");
     setImages([]);

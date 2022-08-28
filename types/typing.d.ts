@@ -4,7 +4,7 @@ export interface User {
   _id: string;
   following: string[];
   follower: string[];
-  __v: number;
+  __v?: number;
   id: string;
   email: string;
   name: string;

@@ -28,6 +28,7 @@ const Home = ({}: Props) => {
     tweetsIsEmpty,
     handleUpdateInfos,
     mutate,
+    uploadTweet
   } = useInfiniteTweet(user?._id, user?.following, 10);
 
   // fetch whan current user following change
@@ -41,7 +42,7 @@ const Home = ({}: Props) => {
         <title>tweeter</title>
       </Head>
       <div className=" w-full lg:max-w-4xl  mb-14 md:mb-0">
-        <CreateTweet />
+        <CreateTweet uploadTweet={uploadTweet} />
         {tweetsIsLoading ? (
           <div>
             <div className="w-full h-[150px] bg-[#d8d8d8] animate-pulse rounded-xl mb-4"></div>

@@ -27,6 +27,8 @@ const Index: NextPageWithLayout = () => {
     setSize,
     tweetsIsEmpty,
     tweetsIsReachingEnd,
+    uploadTweet
+
   } = useInfiniteTweet(user?._id, filter, 10);
 
   if (!user) return <div></div>;
@@ -41,7 +43,7 @@ const Index: NextPageWithLayout = () => {
         <div className="max-w-[1450px] w-full">
           <div className="w-full flex flex-col lg:flex-row mb-2 ">
             <Filter filter={filter} setFilter={setFilter} />
-            <CreateTweet fromProfile={true} filter={filter} />
+            <CreateTweet uploadTweet={uploadTweet} fromProfile={true} filter={filter} />
           </div>
           <div className="mb-14 md:mb-0">
             {tweetsIsLoading ? (
