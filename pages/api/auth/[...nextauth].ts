@@ -1,13 +1,8 @@
-import { profile } from "console";
 import NextAuth, {
   Account,
   NextAuthOptions,
-  Profile,
-  Session,
   User,
 } from "next-auth";
-import credentials from "next-auth/providers/credentials";
-import EmailProvider from "next-auth/providers/email";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -39,7 +34,7 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
-  secret: "mysecret",
+  secret: getEnvVar('SECRET'),
   callbacks: {
     async jwt({ token, user, account, profile }) {
       if (user) {
