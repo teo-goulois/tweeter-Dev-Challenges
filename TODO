@@ -1,6 +1,6 @@
 // User story: I can see my profile or others' profile
 // TODO: ADD pagination or infinite loading for Follower/following and for tags sugestion and people sugestion 
-// TODO: add retweet see view 
+// add retweet see view 
 // User story: When I am on a profile, I can see Tweets and Retweets. I can also filter by Tweets, Tweets and replies, Media and Likes
 // 
 // User story:  When I am on a profile, I can see followers and following

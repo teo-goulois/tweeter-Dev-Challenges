@@ -82,7 +82,7 @@ const FollowCard = ({ user }: Props) => {
         </button>
       </div>
       {/* desc */}
-      <p className="font-medium text-sm text-secondary my-2">{user.bio}</p>
+      <p className="font-medium text-sm w-full max-w-xs text-ellipsis text-secondary my-2">{user.bio}</p>
       {/* image */}
       <div className="bg-[#C4C4C4] w-full max-w-xs h-[78px] rounded-lg overflow-hidden">
         <img src={user.banner} alt="user banner" />
