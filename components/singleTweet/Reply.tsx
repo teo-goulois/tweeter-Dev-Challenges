@@ -24,11 +24,7 @@ const Reply = ({ tweetID, addComment }: Props) => {
   const [input, setInput] = useState<string>("");
   const { user } = useConnectedUser();
 
-  const addImageToTweet = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    value: string
-  ) => {
-    e.preventDefault();
+  const addImageToTweet = (value: string) => {
     setImages((prev) => [value, ...prev]);
     setImageUrlBoxIsOpen(false);
   };
@@ -54,7 +50,7 @@ const Reply = ({ tweetID, addComment }: Props) => {
     <>
       <AddImageModal
         isOpen={imageUrlBoxIsOpen}
-        setIsOpen={setImageUrlBoxIsOpen}
+        close={() => setImageUrlBoxIsOpen(false)}
         addImageToTweet={addImageToTweet}
       />
       <form onClick={(e) => e.stopPropagation()} onSubmit={handleSubmit}>
@@ -91,7 +87,7 @@ const Reply = ({ tweetID, addComment }: Props) => {
         {images.length > 0 && (
           <div
             id="my-container"
-            className="aspect-[4/2] rounded-2xl flex flex-col h-[300px] flex-wrap gap-2 overflow-hidden w-full mb-2"
+            className="aspect-[4/2] rounded-2xl flex flex-col max-h-80 flex-wrap gap-2 overflow-hidden w-full mb-2"
           >
             {images.map((image, index) => {
               return (

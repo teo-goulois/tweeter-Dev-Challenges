@@ -17,11 +17,6 @@ function useInfiniteTweet(
   const issues: any[] = data ? [].concat(...data) : [];
   // @ts-ignore
   const c = cache.get(getKey(0, filter, query));
-  console.log("cahche =>", c);
-
-  console.log("use infinite explore data =>", data);
-  console.log("use infinite explore issues =>", issues);
-  console.log("getkey => ", getKey(0, filter, query));
 
   const isLoadingInitialData = !data && !error;
   const isLoadingMore =

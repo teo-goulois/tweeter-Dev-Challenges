@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@types/fslightbox-react": "^1.4.2",
+    "cloudinary": "^1.31.0",
     "dotenv": "^16.0.1",
     "framer-motion": "^7.1.0",
     "fslightbox-react": "^1.6.2-2",

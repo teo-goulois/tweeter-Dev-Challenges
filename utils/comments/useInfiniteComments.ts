@@ -40,7 +40,6 @@ function useInfiniteComment(tweetID: string | undefined, pageSize: number) {
         t[0] = [{ ...data.comment, author: user }, ...t[0]];
 
         while (t.length > 0) arr.push(t.splice(0, size));
-        console.log(arr, "arr");
 
         return arr[0];
       }, false);
@@ -50,9 +49,7 @@ function useInfiniteComment(tweetID: string | undefined, pageSize: number) {
   };
 
   const handleLike = async ({ commentID, userID, isAdding }: Props) => {
-    if (isAdding) {
-      console.log('like comment client');
-      
+    if (isAdding) {      
       const response = await fetch(
         `/api/tweets/comments/like?commentID=${commentID}&userID=${userID}`,
         { method: "PUT" }
@@ -73,8 +70,6 @@ function useInfiniteComment(tweetID: string | undefined, pageSize: number) {
         return toast.error(data.message);
       }
     } else {
-      console.log('unlike comment client');
-
       const response = await fetch(
         `/api/tweets/comments/like?commentID=${commentID}&userID=${userID}`,
         { method: "PATCH" }

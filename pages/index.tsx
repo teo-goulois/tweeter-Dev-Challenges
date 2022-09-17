@@ -61,7 +61,7 @@ const Home = ({}: Props) => {
           />
         )}
       </div>
-      <div className="hidden md:block ml-2">
+      <div className="hidden md:block ml-2 ">
         <Trend />
         <FollowSugestion />
       </div>

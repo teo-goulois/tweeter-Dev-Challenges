@@ -13,8 +13,6 @@ export default async function handler(
 
   await dbConnect();
   try {
-    console.log(`api/exlpore/top?q=${q}&page=${page}`);
-
     if (q) {
       const tweets = await Tweet.find({ text: { $regex: q } })
         .populate({ path: "author", model: User })

@@ -13,6 +13,9 @@ import useConnectedUser from "../../utils/users/useConnectedUser";
 import { Tweet, User } from "../../types/typing";
 import { key } from "../../utils/profile/useTweets";
 import toast from "react-hot-toast";
+import Backdrop from "../backdrop/BackdropModal";
+import useModal from "../../hooks/useModal";
+import AnimationContainer from "../global/AnimationContainer";
 
 type OpenModal = {
   isOpen: boolean;
@@ -43,11 +46,10 @@ type Props = {
 };
 
 const CreateTweet = ({ fromProfile, filter, uploadTweet }: Props) => {
-  const { mutate } = useSWRConfig();
   // Context
   const { user } = useConnectedUser();
   // state
-  const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false);
+  const { modalOpen, close, open } = useModal();
   const [openModal, setOpenModal] = useState<OpenModal>({
     isOpen: false,
     value: "everyone",
@@ -59,17 +61,17 @@ const CreateTweet = ({ fromProfile, filter, uploadTweet }: Props) => {
   const textareaRef = useAutoIncreaseHeight(input);
 
   const addImageToTweet = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     value: string
   ) => {
-    e.preventDefault();
     setImages((prev) => [value, ...prev]);
-    setImageUrlBoxIsOpen(false);
+    close();
   };
 
   const handleSubmitTweet = async (e: React.FormEvent<HTMLFormElement>) => {
-    if (!user) return toast.error("you sould be connected to post a Tweet");
     e.preventDefault();
+    if (!user) return toast.error("you sould be connected to post a Tweet");
+    if (input.length === 0 && images.length === 0)
+      return toast.error("you sould write somethings to post a Tweet");
 
     const body = {
       text: input,
@@ -85,7 +87,7 @@ const CreateTweet = ({ fromProfile, filter, uploadTweet }: Props) => {
       fromProfile,
       user,
     });
-    
+
     // reinitialize input fomrs
     setInput("");
     setImages([]);
@@ -94,11 +96,18 @@ const CreateTweet = ({ fromProfile, filter, uploadTweet }: Props) => {
   if (!user) return <div></div>;
   return (
     <>
-      <AddImageModal
-        isOpen={imageUrlBoxIsOpen}
-        setIsOpen={setImageUrlBoxIsOpen}
-        addImageToTweet={addImageToTweet}
-      />
+      <AnimationContainer>
+        {modalOpen && (
+          <Backdrop onClick={close}>
+            <AddImageModal
+              isOpen={modalOpen}
+              close={close}
+              addImageToTweet={addImageToTweet}
+            />
+          </Backdrop>
+        )}
+      </AnimationContainer>
+      
       {openModal.isOpen && (
         <div
           onClick={() =>
@@ -140,11 +149,11 @@ const CreateTweet = ({ fromProfile, filter, uploadTweet }: Props) => {
           {images.length > 0 && (
             <div
               id="my-container"
-              className="aspect-[4/2] rounded-2xl flex flex-col h-[300px] flex-wrap gap-2 overflow-hidden w-full mb-2"
+              className="aspect-[4/2] rounded-2xl flex flex-col max-h-80 flex-wrap gap-2 overflow-hidden w-full mb-2"
             >
               {images.map((image, index) => {
                 return (
-                  <div className="relative  min-h-[20px] flex-1 basis-2/5 ">
+                  <div key={image} className="relative  min-h-[20px] flex-1 basis-2/5 ">
                     <img
                       key={index}
                       className="h-full object-cover absolute w-full"
@@ -161,7 +170,7 @@ const CreateTweet = ({ fromProfile, filter, uploadTweet }: Props) => {
             <div className="text-blue flex items-center">
               <button
                 type="button"
-                onClick={() => setImageUrlBoxIsOpen((prev) => !prev)}
+                onClick={open}
                 className="h-6 w-6 mr-2 cursor-pointer"
                 aria-label="add image"
               >

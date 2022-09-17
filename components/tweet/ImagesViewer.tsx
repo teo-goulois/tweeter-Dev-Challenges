@@ -10,7 +10,7 @@ const ImagesViewer = ({ setToggler, images }: Props) => {
     <div
       onClick={() => setToggler((prev) => !prev)}
       id="my-container"
-      className="aspect-[4/2] rounded-2xl flex flex-col h-[300px] flex-wrap gap-2 overflow-hidden w-full"
+      className="aspect-[4/2] rounded-2xl flex flex-col max-h-80 flex-wrap gap-2 overflow-hidden w-full"
     >
       {images.map((image, index) => {
         return (
