@@ -8,6 +8,7 @@ export const uploadImage = async (file2upload: {
   filepath: string;
   size: number;
 }): Promise<OutputImage> => {
+
   if (file2upload.size > 10 * 1024 * 1024) {
     throw new Error("the uploaded image should be less than 10mb");
   }

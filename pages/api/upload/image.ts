@@ -28,10 +28,9 @@ export default async function handler(
             });
           }
 
-          try {
-
+          try {            
             // @ts-ignore
-            const response = await uploadImage(files.file[0]);
+            const response = await uploadImage(files.file);
             res.status(200).json({
               data: {
                 url: response.url,
